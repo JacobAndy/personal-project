@@ -1,0 +1,15 @@
+.add-info {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: stretch;
+  background: rgb(145, 220, 245);
+  border: 2px solid blue;
+  width: 40vw;
+  height: 70vh;
+  top: 13vh;
+  left: 31vw;
+}

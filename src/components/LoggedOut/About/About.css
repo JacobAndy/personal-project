@@ -1,0 +1,43 @@
+.about-page-main {
+  width: 50vw;
+  height: 80vh;
+  border: 1px solid black;
+  position: absolute;
+  top: 6em;
+  left: 26em;
+  background: rgb(145, 220, 245);
+}
+.about-page-title {
+  color: rgb(42, 98, 172);
+  position: relative;
+  font-size: 1.3em;
+  left: 20px;
+  white-space: nowrap;
+  top: 1.4em;
+  text-align: center;
+}
+.about-section,
+.question {
+  line-height: 36px;
+  width: 600px;
+  font-size: 1.3em;
+  text-align: justify;
+  color: whitesmoke;
+}
+.about-section {
+  position: relative;
+  left: 130px;
+  top: 6em;
+}
+.question-holder {
+  position: relative;
+  top: 12em;
+  left: 130px;
+}
+.question-title {
+  color: rgb(46, 109, 190);
+}
+.question {
+  color: whitesmoke;
+  position: relative;
+}

@@ -1,0 +1,31 @@
+.home-main {
+  position: absolute;
+  color: rgb(10, 10, 110);
+  top: 4em;
+  left: 17em;
+  width: 70vw;
+  height: 87vh;
+  background: rgb(130, 219, 248);
+  border: 1px solid blue;
+}
+.home-title {
+  left: 400px;
+  position: relative;
+  font-weight: 600;
+  font-size: 25px;
+  white-space: nowrap;
+}
+.home-desc {
+  line-height: 30px;
+  letter-spacing: 2px;
+  left: 80px;
+  padding-left: 10px;
+  border: 1px solid rgb(83, 83, 238);
+  background: lightblue;
+  position: relative;
+  font-weight: 400;
+  font-size: 20px;
+  top: 3em;
+  width: 400px;
+  height: 150px;
+}

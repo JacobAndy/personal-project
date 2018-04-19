@@ -1,0 +1,68 @@
+.our-services {
+  position: absolute;
+  color: rgb(92, 91, 91);
+  font-family: "Open Sans", sans-serif;
+  background: rgb(130, 198, 253);
+  font-size: 26px;
+  font-weight: 900;
+  width: 40vw;
+  height: 75vh;
+  right: 35px;
+  bottom: 35px;
+  text-align: justify;
+  line-height: 30px;
+  padding: 1em 2em 3em 2em;
+  border: 1.5px solid blue;
+}
+.our-services-title {
+  text-align: center;
+  color: rgb(85, 84, 84);
+  text-shadow: 2px 2px 2px rgb(245, 243, 243);
+}
+a {
+  text-decoration: none;
+  color: rgb(195, 223, 247);
+  text-shadow: 1px 1.5px 0px black;
+  font-weight: 600;
+}
+.article-link {
+  color: #666;
+  line-height: 0;
+  margin-left: 1.5em;
+  text-shadow: 1px 1px 1px rgb(226, 225, 225);
+}
+.quote,
+.quote1 {
+  font-family: "helvetica neue", helvetica, verdana, arial, sans-serif;
+  line-height: 37px;
+  font-size: 27px;
+  font-weight: 400;
+}
+.quote {
+  position: absolute;
+  bottom: 600px;
+  margin-left: 6em;
+  font-family: lato;
+}
+.quote1 {
+  font-family: lato;
+  position: absolute;
+  margin: 0 0 0 18.7em;
+  bottom: 550px;
+}
+.left-quotation,
+.right-quotation {
+  color: rgb(0, 0, 163);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 6em;
+  position: absolute;
+  text-shadow: 4px 2px 0px rgb(79, 176, 206);
+}
+.left-quotation {
+  margin-left: 0.5em;
+  margin-top: 2.9em;
+}
+.right-quotation {
+  margin-left: 8.1em;
+  margin-top: 2.9em;
+}
