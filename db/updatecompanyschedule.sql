@@ -1,0 +1,1 @@
+update schedules set company_id=$3 where employee_id=$1 AND publish=$2;

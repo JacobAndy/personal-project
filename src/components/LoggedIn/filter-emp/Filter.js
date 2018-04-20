@@ -1,29 +1,54 @@
 import React, { Component } from "react";
 import "./Filter.css";
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
 
 class Filter extends Component {
+  constructor() {
+    super();
+    this.state = {
+      station: 1,
+      employee: 1
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(prop, val) {
+    this.setState({ [prop]: val });
+  }
   render() {
     return (
       <div className="filters">
         <div className="filter-station">
-          <select>
-            <option select>select station</option>
-            <option value="Griddle">Griddle</option>
-            <option value="Fry">Fry</option>
-            <option value="Flat Bread">Flat Bread</option>
-            <option value="Broil">Broil</option>
-            <option value="Salad">Salad</option>
-          </select>
+          <SelectField
+            autoWidth={true}
+            value={this.state.station}
+            onChange={(event, i, val) => {
+              this.handleChange("station", val);
+            }}
+          >
+            <MenuItem value={1} primaryText="select station" />
+            <MenuItem value="Griddle" primaryText="Griddle" />
+            <MenuItem value="Fry" primaryText="Fry" />
+            <MenuItem value="Flat Bread" primaryText="Flat Bread" />
+            <MenuItem value="Broil" primaryText="Broil" />
+            <MenuItem value="Salad" primaryText="Salad" />
+          </SelectField>
         </div>
         <div className="filter-emp">
-          <select>
-            <option select>select First Name</option>
-            <option value="A-F">A-F</option>
-            <option value="G-K">G-K</option>
-            <option value="L-P">L-P</option>
-            <option value="Q-U">Q-U</option>
-            <option value="V-Z">V-Z</option>
-          </select>
+          <SelectField
+            autoWidth={true}
+            value={this.state.employee}
+            onChange={(event, i, val) => {
+              this.handleChange("employee", val);
+            }}
+          >
+            <MenuItem value={1} primaryText="select First Name" />
+            <MenuItem value="A-F" primaryText="A-F" />
+            <MenuItem value="G-K" primaryText="G-K" />
+            <MenuItem value="L-P" primaryText="L-P" />
+            <MenuItem value="Q-U" primaryText="Q-U" />
+            <MenuItem value="V-Z" primaryText="V-Z" />
+          </SelectField>
         </div>
       </div>
     );

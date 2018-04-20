@@ -1,0 +1,2 @@
+insert into employee(company_id, user_id)
+values($1,$2) RETURNING *;

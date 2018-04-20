@@ -11,8 +11,13 @@ const {
   getUser,
   updateUser,
   getEmployees,
-  getSchedules,
-  mySchedule
+  getSchedules, //NOT CURRENTLY ACTIVE
+  mySchedule, //NOT CURRENTLY ACTIVE
+  createSchedule, //NOT CURRENTLY ACTIVE
+  updateSchedule, //NOT CURRENTLY ACTIVE
+  deleteSchedule, //NOT CURRENTLY ACTIVE
+  createCompany,
+  getCompany
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -74,31 +79,53 @@ app.get(
     failureFlash: true
   })
 );
-//user profile
+
+////////////////////////////////////////////////////////
+//USER END POINTS
+
+//user profile WORKS
 app.get("/profile", getUser);
 
-//getting employees
-app.get("/employees", getEmployees);
-
-//getting schedules
-app.get("/schedules", getSchedules);
-
-//getting my schedule
-app.get("/myschedule", mySchedule);
-
-//create schedule
-
-//update schedule
-
-//delete schedule
-
-//logging out
+//logging out WORKS
 app.get("/logout", logout);
 
-//adding users extra details
+//adding users extra details  WORKS
 app.put("/update", updateUser);
+//////////////////////////////////////////////////////////
+//EMPLOYEE END POINTS
 
-//listening to port
+//getting employees WORKS
+app.get("/employees", getEmployees);
+
+//////////////////////////////////////////////////////////
+//COMPANY END POINTS
+
+//create company WORKS
+//THIS ALSO CREATES EMPLOYEE REFERENCING USER AND GROUP
+app.post("/createcompany", createCompany);
+
+//get company WORKS
+app.get("/company", getCompany);
+
+//////////////////////////////////////////////////////////
+//SCHEDULE END POINTS
+
+//create schedule
+app.post("/createschedule", createSchedule);
+
+//update schedule
+// app.put('/ud/schedule/:id', updateSchedule);
+
+//delete schedule
+// app.delete('/rm/schedule/:id', deleteSchedule);
+
+//getting schedules
+// app.get("/schedules", getSchedules);
+
+//getting my schedule
+// app.get("/myschedule", mySchedule);
+
+//listening to port  WORKS
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });

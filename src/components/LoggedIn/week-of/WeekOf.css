@@ -23,10 +23,14 @@
   border-width: 0 4px 4px 0;
 }
 .left-arrow {
-  left: 770px;
+  left: 670px;
   transform: rotate(135deg);
 }
 .right-arrow {
-  right: 540px;
+  right: 690px;
   transform: rotate(-45deg);
+}
+.post-schedule {
+  position: absolute;
+  right: 20px;
 }

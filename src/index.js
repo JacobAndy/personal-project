@@ -15,7 +15,6 @@ import lightBaseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
 import GoogleDirections from "./components/LoggedIn/google_directions/GoogleDirections";
 import GoogleTraffic from "./components/LoggedIn/google_traffic/GoogleTraffic";
 import CreateGroup from "./components/LoggedIn/calendar/CreateGroup/CreateGroup";
-// import CreateSchedule from "./components/LoggedIn/CreateSchedule/CreateSchedule";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -30,7 +29,6 @@ ReactDOM.render(
           <Route path="/directions" component={GoogleDirections} />
           <Route path="/traffic" component={GoogleTraffic} />
           <Route path="/creategroup" component={CreateGroup} />
-          {/* <Route path="/schedule/createschedule" component={CreateSchedule} /> */}
         </Switch>
       </Router>
     </MuiThemeProvider>
