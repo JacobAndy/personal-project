@@ -7,10 +7,13 @@ import FlatButton from "material-ui/FlatButton";
 import Popover, { PopoverAnimationFromTop } from "material-ui/Popover";
 import Menu from "material-ui/Menu";
 import WeekOf from "../../week-of/WeekOf";
+import RaisedButton from "material-ui/RaisedButton";
+
 import {
   handleOpen,
   handleStateUpdate,
-  handleOff
+  handleOff,
+  createSchedule
 } from "../../../../ducks/schedulesreducer";
 
 class Schedules extends Component {
@@ -24,63 +27,38 @@ class Schedules extends Component {
       handleOpen,
       handleStateUpdate,
       handleOff,
-      schedule,
+      initSchedule,
       userinfo,
       mondaymorningopen,
       mondaynightopen,
-      mondaymorningclockin,
-      mondaymorningclockout,
-      mondaynightclockin,
-      mondaynightclockout,
-
       tuesdaymorningopen,
       tuesdaynightopen,
-      tuesdaymorningclockin,
-      tuesdaymorningclockout,
-      tuesdaynightclockin,
-      tuesdaynightclockout,
-
       wednesdaymorningopen,
       wednesdaynightopen,
-      wednesdaymorningclockin,
-      wednesdaymorningclockout,
-      wednesdaynightclockin,
-      wednesdaynightclockout,
-
       thursdaymorningopen,
       thursdaynightopen,
-      thursdaymorningclockin,
-      thursdaymorningclockout,
-      thursdaynightclockin,
-      thursdaynightclockout,
-
       fridaymorningopen,
       fridaynightopen,
-      fridaymorningclockin,
-      fridaymorningclockout,
-      fridaynightclockin,
-      fridaynightclockout,
-
       saturdaymorningopen,
       saturdaynightopen,
-      saturdaymorningclockin,
-      saturdaymorningclockout,
-      saturdaynightclockin,
-      saturdaynightclockout,
-
       sundaymorningopen,
-      sundaynightopen,
-      sundaymorningclockin,
-      sundaymorningclockout,
-      sundaynightclockin,
-      sundaynightclockout
+      sundaynightopen
     } = this.props;
-    console.log(this.props);
+    let { schedule } = this.props.schedule;
     return (
       <div>
-        <div className="CreateButtonHolder">
+        {/* <div className="CreateButtonHolder">
           <button className="CreateScheduleButton">Create Schedule</button>
-        </div>
+        </div> */}
+        <RaisedButton
+          onClick={() =>
+            createSchedule(this.props.user_id, this.props.schedule.schedule)
+          }
+          className="post-schedule"
+          label="Post Schedule"
+          backgroundColor="pink"
+          color="white"
+        />
         <WeekOf />
         <div className="calendar">
           <div className="open-shift">
@@ -152,16 +130,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!mondaymorningclockin
+                      {!schedule[0].mondaymorningclockin
                         ? "not working"
-                        : mondaymorningclockin}
+                        : schedule[0].mondaymorningclockin}
                     </p>
                     <p>
-                      {!mondaymorningclockout
+                      {!schedule[0].mondaymorningclockout
                         ? null
-                        : !mondaymorningclockin
+                        : !schedule[0].mondaymorningclockin
                           ? null
-                          : `-${mondaymorningclockout}`}
+                          : `-${schedule[0].mondaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -178,7 +156,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("mondaymorning")}
+                          onClick={() => handleOff(0, "mondaymorning")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -193,28 +171,34 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Monday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("mondaymorningclockin", newDate);
+                          handleStateUpdate(0, "mondaymorningclockin", newDate);
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Monday Morning Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("mondaymorningclockout", newDate);
+                          handleStateUpdate(
+                            0,
+                            "mondaymorningclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!mondaynightclockin ? "not working" : mondaynightclockin}
+                      {!schedule[1].mondaynightclockin
+                        ? "not working"
+                        : schedule[1].mondaynightclockin}
                     </p>
                     <p>
-                      {!mondaynightclockout
+                      {!schedule[1].mondaynightclockout
                         ? null
-                        : !mondaynightclockin
+                        : !schedule[1].mondaynightclockin
                           ? null
-                          : `-${mondaynightclockout}`}
+                          : `-${schedule[1].mondaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -231,7 +215,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("mondaynight")}
+                          onClick={() => handleOff(1, "mondaynight")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -245,14 +229,14 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Monday Night Clock In"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("mondaynightclockin", newDate);
+                          handleStateUpdate(1, "mondaynightclockin", newDate);
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Monday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("mondaynightclockout", newDate);
+                          handleStateUpdate(1, "mondaynightclockout", newDate);
                         }}
                       />
                     </Dialog>
@@ -261,16 +245,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!tuesdaymorningclockin
+                      {!schedule[2].tuesdaymorningclockin
                         ? "not working"
-                        : tuesdaymorningclockin}
+                        : schedule[2].tuesdaymorningclockin}
                     </p>
                     <p>
-                      {!tuesdaymorningclockout
+                      {!schedule[2].tuesdaymorningclockout
                         ? null
-                        : !tuesdaymorningclockin
+                        : !schedule[2].tuesdaymorningclockin
                           ? null
-                          : `-${tuesdaymorningclockout}`}
+                          : `-${schedule[2].tuesdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -287,7 +271,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("tuesdaymorning")}
+                          onClick={() => handleOff(2, "tuesdaymorning")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -302,30 +286,38 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Tuesday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("tuesdaymorningclockin", newDate);
+                          handleStateUpdate(
+                            2,
+                            "tuesdaymorningclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Tuesday Morning Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("tuesdaymorningclockout", newDate);
+                          handleStateUpdate(
+                            2,
+                            "tuesdaymorningclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!tuesdaynightclockin
+                      {!schedule[3].tuesdaynightclockin
                         ? "not working"
-                        : tuesdaynightclockin}
+                        : schedule[3].tuesdaynightclockin}
                     </p>
                     <p>
-                      {!tuesdaynightclockout
+                      {!schedule[3].tuesdaynightclockout
                         ? null
-                        : !tuesdaynightclockin
+                        : !schedule[3].tuesdaynightclockin
                           ? null
-                          : `-${tuesdaynightclockout}`}
+                          : `-${schedule[3].tuesdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -343,7 +335,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("tuesdaynight")}
+                          onClick={() => handleOff(3, "tuesdaynight")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -357,14 +349,14 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Tuesday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("tuesdaynightclockin", newDate);
+                          handleStateUpdate(3, "tuesdaynightclockin", newDate);
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Tuesday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("tuesdaynightclockout", newDate);
+                          handleStateUpdate(3, "tuesdaynightclockout", newDate);
                         }}
                       />
                     </Dialog>
@@ -373,16 +365,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!wednesdaymorningclockin
+                      {!schedule[4].wednesdaymorningclockin
                         ? "not working"
-                        : wednesdaymorningclockin}
+                        : schedule[4].wednesdaymorningclockin}
                     </p>
                     <p>
-                      {!wednesdaymorningclockout
+                      {!schedule[4].wednesdaymorningclockout
                         ? null
-                        : !wednesdaymorningclockin
+                        : !schedule[4].wednesdaymorningclockin
                           ? null
-                          : `-${wednesdaymorningclockout}`}
+                          : `-${schedule[4].wednesdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -399,7 +391,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("wednesdaymorning")}
+                          onClick={() => handleOff(4, "wednesdaymorning")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -413,7 +405,11 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Wednesday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("wednesdaymorningclockin", newDate);
+                          handleStateUpdate(
+                            4,
+                            "wednesdaymorningclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
@@ -421,6 +417,7 @@ class Schedules extends Component {
                         placeholder="Wednesday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            4,
                             "wednesdaymorningclockout",
                             newDate
                           );
@@ -430,16 +427,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!wednesdaynightclockin
+                      {!schedule[5].wednesdaynightclockin
                         ? "not working"
-                        : wednesdaynightclockin}
+                        : schedule[5].wednesdaynightclockin}
                     </p>
                     <p>
-                      {!wednesdaynightclockout
+                      {!schedule[5].wednesdaynightclockout
                         ? null
-                        : !wednesdaynightclockin
+                        : !schedule[5].wednesdaynightclockin
                           ? null
-                          : `-${wednesdaynightclockout}`}
+                          : `-${schedule[5].wednesdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -456,7 +453,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("wednesdaynight")}
+                          onClick={() => handleOff(5, "wednesdaynight")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -470,14 +467,22 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Wednesday Night Clock In"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("wednesdaynightclockin", newDate);
+                          handleStateUpdate(
+                            5,
+                            "wednesdaynightclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Wednesday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("wednesdaynightclockout", newDate);
+                          handleStateUpdate(
+                            5,
+                            "wednesdaynightclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
@@ -486,16 +491,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!thursdaymorningclockin
+                      {!schedule[6].thursdaymorningclockin
                         ? "not working"
-                        : thursdaymorningclockin}
+                        : schedule[6].thursdaymorningclockin}
                     </p>
                     <p>
-                      {!thursdaymorningclockout
+                      {!schedule[6].thursdaymorningclockout
                         ? null
-                        : !thursdaymorningclockin
+                        : !schedule[6].thursdaymorningclockin
                           ? null
-                          : `-${thursdaymorningclockout}`}
+                          : `-${schedule[6].thursdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -512,7 +517,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("thursdaymorning")}
+                          onClick={() => handleOff(6, "thursdaymorning")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -526,30 +531,38 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Thursday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("thursdaymorningclockin", newDate);
+                          handleStateUpdate(
+                            6,
+                            "thursdaymorningclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Thursday Morning Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("thursdaymorningclockout", newDate);
+                          handleStateUpdate(
+                            6,
+                            "thursdaymorningclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!thursdaynightclockin
+                      {!schedule[7].thursdaynightclockin
                         ? "not working"
-                        : thursdaynightclockin}
+                        : schedule[7].thursdaynightclockin}
                     </p>
                     <p>
-                      {!thursdaynightclockout
+                      {!schedule[7].thursdaynightclockout
                         ? null
-                        : !thursdaynightclockin
+                        : !schedule[7].thursdaynightclockin
                           ? null
-                          : `-${thursdaynightclockout}`}
+                          : `-${schedule[7].thursdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -566,7 +579,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("thursdaynight")}
+                          onClick={() => handleOff(7, "thursdaynight")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -580,14 +593,18 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Thursday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("thursdaynightclockin", newDate);
+                          handleStateUpdate(7, "thursdaynightclockin", newDate);
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Thursday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("thursdaynightclockout", newDate);
+                          handleStateUpdate(
+                            7,
+                            "thursdaynightclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
@@ -596,16 +613,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!fridaymorningclockin
+                      {!schedule[8].fridaymorningclockin
                         ? "not working"
-                        : fridaymorningclockin}
+                        : schedule[8].fridaymorningclockin}
                     </p>
                     <p>
-                      {!fridaymorningclockout
+                      {!schedule[8].fridaymorningclockout
                         ? null
-                        : !fridaymorningclockin
+                        : !schedule[8].fridaymorningclockin
                           ? null
-                          : `-${fridaymorningclockout}`}
+                          : `-${schedule[8].fridaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -622,7 +639,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("fridaymorning")}
+                          onClick={() => handleOff(8, "fridaymorning")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -636,28 +653,34 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Friday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("fridaymorningclockin", newDate);
+                          handleStateUpdate(8, "fridaymorningclockin", newDate);
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Friday Morning Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("fridaymorningclockout", newDate);
+                          handleStateUpdate(
+                            8,
+                            "fridaymorningclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!fridaynightclockin ? "not working" : fridaynightclockin}
+                      {!schedule[9].fridaynightclockin
+                        ? "not working"
+                        : schedule[9].fridaynightclockin}
                     </p>
                     <p>
-                      {!fridaynightclockout
+                      {!schedule[9].fridaynightclockout
                         ? null
-                        : !fridaynightclockin
+                        : !schedule[9].fridaynightclockin
                           ? null
-                          : `-${fridaynightclockout}`}
+                          : `-${schedule[9].fridaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -674,7 +697,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("fridaynight")}
+                          onClick={() => handleOff(9, "fridaynight")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -688,14 +711,14 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Friday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("fridaynightclockin", newDate);
+                          handleStateUpdate(9, "fridaynightclockin", newDate);
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Friday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("fridaynightclockout", newDate);
+                          handleStateUpdate(9, "fridaynightclockout", newDate);
                         }}
                       />
                     </Dialog>
@@ -704,16 +727,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!saturdaymorningclockin
+                      {!schedule[10].saturdaymorningclockin
                         ? "not working"
-                        : saturdaymorningclockin}
+                        : schedule[10].saturdaymorningclockin}
                     </p>
                     <p>
-                      {!saturdaymorningclockout
+                      {!schedule[10].saturdaymorningclockout
                         ? null
-                        : !saturdaymorningclockin
+                        : !schedule[10].saturdaymorningclockin
                           ? null
-                          : `-${saturdaymorningclockout}`}
+                          : `-${schedule[10].saturdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -730,7 +753,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("saturdaymorning")}
+                          onClick={() => handleOff(11, "saturdaymorning")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -744,30 +767,38 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Saturday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("saturdaymorningclockin", newDate);
+                          handleStateUpdate(
+                            10,
+                            "saturdaymorningclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Saturday Morning Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("saturdaymorningclockout", newDate);
+                          handleStateUpdate(
+                            10,
+                            "saturdaymorningclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!saturdaynightclockin
+                      {!schedule[11].saturdaynightclockin
                         ? "not working"
-                        : saturdaynightclockin}
+                        : schedule[11].saturdaynightclockin}
                     </p>
                     <p>
-                      {!saturdaynightclockout
+                      {!schedule[11].saturdaynightclockout
                         ? null
-                        : !saturdaynightclockin
+                        : !schedule[11].saturdaynightclockin
                           ? null
-                          : `-${saturdaynightclockout}`}
+                          : `-${schedule[11].saturdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -784,7 +815,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("saturdaynight")}
+                          onClick={() => handleOff(12, "saturdaynight")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -798,14 +829,22 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Saturday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("saturdaynightclockin", newDate);
+                          handleStateUpdate(
+                            11,
+                            "saturdaynightclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Saturday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("saturdaynightclockout", newDate);
+                          handleStateUpdate(
+                            11,
+                            "saturdaynightclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
@@ -814,16 +853,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!sundaymorningclockin
+                      {!schedule[12].sundaymorningclockin
                         ? "not working"
-                        : sundaymorningclockin}
+                        : schedule[12].sundaymorningclockin}
                     </p>
                     <p>
-                      {!sundaymorningclockout
+                      {!schedule[12].sundaymorningclockout
                         ? null
-                        : !sundaymorningclockin
+                        : !schedule[12].sundaymorningclockin
                           ? null
-                          : `-${sundaymorningclockout}`}
+                          : `-${schedule[12].sundaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -840,7 +879,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("sundaymorning")}
+                          onClick={() => handleOff(13, "sundaymorning")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -854,28 +893,38 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Sunday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("sundaymorningclockin", newDate);
+                          handleStateUpdate(
+                            12,
+                            "sundaymorningclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Sunday Morning Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("sundaymorningclockout", newDate);
+                          handleStateUpdate(
+                            12,
+                            "sundaymorningclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!sundaynightclockin ? "not working" : sundaynightclockin}
+                      {!schedule[13].sundaynightclockin
+                        ? "not working"
+                        : schedule[13].sundaynightclockin}
                     </p>
                     <p>
-                      {!sundaynightclockout
+                      {!schedule[13].sundaynightclockout
                         ? null
-                        : !sundaynightclockin
+                        : !schedule[13].sundaynightclockin
                           ? null
-                          : `-${sundaynightclockout}`}
+                          : `-${schedule[13].sundaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -892,7 +941,7 @@ class Schedules extends Component {
                         <FlatButton
                           label="Clear"
                           primary={true}
-                          onClick={() => handleOff("sundaynight")}
+                          onClick={() => handleOff(13, "sundaynight")}
                         />,
                         <FlatButton
                           label="Submit"
@@ -906,14 +955,14 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Sunday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("sundaynightclockin", newDate);
+                          handleStateUpdate(13, "sundaynightclockin", newDate);
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Sunday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate("sundaynightclockout", newDate);
+                          handleStateUpdate(13, "sundaynightclockout", newDate);
                         }}
                       />
                     </Dialog>
@@ -930,12 +979,14 @@ class Schedules extends Component {
 
 let mapStateToProps = state => {
   return {
-    ...state.schedulesreducer
+    ...state.schedulesreducer,
+    user_id: state.users.user_id
   };
 };
 
 export default connect(mapStateToProps, {
   handleOpen,
   handleStateUpdate,
-  handleOff
+  handleOff,
+  createSchedule
 })(Schedules);

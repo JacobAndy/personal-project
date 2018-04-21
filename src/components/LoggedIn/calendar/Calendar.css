@@ -126,3 +126,8 @@ body {
 .right-arrow-small:hover {
   border-width: 0 2.5px 2.5px 0;
 }
+.post-schedule {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}

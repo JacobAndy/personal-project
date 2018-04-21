@@ -1,6 +1,7 @@
 import axios from "axios";
 let initialstate = {
   currentUser: [],
+  user_id: "",
   photo: "",
   name: "",
   user_email: "",
@@ -25,6 +26,7 @@ export default function reducer(state = initialstate, action) {
       console.log(action.payload.data[0]);
       return {
         ...state,
+        user_id: action.payload.data[0].user_id,
         currentUser: action.payload.data,
         photo: action.payload.data[0].image,
         name: action.payload.data[0].full_name,

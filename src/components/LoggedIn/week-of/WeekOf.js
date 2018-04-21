@@ -5,7 +5,6 @@ import Dialog from "material-ui/Dialog";
 import DatePicker from "material-ui/DatePicker";
 import DateRange from "material-ui/svg-icons/action/date-range";
 import FlatButton from "material-ui/FlatButton";
-import RaisedButton from "material-ui/RaisedButton";
 import { Link } from "react-router-dom";
 
 class WeekOf extends Component {
@@ -56,12 +55,6 @@ class WeekOf extends Component {
         <h3 className="week-display">Week Of January 1 - January 7</h3>
         <div className="right-arrow" />
         <DateRange onClick={() => this.calendarToggle("dialogopen")} />
-        <RaisedButton
-          className="post-schedule"
-          label="Post Schedule"
-          backgroundColor="pink"
-          color="white"
-        />
       </div>
     );
   }
