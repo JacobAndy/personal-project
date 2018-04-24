@@ -15,6 +15,7 @@ import lightBaseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
 import GoogleDirections from "./components/LoggedIn/google_directions/GoogleDirections";
 import GoogleTraffic from "./components/LoggedIn/google_traffic/GoogleTraffic";
 import CreateGroup from "./components/LoggedIn/calendar/CreateGroup/CreateGroup";
+import ContactPage from "./components/LoggedOut/ContactPage/ContactPage";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -25,6 +26,7 @@ ReactDOM.render(
           <Route path="/schedule" component={Calendar} />
           <Route path="/about" component={About} />
           <Route path="/services" component={OurServices} />
+          <Route path="/contact" component={ContactPage} />
           <Route path="/profile" component={Profile} />
           <Route path="/directions" component={GoogleDirections} />
           <Route path="/traffic" component={GoogleTraffic} />

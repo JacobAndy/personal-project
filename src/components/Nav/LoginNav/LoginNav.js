@@ -81,6 +81,9 @@ class Nav extends Component {
                 <Link to="/services">
                   <h5 className="burger-options">Our Services</h5>
                 </Link>
+                <Link to="/contact">
+                  <h5 className="burger-options">Contact</h5>
+                </Link>
               </div>
             ) : (
               <div id="burger-selectors">
@@ -102,6 +105,9 @@ class Nav extends Component {
                 </Link>
                 <Link to="/services">
                   <h5 className="burger-options">Our Services</h5>
+                  <Link to="/contact">
+                    <h5 className="burger-options">Contact</h5>
+                  </Link>
                 </Link>
               </div>
             )}

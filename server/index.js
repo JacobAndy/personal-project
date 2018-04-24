@@ -13,8 +13,7 @@ const {
   getEmployees,
   getSchedules, //NOT CURRENTLY ACTIVE
   mySchedule, //NOT CURRENTLY ACTIVE
-  createSchedule, //NOT CURRENTLY ACTIVE
-  updateSchedule, //NOT CURRENTLY ACTIVE
+  createSchedule,
   deleteSchedule, //NOT CURRENTLY ACTIVE
   createCompany,
   getCompany
@@ -113,14 +112,11 @@ app.get("/company", getCompany);
 //create schedule
 app.post("/createschedule", createSchedule);
 
-//update schedule
-// app.put('/ud/schedule/:id', updateSchedule);
-
 //delete schedule
 // app.delete('/rm/schedule/:id', deleteSchedule);
 
 //getting schedules
-// app.get("/schedules", getSchedules);
+app.get("/weekof", getSchedules);
 
 //getting my schedule
 // app.get("/myschedule", mySchedule);

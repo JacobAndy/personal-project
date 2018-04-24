@@ -71,18 +71,56 @@ const getEmployees = (req, res) => {
 
 //MANAGER GETTING SCHEDULES
 const getSchedules = (req, res) => {
-  let { company, publish } = req.query;
+  let { user, weekof } = req.query;
   req.app
     .get("db")
-    .getschedules([company, publish])
-    .then(results => {
-      console.log("get Schedules successful");
-      res.status(200).json(results);
+    .findEmployee(user)
+    .then(currentEmployeeId => {
+      console.log(
+        `current employee id :  ${Number(
+          JSON.stringify(currentEmployeeId)[16]
+        )}`
+      );
+      req.app
+        .get("db")
+        .findcompany(Number(JSON.stringify(currentEmployeeId)[16]))
+        .then(comp_id => {
+          console.log(`COMPANY ID OF GETTING SCHEDULES : => ${comp_id}`);
+          req.app
+            .get("db")
+            .getSchedules([comp_id, weekof])
+            .then(schedules => {
+              console.log(`SCHEDULES RECEIVED HERE THEY ARE : => ${schedules}`);
+            })
+            .catch(e => {
+              res.status(500).json(e);
+              console.log(`ERROR GETTING SCHEDULES : => ${e}`);
+            });
+        })
+        .catch(erroorr => {
+          res.status(500).json(erroorr);
+          console.log(
+            `ERROR FINDING COMPANY IN GETTIN SCHEDULES: => ${erroorr}`
+          );
+        });
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
+    .catch(errrorrr => {
+      console.log(`ERROR FINDING EMPLOYEE ${errrorrr}`);
+      res.status(500).json(errrorrr);
     });
+
+  // req.app
+  //   .get("db")
+  //   .req.app.get("db")
+  //   .getschedules([company, publish])
+  //   .then(results => {
+  //     console.log("get Schedules successful");
+  //     res.status(200).json(results);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //     res.status(500).json(err);
+  //   });
 };
 //ACCESS MY SCHEDULE
 const mySchedule = (req, res) => {
@@ -101,90 +139,94 @@ const mySchedule = (req, res) => {
 };
 //CREATING SCHEDULE
 const createSchedule = (req, res) => {
-  let { newCurr, arr, currentUser } = req.body;
-  let cei;
-  console.log("create schedule hit");
+  let { newCurr, arr, userId } = req.body;
+  // console.log(`THIS IS THE ARRAY OF THE BODY : => ${arr[0].weekOf}`);
+  // console.log("create schedule hit");
+  // console.log(`currentUser: ${userId}`);
   req.app
     .get("db")
-    .findEmployee(currentUser)
+    .findEmployee(userId)
     .then(currentEmployeeId => {
-      cei = currentEmployeeId;
-    })
-    .catch(errrorrr => `ERROR FINDING EMPLOYEE ${errrorrr}`);
-  console.log(`CEI OVER HERE ${cei}`);
-  req.app
-    .get("db")
-    .createschedule(
-      //employee id
-      cei,
-      newCurr,
-      arr[0].mondaymorningclockin + arr[0].mondaymorningclockout,
-      arr[1].mondaynightclockin + arr[1].mondaynightclockout,
+      console.log(
+        `current employee id :  ${Number(
+          JSON.stringify(currentEmployeeId)[16]
+        )}`
+      );
+      //
 
-      arr[2].tuesdaymorningclockin + arr[2].tuesdaymorningclockout,
-      arr[3].tuesdaynightclockin + arr[3].tuesdaynightclockout,
-
-      arr[4].wednesdaymorningclockin + arr[4].wednesdaymorningclockout,
-      arr[5].wednesdaynightclockin + arr[5].wednesdaynightclockout,
-
-      arr[6].thursdaymorningclockin + arr[6].thursdaymorningclockout,
-      arr[7].thursdaynightclockin + arr[7].thursdaynightclockout,
-
-      arr[8].fridaymorningclockin + arr[8].fridaymorningclockout,
-      arr[9].fridaynightclockin + arr[9].fridaynightclockout,
-
-      arr[10].saturdaymorningclockin + arr[10].saturdaymorningclockout,
-      arr[11].saturdaynightclockin + arr[11].saturdaynightclockout,
-
-      arr[12].sundaymorningclockin + arr[12].sundaymorningclockout,
-      arr[13].sundaynightclockin + arr[13].sundaynightclockout
-    )
-    .then(results => {
       req.app
         .get("db")
-        .findcompany(cei)
-        .then(comp_id => {
-          let { company_id } = comp_id[0];
+        .createschedule([
+          Number(JSON.stringify(currentEmployeeId)[16]),
+          newCurr,
+          arr[0].weekOf,
+          arr[1].mondaymorningclockin + arr[1].mondaymorningclockout,
+          arr[2].mondaynightclockin + arr[2].mondaynightclockout,
+
+          arr[3].tuesdaymorningclockin + arr[3].tuesdaymorningclockout,
+          arr[4].tuesdaynightclockin + arr[4].tuesdaynightclockout,
+
+          arr[5].wednesdaymorningclockin + arr[5].wednesdaymorningclockout,
+          arr[6].wednesdaynightclockin + arr[6].wednesdaynightclockout,
+
+          arr[7].thursdaymorningclockin + arr[7].thursdaymorningclockout,
+          arr[8].thursdaynightclockin + arr[8].thursdaynightclockout,
+
+          arr[9].fridaymorningclockin + arr[9].fridaymorningclockout,
+          arr[10].fridaynightclockin + arr[10].fridaynightclockout,
+
+          arr[11].saturdaymorningclockin + arr[11].saturdaymorningclockout,
+          arr[12].saturdaynightclockin + arr[12].saturdaynightclockout,
+
+          arr[13].sundaymorningclockin + arr[13].sundaymorningclockout,
+          arr[14].sundaynightclockin + arr[14].sundaynightclockout
+        ])
+        .then(results => {
           req.app
             .get("db")
-            .updatecompanyschedule(
-              // employee_id,
-              cei,
-              newCurr,
-              company_id
-            )
-            .then(totalres => {
-              console.log(`CREATE SCHEDULE FULLY COMPLETED CORRECTLY`);
-              res.status(200).json(totalres);
+            .findcompany(Number(JSON.stringify(currentEmployeeId)[16]))
+            .then(comp_id => {
+              console.log(`COMPANY ID : =>${comp_id[0].company_id}`);
+              console.log(
+                `NOW THIS IS ACTUALLY THE CEI : => ${Number(
+                  JSON.stringify(currentEmployeeId)[16]
+                )}`
+              );
+              console.log(
+                `NOW THIS IS ACTUALLY THE CURRENT DATE : => ${newCurr}`
+              );
+              let { company_id } = comp_id[0];
+              req.app
+                .get("db")
+                .updatecompanyschedule(
+                  // employee_id,
+                  [
+                    Number(JSON.stringify(currentEmployeeId)[16]),
+                    newCurr,
+                    company_id
+                  ]
+                )
+                .then(totalres => {
+                  console.log(`CREATE SCHEDULE FULLY COMPLETED CORRECTLY`);
+                  res.status(200).json(totalres);
+                })
+                .catch(errorr => {
+                  console.log(`ERROR IN 3RD ITERATION ON CATCH: ${errorr}`);
+                  res.status(500).json(errorr);
+                });
             })
-            .catch(errorr => {
-              console.log(`ERROR IN 3RD ITERATION ON CATCH: ${errorr}`);
-              res.status(500).json(errorr);
+            .catch(err => {
+              console.log(`ERROR FINDING COMPANY OF EMPLOYEE: ${err}`);
+              res.status(500).json(err);
             });
         })
         .catch(err => {
-          console.log(`ERROR FINDING COMPANY OF EMPLOYEE: ${err}`);
+          console.log(`ERROR IN CREATING SCHEDULE :${err}`);
           res.status(500).json(err);
         });
     })
-    .catch(err => {
-      console.log(`ERROR IN CREATING SCHEDULE :${err}`);
-      res.status(500).json(err);
-    });
-  // }
-};
-
-//UPDATING SCHEDULE
-const updateSchedule = (req, res) => {
-  let { id } = req.params;
-  let {} = req.body;
-  req.app
-    .get("db")
-    .then()
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(error);
-    });
+    .catch(errrorrr => `ERROR FINDING EMPLOYEE ${errrorrr}`);
+  // console.log(`CEI OVER HERE ${cei}`);
 };
 
 //DELETING SCHEDULE
@@ -253,7 +295,6 @@ module.exports = {
   getSchedules, //NOT CURRENTLY ACTIVE
   mySchedule, //NOT CURRENTLY ACTIVE
   createSchedule, //NOT CURRENTLY ACTIVE
-  updateSchedule, //NOT CURRENTLY ACTIVE
   deleteSchedule, //NOT CURRENTLY ACTIVE
   createCompany,
   getCompany

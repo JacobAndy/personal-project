@@ -1,1 +1,1 @@
-select * from employee where user_id=$1;
+select employee_id from employee where user_id=$1;

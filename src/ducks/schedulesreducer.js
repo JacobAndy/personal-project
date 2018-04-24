@@ -4,6 +4,7 @@ const initialState = {
   schedule: {
     user1: "",
     schedule: [
+      { weekOf: "" },
       {
         mondaymorningclockin: "",
         mondaymorningclockout: ""
@@ -84,21 +85,38 @@ const initialState = {
     sundaynightopen: false
   },
 
-  adminSchedules: []
+  adminSchedules: [],
+  loading: false
 };
+
+/////////////////////////ACTION CONSTANTS
 
 const CREATE_SCHEDULE = "CREATE_SCHEDULE";
 const HANDLE_STATE_UPDATE = "HANDLE_STATE_UPDATE";
 const HANDLE_OPEN = "HANDLE_OPEN";
 const HANDLE_OFF = "HANDLE_OFF";
-const INIT_SCHEDULE = "INIT_SCHEDULE";
-// const GET_SCHEDULES = "GET_SCHEDULES";
+const GET_WEEK_OF = "GET_WEEK_OF";
+const SET_WEEK_OF = "SET_WEEK_OF";
+//////////////////ACTION CREATORS
+
+export function setWeekOf(val) {
+  console.log("SET WEEK OF WAS HIT");
+  return {
+    type: SET_WEEK_OF,
+    payload: val
+  };
+}
+
+export function getWeekOf(currentUser, week) {
+  return {
+    type: GET_WEEK_OF,
+    payload: axios.get(`/weekof?user=${currentUser}&weekof=${week}`)
+  };
+}
 
 export function createSchedule(userId, arr) {
   let currDate = new Date();
   let newCurr = `${currDate.getMonth()}/${currDate.getDate()}/${currDate.getFullYear()}`;
-  // console.log(this.props);
-  // let currentUser = this.props.user_id;
   return {
     type: CREATE_SCHEDULE,
     payload: axios.post("/createschedule", { newCurr, userId, arr })
@@ -112,6 +130,9 @@ export function handleOpen(prop) {
   };
 }
 export function handleStateUpdate(int, prop, val) {
+  console.log(
+    `HANDLE STATE UPDATE HIT HERE ARE THE VALUES INT : => ${int} PROP : => ${prop} VAL : => ${val}`
+  );
   return {
     type: HANDLE_STATE_UPDATE,
     payload: { int, prop, val }
@@ -124,20 +145,20 @@ export function handleOff(who, property) {
   };
 }
 
+///////////////////// THIS IS THE START OF THE ACTIONS REDUCER
 export default function schedulesreducer(state = initialState, action) {
   switch (action.type) {
-    // case NEW_SCHEDULE:
-    //   return { ...state, schedule: action.payload };
-    //get schedules
-    // case `${GET_SCHEDULES}_PENDING`:
-    //   return { ...state, loading: true };
-    // case `${GET_SCHEDULES}_FULFILLED`:
-    //   console.log(action.payload.data);
-    //   return { ...state, loading: false };
-    // case CREATE_SCHEDULE:
-    // return{...state{
-    //   schedule:
-    //   ...state.schedule, action.payload.data}
+    case SET_WEEK_OF:
+      return {
+        ...state,
+        schedule: {
+          ...state.schedule,
+          schedule: {
+            ...state.schedule.schedule,
+            [0]: { weekOf: action.payload }
+          }
+        }
+      };
     case HANDLE_STATE_UPDATE:
       console.log("handle state hit");
       let { int, prop, val } = action.payload;
@@ -157,6 +178,7 @@ export default function schedulesreducer(state = initialState, action) {
       } else if (hours < 12) {
         minutes = `${minutes}a`;
       }
+      console.log(`[${prop}]: ${hours}:${minutes}`);
       return {
         ...state,
         schedule: {
@@ -170,17 +192,6 @@ export default function schedulesreducer(state = initialState, action) {
           }
         }
       };
-
-    // schedule: {
-    //   ...state.schedule,
-    //   schedule: [
-    //     ...state.schedule.schedule,
-    //     (i = {
-    //       ...state.schedule.schedule[i],
-    //       [prop]: `${hours}:${minutes}`
-    //     })
-    //   ]
-    // }
     case HANDLE_OPEN:
       console.log("OPEN UP");
       return {
@@ -208,15 +219,12 @@ export default function schedulesreducer(state = initialState, action) {
     case CREATE_SCHEDULE:
       console.log("schedule init hit");
       return { ...state, adminSchedules: action.payload.data };
+    case `${GET_WEEK_OF}_PENDING`:
+      return { ...state, loading: true };
+    case `${GET_WEEK_OF}_FULFILLED`:
+      return { ...state, adminSchedules: action.payload.data, loading: false };
     //DEFAULT
     default:
       return state;
   }
 }
-
-// export function getSchedules(company, publish) {
-//   return {
-//     type: GET_SCHEDULES,
-//     payload: axios.get(`/schedules/?company=${company}&publish=${publish}`)
-//   };
-// }

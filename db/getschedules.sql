@@ -5,4 +5,4 @@ s.saturday_m,s.saturday_n,s.sunday_m,s.sunday_n
 FROM schedules s
 JOIN employee e on e.company_id=$1
 JOIN users u on u.user_id=e.user_id
-AND s.publish = $2;
+AND s.week_of = $2;
