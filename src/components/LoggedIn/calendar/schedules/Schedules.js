@@ -6,10 +6,12 @@ import TimePicker from "material-ui/TimePicker";
 import FlatButton from "material-ui/FlatButton";
 import Popover, { PopoverAnimationFromTop } from "material-ui/Popover";
 import Menu from "material-ui/Menu";
+import MenuItem from "material-ui/MenuItem";
 import WeekOf from "../../week-of/WeekOf";
 import RaisedButton from "material-ui/RaisedButton";
 
 import {
+  getEmployees,
   handleOpen,
   handleStateUpdate,
   handleOff,
@@ -19,8 +21,17 @@ import {
 class Schedules extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      popover: false
+    };
   }
+  handlePopOverOpen = event => {
+    // event.preventDefault();
+    this.setState({ popover: true, anchorEl: event.currentTarget });
+  };
+  handlePopOverClose = () => {
+    this.setState({ popover: false });
+  };
 
   render() {
     let {
@@ -44,13 +55,888 @@ class Schedules extends Component {
       sundaymorningopen,
       sundaynightopen
     } = this.props;
-    let { schedule } = this.props.schedule;
+    // let { schedule } = this.props.schedule;
     console.log(this.props);
+    let employeeInfoAndSchedules;
+    if (this.props.adminSchedules.length === 0) {
+      this.props.getEmployees(this.props.user_id);
+    } else {
+      employeeInfoAndSchedules = this.props.adminSchedules.map(e => {
+        return (
+          <div className="employee-display">
+            <div className="individual">
+              <div className="employee">
+                <h4 className="employee-name">{e.full_name}</h4>
+                <div
+                  className="down-arrow-user"
+                  onClick={this.handlePopOverOpen}
+                />
+                <div className="popover">
+                  <Popover
+                    open={this.state.popover}
+                    anchorEl={this.state.anchorEl}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                    targetOrigin={{ horizontal: "right", vertical: "top" }}
+                    onRequestClose={this.handlePopOverClose}
+                    animation={PopoverAnimationFromTop}
+                  >
+                    <Menu>
+                      <MenuItem primaryText={`Email: ${e.email}`} />
+                      <MenuItem primaryText={`Number: ${e.phone_number}`} />
+                      <MenuItem primaryText={`Address: ${e.address}`} />
+                      <MenuItem
+                        primaryText={`emergency: ${e.emergency_contact}`}
+                      />
+                    </Menu>
+                  </Popover>
+                </div>
+              </div>
+              <div className="schedule">
+                <div className="employee-schedule">
+                  <div className="morning-shift">
+                    <p>
+                      {!e.monday_morning
+                        ? "not working"
+                        : e.monday_morning.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.monday_morning
+                        ? null
+                        : `-${e.monday_morning.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("mondaymorningopen")}
+                    />
+                    <Dialog
+                      open={mondaymorningopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("mondaymornopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(1, "mondaymorning")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("mondaymorningopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("mondaymorningopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Monday Morning Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(1, "mondaymorningclockin", newDate);
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Monday Morning Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            1,
+                            "mondaymorningclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                  <div className="morning-shift">
+                    <p>
+                      {!e.monday_night
+                        ? "not working"
+                        : e.monday_night.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.monday_night
+                        ? null
+                        : !e.monday_night
+                          ? null
+                          : `-${e.monday_night.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("mondaynightopen")}
+                    />
+                    <Dialog
+                      open={mondaynightopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("mondaynightopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(2, "mondaynight")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("mondaynightopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("mondaynightopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Monday Night Clock In"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(2, "mondaynightclockin", newDate);
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Monday Night Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(2, "mondaynightclockout", newDate);
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                </div>
+                <div className="employee-schedule">
+                  <div className="morning-shift">
+                    <p>
+                      {!e.tuesday_morning
+                        ? "not working"
+                        : e.tuesday_morning.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.tuesday_morning
+                        ? null
+                        : !e.tuesday_morning
+                          ? null
+                          : `-${e.tuesday_morning.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("tuesdaymorningopen")}
+                    />
+                    <Dialog
+                      open={tuesdaymorningopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("tuesdaymornopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(3, "tuesdaymorning")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("tuesdaymorningopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("tuesdaymorningopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Tuesday Morning Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            3,
+                            "tuesdaymorningclockin",
+                            newDate
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Tuesday Morning Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            3,
+                            "tuesdaymorningclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                  <div className="morning-shift">
+                    <p>
+                      {!e.tuesday_night
+                        ? "not working"
+                        : e.tuesday_night.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.tuesday_night
+                        ? null
+                        : !e.tuesday_night
+                          ? null
+                          : `-${e.tuesday_night.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("tuesdaynightopen")}
+                    />
+
+                    <Dialog
+                      open={tuesdaynightopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("tuesdaynightopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(4, "tuesdaynight")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("tuesdaynightopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("tuesdaynightopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Tuesday Night Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(4, "tuesdaynightclockin", newDate);
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Tuesday Night Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(4, "tuesdaynightclockout", newDate);
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                </div>
+                <div className="employee-schedule">
+                  <div className="morning-shift">
+                    <p>
+                      {!e.wednesday_morning
+                        ? "not working"
+                        : e.wednesday_morning.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.wednesday_morning
+                        ? null
+                        : !e.wednesday_morning
+                          ? null
+                          : `-${e.wednesday_morning.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("wednesdaymorningopen")}
+                    />
+                    <Dialog
+                      open={wednesdaymorningopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("wednesdaymorningopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(5, "wednesdaymorning")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("wednesdaymorningopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("wednesdaymorningopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Wednesday Morning Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            5,
+                            "wednesdaymorningclockin",
+                            newDate
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Wednesday Morning Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            5,
+                            "wednesdaymorningclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                  <div className="morning-shift">
+                    <p>
+                      {!e.wednesday_night
+                        ? "not working"
+                        : e.wednesday_night.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.wednesday_night
+                        ? null
+                        : !e.wednesday_night
+                          ? null
+                          : `-${e.wednesday_night.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("wednesdaynightopen")}
+                    />
+                    <Dialog
+                      open={wednesdaynightopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("wednesdaynightopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(6, "wednesdaynight")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("wednesdaynightopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("wednesdaynightopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Wednesday Night Clock In"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            6,
+                            "wednesdaynightclockin",
+                            newDate
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Wednesday Night Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            6,
+                            "wednesdaynightclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                </div>
+                <div className="employee-schedule">
+                  <div className="morning-shift">
+                    <p>
+                      {!e.thursday_morning
+                        ? "not working"
+                        : e.thursday_morning.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.thursday_morning
+                        ? null
+                        : !e.thursday_morning
+                          ? null
+                          : `-${e.thursday_morning.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("thursdaymorningopen")}
+                    />
+                    <Dialog
+                      open={thursdaymorningopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("thursdaymorningopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(7, "thursdaymorning")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("thursdaymorningopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("thursdaymorningopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Thursday Morning Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            7,
+                            "thursdaymorningclockin",
+                            newDate
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Thursday Morning Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            7,
+                            "thursdaymorningclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                  <div className="morning-shift">
+                    <p>
+                      {!e.thursday_night
+                        ? "not working"
+                        : e.thursday_night.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.thursday_night
+                        ? null
+                        : !e.thursday_night
+                          ? null
+                          : `-${e.thursday_night.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("thursdaynightopen")}
+                    />
+                    <Dialog
+                      open={thursdaynightopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("thursdaynightopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(8, "thursdaynight")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("thursdaynightopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("thursdaynightopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Thursday Night Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(8, "thursdaynightclockin", newDate);
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Thursday Night Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            8,
+                            "thursdaynightclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                </div>
+                <div className="employee-schedule">
+                  <div className="morning-shift">
+                    <p>
+                      {!e.friday_morning
+                        ? "not working"
+                        : e.friday_morning.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.friday_morning
+                        ? null
+                        : !e.friday_morning
+                          ? null
+                          : `-${e.friday_morning.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("fridaymorningopen")}
+                    />
+                    <Dialog
+                      open={fridaymorningopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("fridaymorningopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(9, "fridaymorning")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("fridaymorningopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("fridaymorningopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Friday Morning Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(9, "fridaymorningclockin", newDate);
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Friday Morning Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            9,
+                            "fridaymorningclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                  <div className="morning-shift">
+                    <p>
+                      {!e.friday_night
+                        ? "not working"
+                        : e.friday_night.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.friday_night
+                        ? null
+                        : !e.friday_night
+                          ? null
+                          : `-${e.friday_night.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("fridaynightopen")}
+                    />
+                    <Dialog
+                      open={fridaynightopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("fridaynightopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(10, "fridaynight")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("fridaynightopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("fridaynightopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Friday Night Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(10, "fridaynightclockin", newDate);
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Friday Night Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(10, "fridaynightclockout", newDate);
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                </div>
+                <div className="employee-schedule">
+                  <div className="morning-shift">
+                    <p>
+                      {!e.saturday_morning
+                        ? "not working"
+                        : e.saturday_morning.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.saturday_morning
+                        ? null
+                        : !e.saturday_morning
+                          ? null
+                          : `-${e.saturday_morning.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("saturdaymorningopen")}
+                    />
+                    <Dialog
+                      open={saturdaymorningopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("saturdaymorningopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(11, "saturdaymorning")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("saturdaymorningopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("saturdaymorningopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Saturday Morning Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            11,
+                            "saturdaymorningclockin",
+                            newDate
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Saturday Morning Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            11,
+                            "saturdaymorningclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                  <div className="morning-shift">
+                    <p>
+                      {!e.saturday_night
+                        ? "not working"
+                        : e.saturday_night.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.saturday_night
+                        ? null
+                        : !e.saturday_night
+                          ? null
+                          : `-${e.saturday_night.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("saturdaynightopen")}
+                    />
+                    <Dialog
+                      open={saturdaynightopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("saturdaynightopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(12, "saturdaynight")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("saturdaynightopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("saturdaynightopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Saturday Night Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            12,
+                            "saturdaynightclockin",
+                            newDate
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Saturday Night Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            12,
+                            "saturdaynightclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                </div>
+                <div className="employee-schedule">
+                  <div className="morning-shift">
+                    <p>
+                      {!e.sunday_morning
+                        ? "not working"
+                        : e.sunday_morning.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.sunday_morning
+                        ? null
+                        : !e.sunday_morning
+                          ? null
+                          : `-${e.sunday_morning.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("sundaymorningopen")}
+                    />
+                    <Dialog
+                      open={sundaymorningopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("sundaymorningopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(13, "sundaymorning")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("sundaymorningopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("sundaymorningopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Sunday Morning Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            13,
+                            "sundaymorningclockin",
+                            newDate
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Sunday Morning Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(
+                            13,
+                            "sundaymorningclockout",
+                            newDate
+                          );
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                  <div className="morning-shift">
+                    <p>
+                      {!e.sunday_night
+                        ? "not working"
+                        : e.sunday_night.slice(0, 6)}
+                    </p>
+                    <p>
+                      {!e.sunday_night
+                        ? null
+                        : !e.sunday_night
+                          ? null
+                          : `-${e.sunday_night.slice(6, 12)}`}
+                    </p>
+                    <div
+                      className="right-arrow-small"
+                      onClick={() => handleOpen("sundaynightopen")}
+                    />
+                    <Dialog
+                      open={sundaynightopen}
+                      actions={[
+                        <FlatButton
+                          label="Cancel"
+                          primary={true}
+                          onClick={() => handleOpen("sundaynightopen")}
+                        />,
+                        <FlatButton
+                          label="Clear"
+                          primary={true}
+                          onClick={() => handleOff(14, "sundaynight")}
+                        />,
+                        <FlatButton
+                          label="Submit"
+                          primary={true}
+                          onClick={() => handleOpen("sundaynightopen")}
+                        />
+                      ]}
+                      onRequestClose={() => handleOpen("sundaynightopen")}
+                    >
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Sunday Night Clock in"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(14, "sundaynightclockin", newDate);
+                        }}
+                      />
+                      <TimePicker
+                        format="ampm"
+                        placeholder="Sunday Night Clock Out"
+                        onChange={(blank, newDate) => {
+                          handleStateUpdate(14, "sundaynightclockout", newDate);
+                        }}
+                      />
+                    </Dialog>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      });
+    }
     return (
       <div>
-        {/* <div className="CreateButtonHolder">
-          <button className="CreateScheduleButton">Create Schedule</button>
-        </div> */}
         <RaisedButton
           onClick={() => {
             console.log(this.props.user_id);
@@ -97,33 +983,29 @@ class Schedules extends Component {
               <div className="down-arrow-date6 down-arrow-date" />
             </div>
           </div>
-
-          <div className="employee-display">
+          {employeeInfoAndSchedules}
+          {/* <div className="employee-display">
             <div className="individual">
               <div className="employee">
                 <h4 className="employee-name">Jacob Anderson</h4>
                 <div
                   className="down-arrow-user"
-                  onClick={() => handleOpen("userinfo")}
+                  onClick={this.handlePopOverOpen}
                 />
                 <div className="popover">
                   <Popover
-                    open={userinfo}
-                    // anchorEl={this.state.anchorEl}
-                    anchorOrigin={{
-                      horizontal: "left",
-                      vertical: "bottom"
-                    }}
-                    targetOrigin={{ horizontal: "left", vertical: "top" }}
-                    onRequestClose={() => handleOpen("userinfo")}
+                    open={this.state.popover}
+                    anchorEl={this.state.anchorEl}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                    targetOrigin={{ horizontal: "right", vertical: "top" }}
+                    onRequestClose={this.handlePopOverClose}
                     animation={PopoverAnimationFromTop}
                   >
                     <Menu>
-                      <p>image</p>
-                      <p>email</p>
-                      <p>phone number</p>
-                      <p>address</p>
-                      <p>emergency contact</p>
+                      <MenuItem primaryText="Email" />
+                      <MenuItem primaryText="Phone Number" />
+                      <MenuItem primaryText="Address" />
+                      <MenuItem primaryText="Emergency Contact" />
                     </Menu>
                   </Popover>
                 </div>
@@ -167,7 +1049,6 @@ class Schedules extends Component {
                         />
                       ]}
                       onRequestClose={() => handleOpen("mondaymorningopen")}
-                      // onRequestClose={this.handleOpen}
                     >
                       <TimePicker
                         format="ampm"
@@ -282,7 +1163,6 @@ class Schedules extends Component {
                         />
                       ]}
                       onRequestClose={() => handleOpen("tuesdaymorningopen")}
-                      // onRequestClose={this.handleOpen}
                     >
                       <TimePicker
                         format="ampm"
@@ -972,7 +1852,7 @@ class Schedules extends Component {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );
@@ -990,5 +1870,6 @@ export default connect(mapStateToProps, {
   handleOpen,
   handleStateUpdate,
   handleOff,
-  createSchedule
+  createSchedule,
+  getEmployees
 })(Schedules);

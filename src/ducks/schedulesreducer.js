@@ -1,90 +1,7 @@
 import axios from "axios";
 import { connect } from "react-redux";
 const initialState = {
-  schedule: {
-    user1: "",
-    schedule: [
-      { weekOf: "" },
-      {
-        mondaymorningclockin: "",
-        mondaymorningclockout: ""
-      },
-      {
-        mondaynightclockin: "",
-        mondaynightclockout: ""
-      },
-
-      {
-        tuesdaymorningclockin: "",
-        tuesdaymorningclockout: ""
-      },
-      {
-        tuesdaynightclockin: "",
-        tuesdaynightclockout: ""
-      },
-
-      {
-        wednesdaymorningclockin: "",
-        wednesdaymorningclockout: ""
-      },
-      {
-        wednesdaynightclockin: "",
-        wednesdaynightclockout: ""
-      },
-
-      {
-        thursdaymorningclockin: "",
-        thursdaymorningclockout: ""
-      },
-      {
-        thursdaynightclockin: "",
-        thursdaynightclockout: ""
-      },
-
-      {
-        fridaymorningclockin: "",
-        fridaymorningclockout: ""
-      },
-      {
-        fridaynightclockin: "",
-        fridaynightclockout: ""
-      },
-
-      {
-        saturdaymorningclockin: "",
-        saturdaymorningclockout: ""
-      },
-      {
-        saturdaynightclockin: "",
-        saturdaynightclockout: ""
-      },
-
-      {
-        sundaymorningclockin: "",
-        sundaymorningclockout: ""
-      },
-      {
-        sundaynightclockin: "",
-        sundaynightclockout: ""
-      }
-    ],
-    userinfo: false,
-    mondaymorningopen: false,
-    mondaynightopen: false,
-    tuesdaymorningopen: false,
-    tuesdaynightopen: false,
-    wednesdaymorningopen: false,
-    wednesdaynightopen: false,
-    thursdaymorningopen: false,
-    thursdaynightopen: false,
-    fridaymorningopen: false,
-    fridaynightopen: false,
-    saturdaymorningopen: false,
-    saturdaynightopen: false,
-    sundaymorningopen: false,
-    sundaynightopen: false
-  },
-
+  weekOf: "",
   adminSchedules: [],
   loading: false
 };
@@ -97,7 +14,15 @@ const HANDLE_OPEN = "HANDLE_OPEN";
 const HANDLE_OFF = "HANDLE_OFF";
 const GET_WEEK_OF = "GET_WEEK_OF";
 const SET_WEEK_OF = "SET_WEEK_OF";
+const GET_EMPLOYEES = "GET_EMPLOYEES";
 //////////////////ACTION CREATORS
+export function getEmployees(id) {
+  console.log("get employes reducer hit");
+  return {
+    type: GET_EMPLOYEES,
+    payload: axios.get(`/employees${id}`)
+  };
+}
 
 export function setWeekOf(val) {
   console.log("SET WEEK OF WAS HIT");
@@ -148,16 +73,109 @@ export function handleOff(who, property) {
 ///////////////////// THIS IS THE START OF THE ACTIONS REDUCER
 export default function schedulesreducer(state = initialState, action) {
   switch (action.type) {
+    case `${GET_EMPLOYEES}_FULFILLED`:
+      console.log("HELOOOOOOOO WORRRRLLLLLDDD");
+      let mappedEmployees = action.payload.data.map(e => {
+        return {
+          full_name: e.full_name,
+          emergency_contact: e.emergency_contact,
+          email: e.email,
+          address: e.address,
+          phone_number: e.phone_number,
+          schedule: [
+            { weekOf: state.weekOf },
+            {
+              mondaymorningclockin: "",
+              mondaymorningclockout: ""
+            },
+            {
+              mondaynightclockin: "",
+              mondaynightclockout: ""
+            },
+
+            {
+              tuesdaymorningclockin: "",
+              tuesdaymorningclockout: ""
+            },
+            {
+              tuesdaynightclockin: "",
+              tuesdaynightclockout: ""
+            },
+
+            {
+              wednesdaymorningclockin: "",
+              wednesdaymorningclockout: ""
+            },
+            {
+              wednesdaynightclockin: "",
+              wednesdaynightclockout: ""
+            },
+
+            {
+              thursdaymorningclockin: "",
+              thursdaymorningclockout: ""
+            },
+            {
+              thursdaynightclockin: "",
+              thursdaynightclockout: ""
+            },
+
+            {
+              fridaymorningclockin: "",
+              fridaymorningclockout: ""
+            },
+            {
+              fridaynightclockin: "",
+              fridaynightclockout: ""
+            },
+
+            {
+              saturdaymorningclockin: "",
+              saturdaymorningclockout: ""
+            },
+            {
+              saturdaynightclockin: "",
+              saturdaynightclockout: ""
+            },
+
+            {
+              sundaymorningclockin: "",
+              sundaymorningclockout: ""
+            },
+            {
+              sundaynightclockin: "",
+              sundaynightclockout: ""
+            }
+          ],
+          userinfo: false,
+          mondaymorningopen: false,
+          mondaynightopen: false,
+          tuesdaymorningopen: false,
+          tuesdaynightopen: false,
+          wednesdaymorningopen: false,
+          wednesdaynightopen: false,
+          thursdaymorningopen: false,
+          thursdaynightopen: false,
+          fridaymorningopen: false,
+          fridaynightopen: false,
+          saturdaymorningopen: false,
+          saturdaynightopen: false,
+          sundaymorningopen: false,
+          sundaynightopen: false
+        };
+      });
+      return { ...state, adminSchedules: mappedEmployees };
+    case `${GET_WEEK_OF}_FULFILLED`:
+      console.log(action.payload.data);
+      if (action.payload.data.length === 0) {
+        return { ...state, adminSchedules: [] };
+      } else {
+        return { ...state, adminSchedules: action.payload.data };
+      }
     case SET_WEEK_OF:
       return {
         ...state,
-        schedule: {
-          ...state.schedule,
-          schedule: {
-            ...state.schedule.schedule,
-            [0]: { weekOf: action.payload }
-          }
-        }
+        weekOf: action.payload
       };
     case HANDLE_STATE_UPDATE:
       console.log("handle state hit");

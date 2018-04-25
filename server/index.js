@@ -94,7 +94,7 @@ app.put("/update", updateUser);
 //EMPLOYEE END POINTS
 
 //getting employees WORKS
-app.get("/employees", getEmployees);
+app.get("/employees:id", getEmployees);
 
 //////////////////////////////////////////////////////////
 //COMPANY END POINTS

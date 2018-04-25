@@ -52,16 +52,38 @@ const createEmployee = (req, res) => {
 
 //EMPLOYEES OF THE COMPANY WORKS
 const getEmployees = (req, res) => {
-  let { companyid } = req.query;
+  console.log("GET EMPLOYEES WAS HIT IN THE REDUCER");
+  let { id } = req.params;
+  console.log(id);
   req.app
     .get("db")
-    .getemployees(companyid)
-    .then(results => {
-      console.log("get Employees successful");
-      res.status(200).json(results);
+    .findEmployee(id)
+    .then(empl => {
+      console.log(empl[0].employee_id);
+      req.app
+        .get("db")
+        .findcompany(empl[0].employee_id)
+        .then(companyid => {
+          console.log(companyid[0].company_id);
+          req.app
+            .get("db")
+            .getemployees(companyid[0].company_id)
+            .then(results => {
+              console.log("get Employees successful");
+              res.status(200).json(results);
+            })
+            .catch(err => {
+              console.log(`ERROR GETTING EMPLOYEES : => ${err}`);
+              res.status(500).json(err);
+            });
+        })
+        .catch(errorr => {
+          console.log(`ERROR FINDING COMPANY : =>${errorr}`);
+          res.status(500).json(errorr);
+        });
     })
     .catch(err => {
-      console.log(err);
+      console.log(`ERROR FINDING EMPLOYEE : => ${err}`);
       res.status(500).json(err);
     });
 };
@@ -85,11 +107,14 @@ const getSchedules = (req, res) => {
         .get("db")
         .findcompany(Number(JSON.stringify(currentEmployeeId)[16]))
         .then(comp_id => {
-          console.log(`COMPANY ID OF GETTING SCHEDULES : => ${comp_id}`);
+          console.log(
+            `COMPANY ID OF GETTING SCHEDULES : => ${comp_id[0].company_id}`
+          );
           req.app
             .get("db")
-            .getSchedules([comp_id, weekof])
+            .getschedules([comp_id[0].company_id, weekof])
             .then(schedules => {
+              res.status(200).json(schedules);
               console.log(`SCHEDULES RECEIVED HERE THEY ARE : => ${schedules}`);
             })
             .catch(e => {
@@ -108,20 +133,8 @@ const getSchedules = (req, res) => {
       console.log(`ERROR FINDING EMPLOYEE ${errrorrr}`);
       res.status(500).json(errrorrr);
     });
-
-  // req.app
-  //   .get("db")
-  //   .req.app.get("db")
-  //   .getschedules([company, publish])
-  //   .then(results => {
-  //     console.log("get Schedules successful");
-  //     res.status(200).json(results);
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //     res.status(500).json(err);
-  //   });
 };
+
 //ACCESS MY SCHEDULE
 const mySchedule = (req, res) => {
   let { employeeid, publish } = req.query;

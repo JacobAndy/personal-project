@@ -110,7 +110,14 @@ class WeekOf extends Component {
       currentMonth: month,
       currentYear: year
     });
-    // this.props.getWeekOf(this.props.currentUser[0].user_id, newDate);
+    console.log(
+      `USER ID FOR GET WEEK OF RIGHT HERERRR : => ${
+        this.props.currentUser[0].user_id
+      }`
+    );
+    //this is what is thowing the error
+    this.props.getWeekOf(this.props.currentUser[0].user_id, newDate);
+    console.log(this.props);
   }
   calendarToggle(prop) {
     this.setState({ [prop]: !this.state[prop] });
@@ -137,7 +144,7 @@ class WeekOf extends Component {
         <div
           className="left-arrow"
           onClick={() => {
-            console.log();
+            console.log(this.state.currentnumbermonth);
             let dayTM = new Date(
               this.state.currentYear,
               this.state.currentnumbermonth + 1,
@@ -357,13 +364,12 @@ class WeekOf extends Component {
             mode="landscape"
           />
         </Dialog>
-        <h3 className="week-display">
-          {this.props.schedule.schedule[0].weekOf}
-        </h3>
+        <h3 className="week-display">{this.props.weekOf}</h3>
         <div
           className="right-arrow"
           onClick={() => {
-            console.log();
+            console.log(this.currentMonth);
+            console.log(this.currentnumbermonth);
             let dayTM = new Date(
               this.state.currentYear,
               this.state.currentnumbermonth,
@@ -371,20 +377,6 @@ class WeekOf extends Component {
             );
             let dayTM1 = dayTM.getDate();
             this.setState({ daysThisMonth: dayTM1 });
-            console.log(
-              this.state.currentDay,
-              this.state.currentMonth,
-              this.state.currentnumbermonth,
-              this.state.currentYear,
-              dayTM1
-            );
-
-            // let testDate = new Date(
-            //   `${this.state.currentMonth} ${this.state.currentDay + 7},${
-            //     this.state.currentYear
-            //   }`
-            // );
-            // console.log(`this is the test date ${testDate}`);
 
             if (
               new Date(
@@ -393,22 +385,12 @@ class WeekOf extends Component {
                 }`
               ) == "Invalid Date"
             ) {
-              // console.log(`IF STATEMENT HIT`);
-              // console.log(this.state.currentMonth);
-
+              console.log(dayTM1, this.currentnumbermonth);
               let difference = this.state.currentDay + 7 - dayTM1;
-              // console.log(difference);
               this.setState({
                 currentDay: difference,
                 currentnumbermonth: this.state.currentnumbermonth + 1
               });
-              // console.log(
-              //   `current month: =>${
-              //     this.state.currentMonth
-              //   } current number of month : => ${
-              //     this.state.currentnumbermonth
-              //   } current day of month :=> ${this.state.currentDay}`
-              // );
               let newestDate;
               switch (this.state.currentnumbermonth + 1) {
                 case 0:

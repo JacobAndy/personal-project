@@ -112,7 +112,7 @@ body {
 }
 .down-arrow-user {
   position: absolute;
-  margin: 32px 0 30px 215px;
+  margin: 39px 0 30px 215px;
 }
 .right-arrow-small {
   position: absolute;
@@ -130,4 +130,8 @@ body {
   position: absolute;
   right: 20px;
   top: 20px;
+}
+.popover {
+  position: absolute;
+  top: 15px;
 }
