@@ -16,7 +16,8 @@ const {
   createSchedule,
   deleteSchedule, //NOT CURRENTLY ACTIVE
   createCompany,
-  getCompany
+  getCompany,
+  updateSchedule
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -112,8 +113,11 @@ app.get("/company", getCompany);
 //create schedule
 app.post("/createschedule", createSchedule);
 
+//update schedule
+app.put("/updateschedule", updateSchedule);
+
 //delete schedule
-// app.delete('/rm/schedule/:id', deleteSchedule);
+app.delete("/rm/schedule/", deleteSchedule);
 
 //getting schedules
 app.get("/weekof", getSchedules);

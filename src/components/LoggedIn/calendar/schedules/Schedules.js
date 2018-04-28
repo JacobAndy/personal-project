@@ -9,13 +9,16 @@ import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/MenuItem";
 import WeekOf from "../../week-of/WeekOf";
 import RaisedButton from "material-ui/RaisedButton";
+import _ from "lodash.map";
 
 import {
   getEmployees,
   handleOpen,
   handleStateUpdate,
   handleOff,
-  createSchedule
+  createSchedule,
+  updateschedule,
+  deleteWeek
 } from "../../../../ducks/schedulesreducer";
 
 class Schedules extends Component {
@@ -25,20 +28,19 @@ class Schedules extends Component {
       popover: false
     };
   }
+
   handlePopOverOpen = event => {
-    // event.preventDefault();
     this.setState({ popover: true, anchorEl: event.currentTarget });
   };
   handlePopOverClose = () => {
     this.setState({ popover: false });
   };
-
   render() {
+    let { schedules } = this.state;
     let {
       handleOpen,
       handleStateUpdate,
       handleOff,
-      initSchedule,
       userinfo,
       mondaymorningopen,
       mondaynightopen,
@@ -55,13 +57,14 @@ class Schedules extends Component {
       sundaymorningopen,
       sundaynightopen
     } = this.props;
+    console.log(this.state);
     // let { schedule } = this.props.schedule;
     console.log(this.props);
     let employeeInfoAndSchedules;
     if (this.props.adminSchedules.length === 0) {
       this.props.getEmployees(this.props.user_id);
     } else {
-      employeeInfoAndSchedules = this.props.adminSchedules.map(e => {
+      employeeInfoAndSchedules = _(this.props.adminSchedules, (e, i) => {
         return (
           <div className="employee-display">
             <div className="individual">
@@ -95,14 +98,14 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!e.monday_morning
+                      {!e.schedule[1].mondaymorningclockin
                         ? "not working"
-                        : e.monday_morning.slice(0, 6)}
+                        : e.schedule[1].mondaymorningclockin}
                     </p>
                     <p>
-                      {!e.monday_morning
+                      {!e.schedule[1].mondaymorningclockout
                         ? null
-                        : `-${e.monday_morning.slice(6, 12)}`}
+                        : `-${e.schedule[1].mondaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -133,7 +136,12 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Monday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(1, "mondaymorningclockin", newDate);
+                          handleStateUpdate(
+                            i,
+                            1,
+                            "mondaymorningclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
@@ -141,6 +149,7 @@ class Schedules extends Component {
                         placeholder="Monday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             1,
                             "mondaymorningclockout",
                             newDate
@@ -151,16 +160,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!e.monday_night
+                      {!e.schedule[2].mondaynightclockin
                         ? "not working"
-                        : e.monday_night.slice(0, 6)}
+                        : e.schedule[2].mondaynightclockin}
                     </p>
                     <p>
-                      {!e.monday_night
+                      {!e.schedule[2].mondaynightclockout
                         ? null
-                        : !e.monday_night
+                        : !e.schedule[2].mondaynightclockout
                           ? null
-                          : `-${e.monday_night.slice(6, 12)}`}
+                          : `-${e.schedule[2].mondaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -191,14 +200,24 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Monday Night Clock In"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(2, "mondaynightclockin", newDate);
+                          handleStateUpdate(
+                            i,
+                            2,
+                            "mondaynightclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Monday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(2, "mondaynightclockout", newDate);
+                          handleStateUpdate(
+                            i,
+                            2,
+                            "mondaynightclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
@@ -207,16 +226,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!e.tuesday_morning
+                      {!e.schedule[3].tuesdaymorningclockin
                         ? "not working"
-                        : e.tuesday_morning.slice(0, 6)}
+                        : e.schedule[3].tuesdaymorningclockin}
                     </p>
                     <p>
-                      {!e.tuesday_morning
+                      {!e.schedule[3].tuesdaymorningclockout
                         ? null
-                        : !e.tuesday_morning
+                        : !e.schedule[3].tuesdaymorningclockout
                           ? null
-                          : `-${e.tuesday_morning.slice(6, 12)}`}
+                          : `-${e.schedule[3].tuesdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -248,6 +267,7 @@ class Schedules extends Component {
                         placeholder="Tuesday Morning Clock in"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             3,
                             "tuesdaymorningclockin",
                             newDate
@@ -259,6 +279,7 @@ class Schedules extends Component {
                         placeholder="Tuesday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             3,
                             "tuesdaymorningclockout",
                             newDate
@@ -269,16 +290,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!e.tuesday_night
+                      {!e.schedule[4].tuesdaynightclockin
                         ? "not working"
-                        : e.tuesday_night.slice(0, 6)}
+                        : e.schedule[4].tuesdaynightclockin}
                     </p>
                     <p>
-                      {!e.tuesday_night
+                      {!e.schedule[4].tuesdaynightclockout
                         ? null
-                        : !e.tuesday_night
+                        : !e.schedule[4].tuesdaynightclockout
                           ? null
-                          : `-${e.tuesday_night.slice(6, 12)}`}
+                          : `-${e.schedule[4].tuesdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -310,14 +331,24 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Tuesday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(4, "tuesdaynightclockin", newDate);
+                          handleStateUpdate(
+                            i,
+                            4,
+                            "tuesdaynightclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Tuesday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(4, "tuesdaynightclockout", newDate);
+                          handleStateUpdate(
+                            i,
+                            4,
+                            "tuesdaynightclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
@@ -326,16 +357,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!e.wednesday_morning
+                      {!e.schedule[5].wednesdaymorningclockin
                         ? "not working"
-                        : e.wednesday_morning.slice(0, 6)}
+                        : e.schedule[5].wednesdaymorningclockin}
                     </p>
                     <p>
-                      {!e.wednesday_morning
+                      {!e.schedule[5].wednesdaymorningclockout
                         ? null
-                        : !e.wednesday_morning
+                        : !e.schedule[5].wednesdaymorningclockout
                           ? null
-                          : `-${e.wednesday_morning.slice(6, 12)}`}
+                          : `-${e.schedule[5].wednesdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -388,16 +419,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!e.wednesday_night
+                      {!e.schedule[6].wednesdaynightclockin
                         ? "not working"
-                        : e.wednesday_night.slice(0, 6)}
+                        : e.schedule[6].wednesdaynightclockin}
                     </p>
                     <p>
-                      {!e.wednesday_night
+                      {!e.schedule[6].wednesdaynightclockout
                         ? null
-                        : !e.wednesday_night
+                        : !e.schedule[6].wednesdaynightclockout
                           ? null
-                          : `-${e.wednesday_night.slice(6, 12)}`}
+                          : `-${e.schedule[6].wednesdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -452,16 +483,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!e.thursday_morning
+                      {!e.schedule[7].thursdaymorningclockin
                         ? "not working"
-                        : e.thursday_morning.slice(0, 6)}
+                        : e.schedule[7].thursdaymorningclockin}
                     </p>
                     <p>
-                      {!e.thursday_morning
+                      {!e.schedule[7].thursdaymorningclockout
                         ? null
-                        : !e.thursday_morning
+                        : !e.schedule[7].thursdaymorningclockout
                           ? null
-                          : `-${e.thursday_morning.slice(6, 12)}`}
+                          : `-${e.schedule[7].thursdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -514,16 +545,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!e.thursday_night
+                      {!e.schedule[8].thursdaynightclockin
                         ? "not working"
-                        : e.thursday_night.slice(0, 6)}
+                        : e.schedule[8].thursdaynightclockin}
                     </p>
                     <p>
-                      {!e.thursday_night
+                      {!e.schedule[8].thursdaynightclockout
                         ? null
-                        : !e.thursday_night
+                        : !e.schedule[8].thursdaynightclockout
                           ? null
-                          : `-${e.thursday_night.slice(6, 12)}`}
+                          : `-${e.schedule[8].thursdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -574,16 +605,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!e.friday_morning
+                      {!e.schedule[9].fridaymorningclockin
                         ? "not working"
-                        : e.friday_morning.slice(0, 6)}
+                        : e.schedule[9].fridaymorningclockin}
                     </p>
                     <p>
-                      {!e.friday_morning
+                      {!e.schedule[9].fridaymorningclockout
                         ? null
-                        : !e.friday_morning
+                        : !e.schedule[9].fridaymorningclockout
                           ? null
-                          : `-${e.friday_morning.slice(6, 12)}`}
+                          : `-${e.schedule[9].fridaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -632,16 +663,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!e.friday_night
+                      {!e.schedule[10].fridaynightclockin
                         ? "not working"
-                        : e.friday_night.slice(0, 6)}
+                        : e.schedule[10].fridaynightclockin}
                     </p>
                     <p>
-                      {!e.friday_night
+                      {!e.schedule[10].fridaynightclockout
                         ? null
-                        : !e.friday_night
+                        : !e.schedule[10].fridaynightclockout
                           ? null
-                          : `-${e.friday_night.slice(6, 12)}`}
+                          : `-${e.schedule[10].fridaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -688,16 +719,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!e.saturday_morning
+                      {!e.schedule[11].saturdaymorningclockin
                         ? "not working"
-                        : e.saturday_morning.slice(0, 6)}
+                        : e.schedule[11].saturdaymorningclockin}
                     </p>
                     <p>
-                      {!e.saturday_morning
+                      {!e.schedule[11].saturdaymorningclockout
                         ? null
-                        : !e.saturday_morning
+                        : !e.schedule[11].saturdaymorningclockout
                           ? null
-                          : `-${e.saturday_morning.slice(6, 12)}`}
+                          : `-${e.schedule[11].saturdaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -750,16 +781,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!e.saturday_night
+                      {!e.schedule[12].saturdaynightclockin
                         ? "not working"
-                        : e.saturday_night.slice(0, 6)}
+                        : e.schedule[12].saturdaynightclockin}
                     </p>
                     <p>
-                      {!e.saturday_night
+                      {!e.schedule[12].saturdaynightclockout
                         ? null
-                        : !e.saturday_night
+                        : !e.schedule[12].saturdaynightclockout
                           ? null
-                          : `-${e.saturday_night.slice(6, 12)}`}
+                          : `-${e.schedule[12].saturdaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -814,16 +845,16 @@ class Schedules extends Component {
                 <div className="employee-schedule">
                   <div className="morning-shift">
                     <p>
-                      {!e.sunday_morning
+                      {!e.schedule[13].sundaymorningclockin
                         ? "not working"
-                        : e.sunday_morning.slice(0, 6)}
+                        : e.schedule[13].sundaymorningclockin}
                     </p>
                     <p>
-                      {!e.sunday_morning
+                      {!e.schedule[13].sundaymorningclockout
                         ? null
-                        : !e.sunday_morning
+                        : !e.schedule[13].sundaymorningclockout
                           ? null
-                          : `-${e.sunday_morning.slice(6, 12)}`}
+                          : `-${e.schedule[13].sundaymorningclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -876,16 +907,16 @@ class Schedules extends Component {
                   </div>
                   <div className="morning-shift">
                     <p>
-                      {!e.sunday_night
+                      {!e.schedule[14].sundaynightclockin
                         ? "not working"
-                        : e.sunday_night.slice(0, 6)}
+                        : e.schedule[14].sundaynightclockin}
                     </p>
                     <p>
-                      {!e.sunday_night
+                      {!e.schedule[14].sundaynightclockout
                         ? null
-                        : !e.sunday_night
+                        : !e.schedule[14].sundaynightclockout
                           ? null
-                          : `-${e.sunday_night.slice(6, 12)}`}
+                          : `-${e.schedule[14].sundaynightclockout}`}
                     </p>
                     <div
                       className="right-arrow-small"
@@ -939,12 +970,32 @@ class Schedules extends Component {
       <div>
         <RaisedButton
           onClick={() => {
-            console.log(this.props.user_id);
-            createSchedule(this.props.user_id, this.props.schedule.schedule);
+            this.props.deleteWeek(this.props.adminSchedules, this.props.weekOf);
+          }}
+          className="clear-schedule"
+          label="Clear Week"
+          backgroundColor="pink"
+          color="white"
+        />
+        <RaisedButton
+          onClick={() => {
+            console.log(this.props);
+            {
+              !this.props.update
+                ? this.props.createSchedule(
+                    this.props.user_id,
+                    this.props.adminSchedules
+                  )
+                : this.props.updateschedule(
+                    this.props.weekOf,
+                    this.props.user_id,
+                    this.props.adminSchedules
+                  );
+            }
           }}
           className="post-schedule"
           label="Post Schedule"
-          backgroundColor="pink"
+          backgroundColor="green"
           color="white"
         />
         <WeekOf />
@@ -1871,5 +1922,7 @@ export default connect(mapStateToProps, {
   handleStateUpdate,
   handleOff,
   createSchedule,
-  getEmployees
+  getEmployees,
+  updateschedule,
+  deleteWeek
 })(Schedules);

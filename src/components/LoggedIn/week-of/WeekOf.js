@@ -176,6 +176,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 1:
                   this.setState({ currentMonth: this.state.feb });
@@ -183,6 +187,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 2:
                   this.setState({ currentMonth: this.state.march });
@@ -190,6 +198,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 3:
                   this.setState({ currentMonth: this.state.april });
@@ -197,6 +209,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 4:
                   this.setState({ currentMonth: this.state.may });
@@ -204,6 +220,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 5:
                   this.setState({ currentMonth: this.state.june });
@@ -211,6 +231,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 6:
                   this.setState({ currentMonth: this.state.july });
@@ -218,6 +242,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 7:
                   this.setState({ currentMonth: this.state.aug });
@@ -225,6 +253,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 8:
                   this.setState({ currentMonth: this.state.sept });
@@ -232,6 +264,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 9:
                   this.setState({ currentMonth: this.state.oct });
@@ -239,6 +275,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 10:
                   this.setState({ currentMonth: this.state.nov });
@@ -246,6 +286,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 case 11:
                   this.setState({ currentMonth: this.state.dec });
@@ -253,6 +297,10 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
+                  this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestDate
+                  );
                   break;
                 default:
                   this.setState({ currentMonth: "month unavailable" });
@@ -264,6 +312,10 @@ class WeekOf extends Component {
               let newestsDate = `${this.state.currentMonth} ${this.state
                 .currentDay - 7}, ${this.state.currentYear}`;
               this.props.setWeekOf(newestsDate);
+              this.props.getWeekOf(
+                this.props.currentUser[0].user_id,
+                newestsDate
+              );
             }
           }}
         />
@@ -372,7 +424,7 @@ class WeekOf extends Component {
             console.log(this.currentnumbermonth);
             let dayTM = new Date(
               this.state.currentYear,
-              this.state.currentnumbermonth,
+              this.state.currentnumbermonth + 1,
               0
             );
             let dayTM1 = dayTM.getDate();

@@ -130,8 +130,15 @@ body {
   position: absolute;
   right: 20px;
   top: 20px;
+  width: 151px;
 }
 .popover {
   position: absolute;
   top: 15px;
+}
+.clear-schedule {
+  top: 20px;
+  width: 151px;
+  right: 200px;
+  position: absolute;
 }

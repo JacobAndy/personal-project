@@ -152,7 +152,10 @@ const mySchedule = (req, res) => {
 };
 //CREATING SCHEDULE
 const createSchedule = (req, res) => {
+  console.log("CREATE SCHEDULE CONTROLLER HIT!");
   let { newCurr, arr, userId } = req.body;
+  console.log(`ARRAY LENGTH : => ${arr.length}`);
+  console.log(arr[0].schedule[0].weekOf);
   // console.log(`THIS IS THE ARRAY OF THE BODY : => ${arr[0].weekOf}`);
   // console.log("create schedule hit");
   // console.log(`currentUser: ${userId}`);
@@ -172,27 +175,41 @@ const createSchedule = (req, res) => {
         .createschedule([
           Number(JSON.stringify(currentEmployeeId)[16]),
           newCurr,
-          arr[0].weekOf,
-          arr[1].mondaymorningclockin + arr[1].mondaymorningclockout,
-          arr[2].mondaynightclockin + arr[2].mondaynightclockout,
+          arr[0].schedule[0].weekOf,
+          arr[0].schedule[1].mondaymorningclockin +
+            arr[0].schedule[1].mondaymorningclockout,
+          arr[0].schedule[2].mondaynightclockin +
+            arr[0].schedule[2].mondaynightclockout,
 
-          arr[3].tuesdaymorningclockin + arr[3].tuesdaymorningclockout,
-          arr[4].tuesdaynightclockin + arr[4].tuesdaynightclockout,
+          arr[0].schedule[3].tuesdaymorningclockin +
+            arr[0].schedule[3].tuesdaymorningclockout,
+          arr[0].schedule[4].tuesdaynightclockin +
+            arr[0].schedule[4].tuesdaynightclockout,
 
-          arr[5].wednesdaymorningclockin + arr[5].wednesdaymorningclockout,
-          arr[6].wednesdaynightclockin + arr[6].wednesdaynightclockout,
+          arr[0].schedule[5].wednesdaymorningclockin +
+            arr[0].schedule[5].wednesdaymorningclockout,
+          arr[0].schedule[6].wednesdaynightclockin +
+            arr[0].schedule[6].wednesdaynightclockout,
 
-          arr[7].thursdaymorningclockin + arr[7].thursdaymorningclockout,
-          arr[8].thursdaynightclockin + arr[8].thursdaynightclockout,
+          arr[0].schedule[7].thursdaymorningclockin +
+            arr[0].schedule[7].thursdaymorningclockout,
+          arr[0].schedule[8].thursdaynightclockin +
+            arr[0].schedule[8].thursdaynightclockout,
 
-          arr[9].fridaymorningclockin + arr[9].fridaymorningclockout,
-          arr[10].fridaynightclockin + arr[10].fridaynightclockout,
+          arr[0].schedule[9].fridaymorningclockin +
+            arr[0].schedule[9].fridaymorningclockout,
+          arr[0].schedule[10].fridaynightclockin +
+            arr[0].schedule[10].fridaynightclockout,
 
-          arr[11].saturdaymorningclockin + arr[11].saturdaymorningclockout,
-          arr[12].saturdaynightclockin + arr[12].saturdaynightclockout,
+          arr[0].schedule[11].saturdaymorningclockin +
+            arr[0].schedule[11].saturdaymorningclockout,
+          arr[0].schedule[12].saturdaynightclockin +
+            arr[0].schedule[12].saturdaynightclockout,
 
-          arr[13].sundaymorningclockin + arr[13].sundaymorningclockout,
-          arr[14].sundaynightclockin + arr[14].sundaynightclockout
+          arr[0].schedule[13].sundaymorningclockin +
+            arr[0].schedule[13].sundaymorningclockout,
+          arr[0].schedule[14].sundaynightclockin +
+            arr[0].schedule[14].sundaynightclockout
         ])
         .then(results => {
           req.app
@@ -241,12 +258,74 @@ const createSchedule = (req, res) => {
     .catch(errrorrr => `ERROR FINDING EMPLOYEE ${errrorrr}`);
   // console.log(`CEI OVER HERE ${cei}`);
 };
+const updateSchedule = (req, res) => {
+  console.log("UPDATE SCHEDULE CONTROLLER HIT!");
+  let { week, userId, arr } = req.body;
+  console.log(`THIS IS THE WEEK : => ${week}`);
+  console.log(`THIS IS THE USER ID : => ${userId}`);
+  console.log(arr[0].schedule[0].weekOf);
+  req.app
+    .get("db")
+    .updateschedules([
+      arr[0].employee_id,
+      arr[0].schedule[1].mondaymorningclockin +
+        arr[0].schedule[1].mondaymorningclockout,
+      arr[0].schedule[2].mondaynightclockin +
+        arr[0].schedule[2].mondaynightclockout,
+
+      arr[0].schedule[3].tuesdaymorningclockin +
+        arr[0].schedule[3].tuesdaymorningclockout,
+      arr[0].schedule[4].tuesdaynightclockin +
+        arr[0].schedule[4].tuesdaynightclockout,
+
+      arr[0].schedule[5].wednesdaymorningclockin +
+        arr[0].schedule[5].wednesdaymorningclockout,
+      arr[0].schedule[6].wednesdaynightclockin +
+        arr[0].schedule[6].wednesdaynightclockout,
+
+      arr[0].schedule[7].thursdaymorningclockin +
+        arr[0].schedule[7].thursdaymorningclockout,
+      arr[0].schedule[8].thursdaynightclockin +
+        arr[0].schedule[8].thursdaynightclockout,
+
+      arr[0].schedule[9].fridaymorningclockin +
+        arr[0].schedule[9].fridaymorningclockout,
+      arr[0].schedule[10].fridaynightclockin +
+        arr[0].schedule[10].fridaynightclockout,
+
+      arr[0].schedule[11].saturdaymorningclockin +
+        arr[0].schedule[11].saturdaymorningclockout,
+      arr[0].schedule[12].saturdaynightclockin +
+        arr[0].schedule[12].saturdaynightclockout,
+
+      arr[0].schedule[13].sundaymorningclockin +
+        arr[0].schedule[13].sundaymorningclockout,
+      arr[0].schedule[14].sundaynightclockin +
+        arr[0].schedule[14].sundaynightclockout,
+      arr[0].schedule[0].weekOf
+    ])
+    .then(results => {
+      console.log(`UPDATING SCHEDULES SUCCESSFUL`);
+      res.status(200).json(results);
+    })
+    .catch(err => {
+      console.log(`ERROR UPDATING SCHEDULES : => ${err}`);
+      res.status(500).json(err);
+    });
+};
 
 //DELETING SCHEDULE
 const deleteSchedule = (req, res) => {
+  let { user, weekof } = req.query;
+  console.log(user);
+  console.log(weekof);
   req.app
     .get("db")
-    .then()
+    .deleteweek([user, weekof])
+    .then(results => {
+      console.log("DELETE WEEK SUCCESSFUL");
+      res.status(200).json(results);
+    })
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
@@ -310,5 +389,6 @@ module.exports = {
   createSchedule, //NOT CURRENTLY ACTIVE
   deleteSchedule, //NOT CURRENTLY ACTIVE
   createCompany,
-  getCompany
+  getCompany,
+  updateSchedule
 };
