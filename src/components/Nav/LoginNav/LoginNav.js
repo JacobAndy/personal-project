@@ -90,6 +90,12 @@ class Nav extends Component {
                 <Link to="/">
                   <h5 className="burger-options">Home</h5>
                 </Link>
+                <Link to="/profile">
+                  <h5 className="burger-options">Profile</h5>
+                </Link>
+                <Link to="/jobs">
+                  <h5 className="burger-options">Jobs</h5>
+                </Link>
                 <Link to="/schedule">
                   <h5 className="burger-options">Schedule</h5>
                 </Link>

@@ -17,7 +17,8 @@ const {
   deleteSchedule, //NOT CURRENTLY ACTIVE
   createCompany,
   getCompany,
-  updateSchedule
+  updateSchedule,
+  getAllJobs
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -106,6 +107,9 @@ app.post("/createcompany", createCompany);
 
 //get company WORKS
 app.get("/company", getCompany);
+
+//getting all jobs that live in database
+app.get("/alljobs", getAllJobs);
 
 //////////////////////////////////////////////////////////
 //SCHEDULE END POINTS

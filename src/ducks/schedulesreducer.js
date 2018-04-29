@@ -204,7 +204,7 @@ export default function schedulesreducer(state = initialState, action) {
         return { ...state, adminSchedules: [] };
       } else {
         console.log("THIS IS THE ELSE STATEMENT121212121212121212");
-        handleUpdate(1);
+        // handleUpdate(1);
         let mapEmployees = action.payload.data.map(e => {
           return {
             employee_id: e.employee_id,

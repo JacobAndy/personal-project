@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Nav from "../../Nav/LoginNav/LoginNav";
 
 class ContactPage extends Component {
   constructor() {
@@ -8,7 +9,10 @@ class ContactPage extends Component {
   render() {
     return (
       <div>
-        <h1>this is a contact page</h1>
+        <Nav />
+        <div>
+          <h1>this is a contact page</h1>
+        </div>
       </div>
     );
   }

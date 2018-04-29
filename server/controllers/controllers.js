@@ -365,11 +365,14 @@ const createCompany = (req, res) => {
 //GETTING THE COMPANY OF THE USER ID WORKS
 const getCompany = (req, res) => {
   let { userid } = req.query;
+  console.log(`USER ID : => ${userid}`);
+  console.log("GET COMPANY HIT");
   req.app
     .get("db")
     .getGroup(userid)
     .then(results => {
       console.log("getting company successful");
+      console.log(results);
       res.status(200).json(results);
     })
     .catch(err => {
@@ -378,6 +381,20 @@ const getCompany = (req, res) => {
     });
 };
 
+//getting all jobs that live in the database
+const getAllJobs = (req, res) => {
+  req.app
+    .get("db")
+    .getallbusiness()
+    .then(all => {
+      console.log("SUCCESS IN GETTING ALL BUSINESSES");
+      res.status(200).json(all);
+    })
+    .catch(error => {
+      console.log(`ERROR IN GETTING ALL BUSINESSES : => ${error}`);
+      res.status(500).json(error);
+    });
+};
 ////////////////////////////////////////////////////////////////////////////////////////
 //MODULE EXPORTING FUNCTIONS
 module.exports = {
@@ -390,5 +407,6 @@ module.exports = {
   deleteSchedule, //NOT CURRENTLY ACTIVE
   createCompany,
   getCompany,
-  updateSchedule
+  updateSchedule,
+  getAllJobs
 };

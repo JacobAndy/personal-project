@@ -18,7 +18,8 @@ import {
   handleOff,
   createSchedule,
   updateschedule,
-  deleteWeek
+  deleteWeek,
+  getWeekOf
 } from "../../../../ducks/schedulesreducer";
 
 class Schedules extends Component {
@@ -35,6 +36,7 @@ class Schedules extends Component {
   handlePopOverClose = () => {
     this.setState({ popover: false });
   };
+
   render() {
     let { schedules } = this.state;
     let {
@@ -398,6 +400,7 @@ class Schedules extends Component {
                         placeholder="Wednesday Morning Clock in"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             5,
                             "wednesdaymorningclockin",
                             newDate
@@ -409,6 +412,7 @@ class Schedules extends Component {
                         placeholder="Wednesday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             5,
                             "wednesdaymorningclockout",
                             newDate
@@ -460,6 +464,7 @@ class Schedules extends Component {
                         placeholder="Wednesday Night Clock In"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             6,
                             "wednesdaynightclockin",
                             newDate
@@ -471,6 +476,7 @@ class Schedules extends Component {
                         placeholder="Wednesday Night Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             6,
                             "wednesdaynightclockout",
                             newDate
@@ -524,6 +530,7 @@ class Schedules extends Component {
                         placeholder="Thursday Morning Clock in"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             7,
                             "thursdaymorningclockin",
                             newDate
@@ -535,6 +542,7 @@ class Schedules extends Component {
                         placeholder="Thursday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             7,
                             "thursdaymorningclockout",
                             newDate
@@ -585,7 +593,12 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Thursday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(8, "thursdaynightclockin", newDate);
+                          handleStateUpdate(
+                            i,
+                            8,
+                            "thursdaynightclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
@@ -593,6 +606,7 @@ class Schedules extends Component {
                         placeholder="Thursday Night Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             8,
                             "thursdaynightclockout",
                             newDate
@@ -645,7 +659,12 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Friday Morning Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(9, "fridaymorningclockin", newDate);
+                          handleStateUpdate(
+                            i,
+                            9,
+                            "fridaymorningclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
@@ -653,6 +672,7 @@ class Schedules extends Component {
                         placeholder="Friday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             9,
                             "fridaymorningclockout",
                             newDate
@@ -703,14 +723,24 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Friday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(10, "fridaynightclockin", newDate);
+                          handleStateUpdate(
+                            i,
+                            10,
+                            "fridaynightclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Friday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(10, "fridaynightclockout", newDate);
+                          handleStateUpdate(
+                            i,
+                            10,
+                            "fridaynightclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
@@ -760,6 +790,7 @@ class Schedules extends Component {
                         placeholder="Saturday Morning Clock in"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             11,
                             "saturdaymorningclockin",
                             newDate
@@ -771,6 +802,7 @@ class Schedules extends Component {
                         placeholder="Saturday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             11,
                             "saturdaymorningclockout",
                             newDate
@@ -822,6 +854,7 @@ class Schedules extends Component {
                         placeholder="Saturday Night Clock in"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             12,
                             "saturdaynightclockin",
                             newDate
@@ -833,6 +866,7 @@ class Schedules extends Component {
                         placeholder="Saturday Night Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             12,
                             "saturdaynightclockout",
                             newDate
@@ -886,6 +920,7 @@ class Schedules extends Component {
                         placeholder="Sunday Morning Clock in"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             13,
                             "sundaymorningclockin",
                             newDate
@@ -897,6 +932,7 @@ class Schedules extends Component {
                         placeholder="Sunday Morning Clock Out"
                         onChange={(blank, newDate) => {
                           handleStateUpdate(
+                            i,
                             13,
                             "sundaymorningclockout",
                             newDate
@@ -947,14 +983,24 @@ class Schedules extends Component {
                         format="ampm"
                         placeholder="Sunday Night Clock in"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(14, "sundaynightclockin", newDate);
+                          handleStateUpdate(
+                            i,
+                            14,
+                            "sundaynightclockin",
+                            newDate
+                          );
                         }}
                       />
                       <TimePicker
                         format="ampm"
                         placeholder="Sunday Night Clock Out"
                         onChange={(blank, newDate) => {
-                          handleStateUpdate(14, "sundaynightclockout", newDate);
+                          handleStateUpdate(
+                            i,
+                            14,
+                            "sundaynightclockout",
+                            newDate
+                          );
                         }}
                       />
                     </Dialog>
@@ -1924,5 +1970,6 @@ export default connect(mapStateToProps, {
   createSchedule,
   getEmployees,
   updateschedule,
-  deleteWeek
+  deleteWeek,
+  getWeekOf
 })(Schedules);

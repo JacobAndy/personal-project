@@ -14,8 +14,8 @@ import getMuiTheme from "material-ui/styles/getMuiTheme";
 import lightBaseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
 import GoogleDirections from "./components/LoggedIn/google_directions/GoogleDirections";
 import GoogleTraffic from "./components/LoggedIn/google_traffic/GoogleTraffic";
-import CreateGroup from "./components/LoggedIn/calendar/CreateGroup/CreateGroup";
 import ContactPage from "./components/LoggedOut/ContactPage/ContactPage";
+import Jobs from "./components/LoggedIn/Jobs/Jobs";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -24,13 +24,13 @@ ReactDOM.render(
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/schedule" component={Calendar} />
+          <Route path="/jobs" component={Jobs} />
           <Route path="/about" component={About} />
           <Route path="/services" component={OurServices} />
           <Route path="/contact" component={ContactPage} />
           <Route path="/profile" component={Profile} />
           <Route path="/directions" component={GoogleDirections} />
           <Route path="/traffic" component={GoogleTraffic} />
-          <Route path="/creategroup" component={CreateGroup} />
         </Switch>
       </Router>
     </MuiThemeProvider>
