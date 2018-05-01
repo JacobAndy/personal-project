@@ -337,15 +337,18 @@ const deleteSchedule = (req, res) => {
 
 //CREATING THE COMPANY FOR THE USER, AND MAKING AN EMPLOYEE OF THE COMPANY OF THE USER WHO CREATED THE COMPANY WORKS
 const createCompany = (req, res) => {
-  let { name, founded, founder } = req.body;
+  console.log("CREATE COMPANY HIT");
+  let { name, founded, founder, lat, long, location } = req.body;
+  console.log(lat);
+  console.log(long);
   req.app
     .get("db")
-    .createGroup([name, founded, founder])
+    .createGroup([name, founded, founder, lat, long, location])
     .then(results => {
       console.log("group created successful: " + results);
       req.app
         .get("db")
-        .createEmployee([results[0]["company_id"], results[0]["founder"]])
+        .createEmployee([results[0]["company_id"], results[0]["founder"], 1])
         .then(newres => {
           console.log("MANAGER CREATED", newres);
           res.status(200).json(newres);
@@ -395,6 +398,21 @@ const getAllJobs = (req, res) => {
       res.status(500).json(error);
     });
 };
+const getLocation = (req, res) => {
+  let { id } = req.params;
+  console.log(`GET LOCATION HIT HERE IS THE ID : => ${id}`);
+  req.app
+    .get("db")
+    .getLatLon(id)
+    .then(latlong => {
+      console.log(`GETTING LOCATION IS SUCCESSFUL : => ${latlong}`);
+      res.status(200).json(latlong);
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+};
 ////////////////////////////////////////////////////////////////////////////////////////
 //MODULE EXPORTING FUNCTIONS
 module.exports = {
@@ -408,5 +426,6 @@ module.exports = {
   createCompany,
   getCompany,
   updateSchedule,
-  getAllJobs
+  getAllJobs,
+  getLocation
 };

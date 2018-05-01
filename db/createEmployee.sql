@@ -1,2 +1,2 @@
-insert into employee(company_id, user_id)
-values($1,$2) RETURNING *;
+insert into employee(company_id, user_id,manager)
+values($1,$2,$3) RETURNING *;

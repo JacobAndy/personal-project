@@ -8,7 +8,10 @@ let initialstate = {
   number: "",
   user_address: "",
   emerg_contact: "",
-  loading: false
+  userLat: 0,
+  userLong: 0,
+  loading: false,
+  locationErrors: false
 };
 
 const AUTH_CTRL = "AUTH_CTRL";
@@ -16,9 +19,13 @@ const GET_USER = "GET_USER";
 const UPDATE_USER = "UPDATE_USER";
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
+const UPDATE_LOCATION = "UPDATE_LOCATION";
+const LOCATION_ERROR = "LOCATION_ERROR";
 
 export default function reducer(state = initialstate, action) {
   switch (action.type) {
+    case LOCATION_ERROR:
+      return { ...state, locationError: true };
     case `${GET_USER}_PENDING`:
       console.log("pending");
       return { ...state, loading: true };
@@ -62,6 +69,13 @@ export default function reducer(state = initialstate, action) {
         user_address: "",
         emerg_contact: ""
       };
+    case `${UPDATE_LOCATION}`:
+      return {
+        ...state,
+        userLat: action.payload.lat,
+        userLong: action.payload.long,
+        locationError: false
+      };
     //default call
     default:
       console.log(state);
@@ -99,5 +113,36 @@ export function logout() {
   return {
     type: LOG_OUT,
     payload: axios.get("/logout")
+  };
+}
+export function updateLocation(lat, long) {
+  return {
+    type: UPDATE_LOCATION,
+    payload: { lat, long }
+  };
+}
+export function locationError() {
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      updateLocation(position.coords.latitude, position.coords.longitude);
+      console.log(
+        `LATITUDE : => ${position.coords.latitude}, LONGITUDE : => ${
+          position.coords.longitude
+        }`
+      );
+    },
+    error => {
+      console.log("ERROR HIT");
+      locationError();
+    },
+    {
+      enableHighAccuracy: false,
+      timeout: 300000,
+      maximumAge: 0
+    }
+  );
+  return {
+    type: LOCATION_ERROR,
+    payload: false
   };
 }

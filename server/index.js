@@ -7,6 +7,15 @@ const session = require("express-session");
 const passport = require("passport");
 const port = process.env.PORT || 3003;
 const { strat, logout } = require(`${__dirname}/controllers/strategy`);
+const NodeGeocoder = require("node-geocoder");
+
+const options = {
+  provider: "google",
+  httpAdapter: "https",
+  apiKey: process.env.REACT_APP_GOOGLE_MAP_KEY,
+  formatter: null
+};
+const geocoder = NodeGeocoder(options);
 const {
   getUser,
   updateUser,
@@ -18,7 +27,8 @@ const {
   createCompany,
   getCompany,
   updateSchedule,
-  getAllJobs
+  getAllJobs,
+  getLocation
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -101,6 +111,21 @@ app.get("/employees:id", getEmployees);
 //////////////////////////////////////////////////////////
 //COMPANY END POINTS
 
+//LOCATION CONVERTER
+app.post("/job/location/convert", (req, res, next) => {
+  let { location } = req.body;
+  geocoder
+    .geocode(location)
+    .then(resp => {
+      console.log("GEOCODE SUCCESSFUL BOY");
+      res.status(200).json(resp);
+    })
+    .catch(err => {
+      console.log(`ERROR IN GEOLOCATION : => ${err}`);
+      res.status(500).json(err);
+    });
+});
+
 //create company WORKS
 //THIS ALSO CREATES EMPLOYEE REFERENCING USER AND GROUP
 app.post("/createcompany", createCompany);
@@ -110,6 +135,9 @@ app.get("/company", getCompany);
 
 //getting all jobs that live in database
 app.get("/alljobs", getAllJobs);
+
+//getting location of a specefic company
+app.get("/job/location/:id", getLocation);
 
 //////////////////////////////////////////////////////////
 //SCHEDULE END POINTS

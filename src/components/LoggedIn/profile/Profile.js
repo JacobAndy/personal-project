@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getUser, updateUser } from "../../../ducks/users";
+import { getUser, updateUser, updateLocation } from "../../../ducks/users";
 import LoginNav from "../../Nav/LoginNav/LoginNav";
 import "./Profile.css";
 import Error from "../../Error/Error";
+import { locationError } from "../../../ducks/users";
 
 class Profile extends Component {
   constructor() {
@@ -19,6 +20,28 @@ class Profile extends Component {
   componentDidMount() {
     console.log("hit get user did mount");
     this.props.getUser();
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.props.updateLocation(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        console.log(
+          `LATITUDE : => ${position.coords.latitude}, LONGITUDE : => ${
+            position.coords.longitude
+          }`
+        );
+      },
+      error => {
+        console.log("ERROR HIT");
+        this.props.locationError();
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 60000,
+        maximumAge: 0
+      }
+    );
   }
   handleEmail(e) {
     this.setState({ newemail: e });
@@ -96,4 +119,9 @@ let mapStateToProps = state => {
     ...state.users
   };
 };
-export default connect(mapStateToProps, { getUser, updateUser })(Profile);
+export default connect(mapStateToProps, {
+  getUser,
+  updateUser,
+  updateLocation,
+  locationError
+})(Profile);

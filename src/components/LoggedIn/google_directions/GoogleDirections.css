@@ -1,0 +1,15 @@
+.GoogleDirections {
+  position: absolute;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: row;
+  right: 170px;
+}
+.mappedDirectionCompany {
+  margin: 0 0 0 170px;
+  right: 10px;
+}
+.directionstitle {
+  text-align: center;
+}

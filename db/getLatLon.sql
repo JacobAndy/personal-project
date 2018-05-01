@@ -1,0 +1,1 @@
+select latitude, longitude from company where company_id=$1;
