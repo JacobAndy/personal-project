@@ -7,8 +7,13 @@ const initialState = {
   currentCompanyLongitude: 0,
   currentCompanyId: "",
   currentCompanyEmployeeId: "",
+  currentCompanyName: "",
   createCompanyLatitude: "",
-  createCompanyLongitude: ""
+  createCompanyLongitude: "",
+  currentCompanyIdForDate: "",
+  selectDefaultCompanyId: "",
+  modifiedCompanys: "",
+  currentCompanyManager: null
 };
 
 const CREATE_GROUP = "CREATE_GROUP";
@@ -18,6 +23,7 @@ const SET_DIRECTIONS = "GET_DIRECTIONS";
 const SET_TRAFFIC = "GET_TRAFFIC";
 const GET_LAT_LONG = "GET_LAT_LONG";
 const PRE_SET_CREATE = "PRE_SET_CREATE";
+const UPDATE_STATE_COMP_ID = "UPDATE_STATE_COMP_ID";
 
 export default function company(state = initialState, action) {
   switch (action.type) {
@@ -28,6 +34,8 @@ export default function company(state = initialState, action) {
       console.log(action.payload.data);
       return { ...state, loading: false };
 
+    case UPDATE_STATE_COMP_ID:
+      return { ...state, currentCompanyIdForDate: action.payload };
     //UPDATING CURRENT COMPANY LATITUDE AND LONGITUDE
 
     //get company
@@ -38,15 +46,28 @@ export default function company(state = initialState, action) {
       console.log("pending get company");
       return { ...state, loading: true };
     case `${GET_COMPANY}_FULFILLED`:
+      console.log(action.payload.data.slice(1));
       console.log(action.payload.data);
-      console.log("PENDING NO MAS");
-      return {
-        ...state,
-        companys: action.payload.data,
-        currentCompanyLatitude: action.payload.data[0].latitude,
-        currentCompanyLongitude: action.payload.data[0].longitude,
-        loading: false
-      };
+      let newPayload = action.payload.data.slice(1);
+      if (!action.payload.data.length) {
+        return { ...state };
+      } else {
+        return {
+          ...state,
+          modifiedCompanys: newPayload,
+          companys: action.payload.data,
+          selectDefaultCompanyId: action.payload.data[0].company_id,
+          currentCompanyName: action.payload.data[0].name,
+          currentCompanyLatitude: action.payload.data[0].latitude,
+          currentCompanyLongitude: action.payload.data[0].longitude,
+          currentCompanyManager:
+            action.payload.data[0].manager === null ||
+            action.payload.data[0].manager === 0
+              ? false
+              : true,
+          loading: false
+        };
+      }
 
     //GETTING LAT AND LONG FROM LOCATION INPUT
     case `${GET_LAT_LONG}_FULFILLED`:
@@ -90,6 +111,13 @@ export default function company(state = initialState, action) {
 }
 
 //ACTIONS
+
+export function updateStateCompId(val) {
+  return {
+    type: UPDATE_STATE_COMP_ID,
+    payload: val
+  };
+}
 
 export function createGroup(name, founded, founder, lat, long, location) {
   console.log("CREATE GROUP HITTTTKSJFSLKDJSLKJDFSKLJ");

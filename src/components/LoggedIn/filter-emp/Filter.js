@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./Filter.css";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
+import { connect } from "react-redux";
+import { updateFilterValue } from "../../../ducks/schedulesreducer";
 
 class Filter extends Component {
   constructor() {
@@ -18,7 +20,7 @@ class Filter extends Component {
   render() {
     return (
       <div className="filters">
-        <div className="filter-station">
+        {/* <div className="filter-station">
           <SelectField
             autoWidth={true}
             value={this.state.station}
@@ -33,13 +35,15 @@ class Filter extends Component {
             <MenuItem value="Broil" primaryText="Broil" />
             <MenuItem value="Salad" primaryText="Salad" />
           </SelectField>
-        </div>
+        </div> */}
         <div className="filter-emp">
           <SelectField
             autoWidth={true}
             value={this.state.employee}
             onChange={(event, i, val) => {
+              console.log(val);
               this.handleChange("employee", val);
+              this.props.updateFilterValue(val);
             }}
           >
             <MenuItem value={1} primaryText="select First Name" />
@@ -54,4 +58,9 @@ class Filter extends Component {
     );
   }
 }
-export default Filter;
+let mapStateToProps = state => {
+  return {
+    ...state.schedulesreducer
+  };
+};
+export default connect(mapStateToProps, { updateFilterValue })(Filter);

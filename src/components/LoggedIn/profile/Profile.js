@@ -5,6 +5,7 @@ import LoginNav from "../../Nav/LoginNav/LoginNav";
 import "./Profile.css";
 import Error from "../../Error/Error";
 import { locationError } from "../../../ducks/users";
+import { getCompany } from "../../../ducks/company";
 
 class Profile extends Component {
   constructor() {
@@ -19,7 +20,13 @@ class Profile extends Component {
   }
   componentDidMount() {
     console.log("hit get user did mount");
-    this.props.getUser();
+    this.props
+      .getUser()
+      .then(() => {
+        console.log(this.props.user_id);
+        this.props.getCompany(this.props.user_id);
+      })
+      .catch(err => console.log(err));
     navigator.geolocation.getCurrentPosition(
       position => {
         this.props.updateLocation(
@@ -123,5 +130,6 @@ export default connect(mapStateToProps, {
   getUser,
   updateUser,
   updateLocation,
-  locationError
+  locationError,
+  getCompany
 })(Profile);

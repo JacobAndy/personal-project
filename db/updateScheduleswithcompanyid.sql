@@ -1,0 +1,2 @@
+UPDATE schedules set monday_morning=$2,monday_night=$3,tuesday_morning=$4,tuesday_night=$5,wednesday_morning=$6,wednesday_night=$7,thursday_morning=$8,thursday_night=$9,friday_morning=$10,
+friday_night=$11,saturday_morning=$12, saturday_night=$13, sunday_morning=$14, sunday_night=$15 where employee_id=$1 AND week_of=$16;

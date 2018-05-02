@@ -110,7 +110,11 @@ class GoogleDirections extends Component {
     return (
       <div>
         <LoginNav />
-        {this.props.currentUser[0] && userLat && userLong ? (
+        {!this.props.companys.length && this.props.currentUser[0] ? (
+          <div>
+            <h3>you have no business</h3>
+          </div>
+        ) : this.props.currentUser[0] && userLat && userLong ? (
           <div>
             <h3>Directions</h3>
             <div className="GoogleDirections">

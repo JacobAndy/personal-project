@@ -4,7 +4,8 @@ const initialState = {
   weekOf: "",
   adminSchedules: [],
   loading: false,
-  update: true
+  update: true,
+  filterValue: ""
 };
 
 /////////////////////////ACTION CONSTANTS
@@ -19,7 +20,38 @@ const GET_EMPLOYEES = "GET_EMPLOYEES";
 const HANDLE_UPDATE = "HANDLE_UPDATE";
 const UPDATE_SCHEDULE = "UPDATE_SCHEDULE";
 const DELETE_WEEK = "DELETE_WEEK";
+const COMPANY_WEEK_OF = "COMPANY_WEEK_OF";
+const CREATE_GROUP_SCHEDULE = "CREATE_GROUP_SCHEDULE";
+const UPDATE_GROUP_SCHEDULE = "UPDATE_GROUP_SCHEDULE";
+const DELETE_SCHEDULE_WITH_ID = "DELETE_SCHEDULE_WITH_ID";
+const FILTER_VALUE = "FILTER_VALUE";
 //////////////////ACTION CREATORS
+export function updateFilterValue(val) {
+  console.log(val);
+  return {
+    type: FILTER_VALUE,
+    payload: val
+  };
+}
+
+export function deleteWeekWithCompanyId(userId, compId, weekof) {
+  return {
+    type: DELETE_SCHEDULE_WITH_ID,
+    payload: axios.delete(
+      `/deletewithid?company=${compId}&user=${userId}&week=${weekof}`
+    )
+  };
+}
+export function updateCompanyWeekOf(compId, arr, userId, weekof) {
+  return {
+    type: UPDATE_GROUP_SCHEDULE,
+    payload: axios.put(`/updatecompanyschedule/${compId}`, {
+      arr,
+      userId,
+      weekof
+    })
+  };
+}
 export function deleteWeek(arr, week) {
   let user = arr.map(e => e.employee_id);
   console.log(user);
@@ -32,7 +64,7 @@ export function getEmployees(id) {
   console.log("get employes reducer hit");
   return {
     type: GET_EMPLOYEES,
-    payload: axios.get(`/employees${id}`)
+    payload: axios.get(`/employees/${id}`)
   };
 }
 
@@ -43,7 +75,12 @@ export function setWeekOf(val) {
     payload: val
   };
 }
-
+export function companyWeekOf(compId, week) {
+  return {
+    type: COMPANY_WEEK_OF,
+    payload: axios.get(`/company/weekof?company=${compId}&weekof=${week}`)
+  };
+}
 export function getWeekOf(currentUser, week) {
   return {
     type: GET_WEEK_OF,
@@ -57,6 +94,20 @@ export function createSchedule(userId, arr) {
   return {
     type: CREATE_SCHEDULE,
     payload: axios.post("/createschedule", { newCurr, userId, arr })
+  };
+}
+export function createCompanyWeekOf(groupId, arr, userId) {
+  console.log("CREATE GROUP REDUCER WAS HIT");
+  let currDate = new Date();
+  let newCurr = `${currDate.getMonth()}/${currDate.getDate()}/${currDate.getFullYear()}`;
+  console.log(newCurr);
+  return {
+    type: CREATE_GROUP_SCHEDULE,
+    payload: axios.post(`/creategroupschedule/${groupId}`, {
+      newCurr,
+      arr,
+      userId
+    })
   };
 }
 export function updateschedule(week, userId, arr) {
@@ -84,10 +135,10 @@ export function handleStateUpdate(i, int, prop, val) {
     payload: { i, int, prop, val }
   };
 }
-export function handleOff(who, property) {
+export function handleOff(j, who, property) {
   return {
     type: HANDLE_OFF,
-    payload: { who, property }
+    payload: { j, who, property }
   };
 }
 export function handleUpdate(val) {
@@ -101,13 +152,17 @@ export function handleUpdate(val) {
 ///////////////////// THIS IS THE START OF THE ACTIONS REDUCER
 export default function schedulesreducer(state = initialState, action) {
   switch (action.type) {
+    case FILTER_VALUE:
+      return { ...state, filterValue: action.payload };
     case HANDLE_UPDATE:
       console.log("HANDLE UPDATE REDUCER WAS HIT 1000X");
       return { ...state, update: action.payload };
     case `${GET_EMPLOYEES}_FULFILLED`:
       console.log(action.payload.data);
+      console.log("get employees was hittttt boyy");
       handleUpdate(0);
       let mappedEmployees = action.payload.data.map(e => {
+        console.log(e);
         return {
           employee_id: e.employee_id,
           full_name: e.full_name,
@@ -198,12 +253,15 @@ export default function schedulesreducer(state = initialState, action) {
         };
       });
       return { ...state, adminSchedules: mappedEmployees, update: false };
+    case `${COMPANY_WEEK_OF}_FULFILLED`:
     case `${GET_WEEK_OF}_FULFILLED`:
       console.log(action.payload.data);
+      console.log("get employees was hittttt boyy");
       if (action.payload.data.length === 0) {
         return { ...state, adminSchedules: [] };
       } else {
         console.log("THIS IS THE ELSE STATEMENT121212121212121212");
+        console.log(action.payload.data);
         // handleUpdate(1);
         let mapEmployees = action.payload.data.map(e => {
           return {
@@ -349,23 +407,28 @@ export default function schedulesreducer(state = initialState, action) {
         [action.payload]: !state[action.payload]
       };
     case HANDLE_OFF:
-      let { who, property } = action.payload;
+      let { who, property, j } = action.payload;
       let clockin = `${property}clockin`;
       let clockout = `${property}clockout`;
       return {
         ...state,
-        schedule: {
-          ...state.schedule,
-          schedule: [
-            ...state.schedule.schedule,
-
-            (state.schedule.schedule[who] = {
-              [clockin]: null,
-              [clockout]: null
-            })
-          ]
+        adminSchedules: {
+          ...state.adminSchedules,
+          [j]: {
+            ...state.adminSchedules[j],
+            schedule: {
+              ...state.adminSchedules[j].schedule,
+              [who]: {
+                [clockin]: null,
+                [clockout]: null
+              }
+            }
+          }
         }
       };
+    // case `${COMPANY_WEEK_OF}_FULFILLED`:
+    //   console.log(action.payload.data);
+    //   return { ...state, adminSchedules: action.payload.data };
     case `${CREATE_SCHEDULE}_FULFILLED`:
       return { ...state, adminSchedules: action.payload.data };
     case `${UPDATE_SCHEDULE}_FULFILLED`:

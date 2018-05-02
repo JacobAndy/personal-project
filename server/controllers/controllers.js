@@ -59,11 +59,13 @@ const getEmployees = (req, res) => {
     .get("db")
     .findEmployee(id)
     .then(empl => {
+      console.log("EMPLOYEE ID RIGHT BELOW");
       console.log(empl[0].employee_id);
       req.app
         .get("db")
         .findcompany(empl[0].employee_id)
         .then(companyid => {
+          console.log("COMPANY ID BELOW HERE");
           console.log(companyid[0].company_id);
           req.app
             .get("db")
@@ -91,21 +93,38 @@ const getEmployees = (req, res) => {
 ////////////////////////////////////////////////////////////////
 //SCHEDULE CONTROLLERS
 
+//getting company schedules
+const getCompanySchedules = (req, res, next) => {
+  let { company, weekof } = req.query;
+  console.log(company);
+  console.log(weekof);
+  req.app
+    .get("db")
+    .getCompanyWeekOf([company, weekof])
+    .then(results => {
+      console.log(results);
+      console.log("THIS WAS HIT HEYOO");
+      console.log(`GETTING COMPANY WEEK OF SUCCESSFUL : => ${results}`);
+      res.status(200).json(results);
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+};
 //MANAGER GETTING SCHEDULES
 const getSchedules = (req, res) => {
   let { user, weekof } = req.query;
+  console.log(`THIS IS THE USER ID : => ${user}`);
   req.app
     .get("db")
     .findEmployee(user)
     .then(currentEmployeeId => {
-      console.log(
-        `current employee id :  ${Number(
-          JSON.stringify(currentEmployeeId)[16]
-        )}`
-      );
+      console.log(currentEmployeeId);
+      console.log(`current employee id :  ${currentEmployeeId[0].employee_id}`);
       req.app
         .get("db")
-        .findcompany(Number(JSON.stringify(currentEmployeeId)[16]))
+        .findcompany(currentEmployeeId[0].employee_id)
         .then(comp_id => {
           console.log(
             `COMPANY ID OF GETTING SCHEDULES : => ${comp_id[0].company_id}`
@@ -148,6 +167,74 @@ const mySchedule = (req, res) => {
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
+    });
+};
+//CREATING SCHEDULE WITH GROUP ID
+const createCompanyIdSchedule = (req, res, next) => {
+  let { id } = req.params;
+  let { newCurr, arr, userId } = req.body;
+  console.log(userId);
+  req.app
+    .get("db")
+    .findEmployeeWithGroup([userId, id])
+    .then(empId => {
+      console.log(+empId[0].employee_id);
+      req.app
+        .get("db")
+        .createCompanySchedule([
+          +empId[0].employee_id,
+          id,
+          newCurr,
+          arr[0].schedule[0].weekOf,
+          arr[0].schedule[1].mondaymorningclockin +
+            arr[0].schedule[1].mondaymorningclockout,
+          arr[0].schedule[2].mondaynightclockin +
+            arr[0].schedule[2].mondaynightclockout,
+
+          arr[0].schedule[3].tuesdaymorningclockin +
+            arr[0].schedule[3].tuesdaymorningclockout,
+          arr[0].schedule[4].tuesdaynightclockin +
+            arr[0].schedule[4].tuesdaynightclockout,
+
+          arr[0].schedule[5].wednesdaymorningclockin +
+            arr[0].schedule[5].wednesdaymorningclockout,
+          arr[0].schedule[6].wednesdaynightclockin +
+            arr[0].schedule[6].wednesdaynightclockout,
+
+          arr[0].schedule[7].thursdaymorningclockin +
+            arr[0].schedule[7].thursdaymorningclockout,
+          arr[0].schedule[8].thursdaynightclockin +
+            arr[0].schedule[8].thursdaynightclockout,
+
+          arr[0].schedule[9].fridaymorningclockin +
+            arr[0].schedule[9].fridaymorningclockout,
+          arr[0].schedule[10].fridaynightclockin +
+            arr[0].schedule[10].fridaynightclockout,
+
+          arr[0].schedule[11].saturdaymorningclockin +
+            arr[0].schedule[11].saturdaymorningclockout,
+          arr[0].schedule[12].saturdaynightclockin +
+            arr[0].schedule[12].saturdaynightclockout,
+
+          arr[0].schedule[13].sundaymorningclockin +
+            arr[0].schedule[13].sundaymorningclockout,
+          arr[0].schedule[14].sundaynightclockin +
+            arr[0].schedule[14].sundaynightclockout
+        ])
+        .then(results => {
+          console.log("SUCCESS IN CREATING COMPANY SCHEDULE WITH COMPANY ID");
+          // res.status(200).json(results)
+        })
+        .catch(err => {
+          console.log(`ERROR IN CREATING SCHEDULE WITH COMPANY ID : => ${err}`);
+          res.status(500).json(err);
+        });
+    })
+    .catch(error => {
+      console.log(
+        `ERROR FINDING EMPLOYEE IN CREATE COMPANY WITH COMPANY ID: => ${error}`
+      );
+      res.status(500).json(error);
     });
 };
 //CREATING SCHEDULE
@@ -258,6 +345,67 @@ const createSchedule = (req, res) => {
     .catch(errrorrr => `ERROR FINDING EMPLOYEE ${errrorrr}`);
   // console.log(`CEI OVER HERE ${cei}`);
 };
+const updateCompanyIdSchedule = (req, res, next) => {
+  let { arr, userId, weekof } = req.body;
+  let { id } = req.params;
+  console.log(arr);
+  console.log(userId);
+  console.log(weekof);
+  req.app
+    .get("db")
+    .findEmployeeWithGroup([userId, id])
+    .then(empId => {
+      console.log(empId);
+      req.app
+        .get("db")
+        .updateScheduleswithcompanyid([
+          empId[0].employee_id,
+          arr[0].schedule[1].mondaymorningclockin +
+            arr[0].schedule[1].mondaymorningclockout,
+          arr[0].schedule[2].mondaynightclockin +
+            arr[0].schedule[2].mondaynightclockout,
+
+          arr[0].schedule[3].tuesdaymorningclockin +
+            arr[0].schedule[3].tuesdaymorningclockout,
+          arr[0].schedule[4].tuesdaynightclockin +
+            arr[0].schedule[4].tuesdaynightclockout,
+
+          arr[0].schedule[5].wednesdaymorningclockin +
+            arr[0].schedule[5].wednesdaymorningclockout,
+          arr[0].schedule[6].wednesdaynightclockin +
+            arr[0].schedule[6].wednesdaynightclockout,
+
+          arr[0].schedule[7].thursdaymorningclockin +
+            arr[0].schedule[7].thursdaymorningclockout,
+          arr[0].schedule[8].thursdaynightclockin +
+            arr[0].schedule[8].thursdaynightclockout,
+
+          arr[0].schedule[9].fridaymorningclockin +
+            arr[0].schedule[9].fridaymorningclockout,
+          arr[0].schedule[10].fridaynightclockin +
+            arr[0].schedule[10].fridaynightclockout,
+
+          arr[0].schedule[11].saturdaymorningclockin +
+            arr[0].schedule[11].saturdaymorningclockout,
+          arr[0].schedule[12].saturdaynightclockin +
+            arr[0].schedule[12].saturdaynightclockout,
+
+          arr[0].schedule[13].sundaymorningclockin +
+            arr[0].schedule[13].sundaymorningclockout,
+          arr[0].schedule[14].sundaynightclockin +
+            arr[0].schedule[14].sundaynightclockout,
+          arr[0].schedule[0].weekOf
+        ])
+        .then(results => {
+          console.log("SUCCESS IN UPDATING WOO HOO");
+        })
+        .catch(err => {
+          console.log(`ERROR IN UPDATING SCHEDULE WITH COMPANY ID : => ${err}`);
+          res.status(500).json(err);
+        });
+    })
+    .catch();
+};
 const updateSchedule = (req, res) => {
   console.log("UPDATE SCHEDULE CONTROLLER HIT!");
   let { week, userId, arr } = req.body;
@@ -313,7 +461,32 @@ const updateSchedule = (req, res) => {
       res.status(500).json(err);
     });
 };
-
+//deleting schedule with group id
+const deleteschedulewithgroupid = (req, res, next) => {
+  let { user, company, week } = req.query;
+  console.log(user);
+  console.log(company);
+  console.log(week);
+  req.app
+    .get("db")
+    .findEmployeeWithGroup([user, company])
+    .then(empId => {
+      req.app
+        .get("db")
+        .deleteweek([empId[0].employee_id, week])
+        .then(results => {
+          res.status(200).json(results);
+          console.log("SUCCESS IN DELETING WEEK WITH GROUP ID");
+        })
+        .catch(err => {
+          console.log(`ERROR IN DELETING WEEK WITH GROUP ID : => ${err}`);
+        });
+    })
+    .catch(error => {
+      console.log(`ERROR IN FINDING EMPLOYEE WITH GROUP ID${error}`);
+      res.status(500).json(error);
+    });
+};
 //DELETING SCHEDULE
 const deleteSchedule = (req, res) => {
   let { user, weekof } = req.query;
@@ -427,5 +600,9 @@ module.exports = {
   getCompany,
   updateSchedule,
   getAllJobs,
-  getLocation
+  getLocation,
+  getCompanySchedules,
+  createCompanyIdSchedule,
+  updateCompanyIdSchedule,
+  deleteschedulewithgroupid
 };

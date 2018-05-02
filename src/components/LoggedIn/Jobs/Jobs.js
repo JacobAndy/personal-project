@@ -25,10 +25,7 @@ class Jobs extends Component {
   }
   componentDidMount() {
     this.props.getCompany(this.props.user_id);
-    // .then(() => {
     this.props.getJobs();
-    // })
-    // .catch(err => console.log(err));
   }
   toggleCreateGroup() {
     this.setState({ createGroupFlag: !this.state.createGroupFlag });
@@ -107,21 +104,26 @@ class Jobs extends Component {
     this.toggleCreateGroup();
   }
   render() {
+    let newVar = [];
     let mappedComp = this.props.companys.map((e, i) => {
+      newVar.push(e.company_id);
       return (
-        <div>
+        <div key={i}>
           <h5>{e.name}</h5>
         </div>
       );
     });
-    let mappedJobs = this.props.jobs.map((e, i) => {
-      return (
-        <div>
-          <h5>Name: {e.name}</h5>
-          <h5>Location: {e.location}</h5>
-          <button>Apply</button>
-        </div>
-      );
+    let mappedJobs = this.props.jobs.map((e, i, a) => {
+      if (!newVar.includes(e.company_id)) {
+        // console.log("heyy boy");
+        return (
+          <div key={i}>
+            <h5>Name: {e.name}</h5>
+            <h5>Location: {e.location}</h5>
+            <button>Apply</button>
+          </div>
+        );
+      }
     });
     console.log(this.props);
     return (

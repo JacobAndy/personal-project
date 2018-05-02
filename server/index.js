@@ -28,7 +28,11 @@ const {
   getCompany,
   updateSchedule,
   getAllJobs,
-  getLocation
+  getLocation,
+  getCompanySchedules,
+  createCompanyIdSchedule,
+  updateCompanyIdSchedule,
+  deleteschedulewithgroupid
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -106,7 +110,7 @@ app.put("/update", updateUser);
 //EMPLOYEE END POINTS
 
 //getting employees WORKS
-app.get("/employees:id", getEmployees);
+app.get("/employees/:id", getEmployees);
 
 //////////////////////////////////////////////////////////
 //COMPANY END POINTS
@@ -145,14 +149,24 @@ app.get("/job/location/:id", getLocation);
 //create schedule
 app.post("/createschedule", createSchedule);
 
+//creating schedule by group id
+app.post(`/creategroupschedule/:id`, createCompanyIdSchedule);
+
+//updating schedule with the company id
+app.put(`/updatecompanyschedule/:id`, updateCompanyIdSchedule);
+
 //update schedule
 app.put("/updateschedule", updateSchedule);
 
 //delete schedule
 app.delete("/rm/schedule/", deleteSchedule);
 
+//delete schedule with group id
+app.delete(`/deletewithid`, deleteschedulewithgroupid);
 //getting schedules
 app.get("/weekof", getSchedules);
+
+app.get(`/company/weekof`, getCompanySchedules);
 
 //getting my schedule
 // app.get("/myschedule", mySchedule);

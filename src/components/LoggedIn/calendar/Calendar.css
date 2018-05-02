@@ -116,7 +116,7 @@ body {
 }
 .right-arrow-small {
   position: absolute;
-  margin-left: 170px;
+  right: 15px;
   border: solid black;
   border-width: 0 1.5px 1.5px 0;
   display: inline-block;
@@ -141,4 +141,13 @@ body {
   width: 151px;
   right: 200px;
   position: absolute;
+}
+.Job-select {
+  display: flex;
+  position: absolute;
+  top: 21px;
+  right: 400px;
+  color: black;
+  width: 220px;
+  height: 36px;
 }

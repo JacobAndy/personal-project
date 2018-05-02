@@ -69,7 +69,11 @@ class Traffic extends Component {
     return (
       <div>
         <LoginNav />
-        {this.props.currentUser[0] ? (
+        {!this.props.companys.length ? (
+          <div>
+            <h3>you have no business</h3>
+          </div>
+        ) : this.props.currentUser[0] ? (
           <div>
             <h3>Live Traffic Feed</h3>
             <div className="GoogleDirections">

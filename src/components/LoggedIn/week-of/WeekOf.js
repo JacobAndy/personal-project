@@ -7,7 +7,11 @@ import DateRange from "material-ui/svg-icons/action/date-range";
 import FlatButton from "material-ui/FlatButton";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { getWeekOf, setWeekOf } from "../../../ducks/schedulesreducer";
+import {
+  getWeekOf,
+  setWeekOf,
+  companyWeekOf
+} from "../../../ducks/schedulesreducer";
 
 class WeekOf extends Component {
   constructor() {
@@ -57,6 +61,9 @@ class WeekOf extends Component {
       null;
     } else {
       monthDay = monthDay - (weekDay - 1);
+      console.log(weekDay);
+      console.log(monthDay);
+
       // console.log(diff);
       console.log(monthDay);
     }
@@ -175,132 +182,252 @@ class WeekOf extends Component {
                   newestDate = `${this.state.jan} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 1:
                   this.setState({ currentMonth: this.state.feb });
                   newestDate = `${this.state.feb} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 2:
                   this.setState({ currentMonth: this.state.march });
                   newestDate = `${this.state.march} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 3:
                   this.setState({ currentMonth: this.state.april });
                   newestDate = `${this.state.april} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 4:
                   this.setState({ currentMonth: this.state.may });
                   newestDate = `${this.state.may} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 5:
                   this.setState({ currentMonth: this.state.june });
                   newestDate = `${this.state.june} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 6:
                   this.setState({ currentMonth: this.state.july });
                   newestDate = `${this.state.july} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 7:
                   this.setState({ currentMonth: this.state.aug });
                   newestDate = `${this.state.aug} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 8:
                   this.setState({ currentMonth: this.state.sept });
                   newestDate = `${this.state.sept} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 9:
                   this.setState({ currentMonth: this.state.oct });
                   newestDate = `${this.state.oct} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 10:
                   this.setState({ currentMonth: this.state.nov });
                   newestDate = `${this.state.nov} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 11:
                   this.setState({ currentMonth: this.state.dec });
                   newestDate = `${this.state.dec} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 default:
                   this.setState({ currentMonth: "month unavailable" });
@@ -312,10 +439,19 @@ class WeekOf extends Component {
               let newestsDate = `${this.state.currentMonth} ${this.state
                 .currentDay - 7}, ${this.state.currentYear}`;
               this.props.setWeekOf(newestsDate);
-              this.props.getWeekOf(
-                this.props.currentUser[0].user_id,
-                newestsDate
-              );
+              // this.props.getWeekOf(
+              //   this.props.currentUser[0].user_id,
+              //   newestsDate
+              // );
+              !this.props.currentCompanyIdForDate
+                ? this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestsDate
+                  )
+                : this.props.companyWeekOf(
+                    this.props.currentCompanyIdForDate,
+                    newestsDate
+                  );
             }
           }}
         />
@@ -451,65 +587,119 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate
+                      );
                   break;
                 case 1:
                   this.setState({ currentMonth: this.state.feb });
                   newestDate = `${this.state.feb} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 2:
                   this.setState({ currentMonth: this.state.march });
                   newestDate = `${this.state.march} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 3:
                   this.setState({ currentMonth: this.state.april });
                   newestDate = `${this.state.april} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 4:
                   this.setState({ currentMonth: this.state.may });
                   newestDate = `${this.state.may} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 5:
                   this.setState({ currentMonth: this.state.june });
                   newestDate = `${this.state.june} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 6:
                   this.setState({ currentMonth: this.state.july });
@@ -517,80 +707,159 @@ class WeekOf extends Component {
                     this.state.currentYear
                   }`;
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
+                  this.props.setWeekOf(newestDate);
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 7:
                   this.setState({ currentMonth: this.state.aug });
                   newestDate = `${this.state.aug} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
+                  this.props.setWeekOf(newestDate);
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 8:
                   this.setState({ currentMonth: this.state.sept });
                   newestDate = `${this.state.sept} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 9:
                   this.setState({ currentMonth: this.state.oct });
                   newestDate = `${this.state.oct} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 10:
                   this.setState({ currentMonth: this.state.nov });
                   newestDate = `${this.state.nov} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 case 11:
                   this.setState({ currentMonth: this.state.dec });
                   newestDate = `${this.state.dec} ${difference}, ${
                     this.state.currentYear
                   }`;
+                  // this.props.setWeekOf(newestDate);
+                  // this.props.getWeekOf(
+                  //   this.props.currentUser[0].user_id,
+                  //   newestDate
+                  // );
                   this.props.setWeekOf(newestDate);
-                  this.props.getWeekOf(
-                    this.props.currentUser[0].user_id,
-                    newestDate
-                  );
+                  !this.props.currentCompanyIdForDate
+                    ? this.props.getWeekOf(
+                        this.props.currentUser[0].user_id,
+                        newestDate
+                      )
+                    : this.props.companyWeekOf(
+                        this.props.currentCompanyIdForDate,
+                        newestDate
+                      );
                   break;
                 default:
                   this.setState({ currentMonth: "month unavailable" });
               }
             } else {
               console.log(`DEFAULT ELSE STATEMENT HIT`);
-              console.log(this.state.currentMonth);
+              console.log(this.props.currentCompanyIdForDate);
               this.setState({ currentDay: this.state.currentDay + 7 });
               let newestsDate = `${this.state.currentMonth} ${this.state
                 .currentDay + 7}, ${this.state.currentYear}`;
               this.props.setWeekOf(newestsDate);
-              this.props.getWeekOf(
-                this.props.currentUser[0].user_id,
-                newestsDate
-              );
+              // this.props.getWeekOf(
+              //   this.props.currentUser[0].user_id,
+              //   newestsDate
+              // );
+              !this.props.currentCompanyIdForDate
+                ? this.props.getWeekOf(
+                    this.props.currentUser[0].user_id,
+                    newestsDate
+                  )
+                : this.props.companyWeekOf(
+                    this.props.currentCompanyIdForDate,
+                    newestsDate
+                  );
             }
           }}
         />
@@ -604,8 +873,13 @@ class WeekOf extends Component {
 let mapStateToProps = state => {
   return {
     ...state.schedulesreducer,
-    ...state.users
+    ...state.users,
+    ...state.company
   };
 };
 
-export default connect(mapStateToProps, { getWeekOf, setWeekOf })(WeekOf);
+export default connect(mapStateToProps, {
+  getWeekOf,
+  setWeekOf,
+  companyWeekOf
+})(WeekOf);
