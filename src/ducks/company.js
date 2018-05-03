@@ -13,7 +13,9 @@ const initialState = {
   currentCompanyIdForDate: "",
   selectDefaultCompanyId: "",
   modifiedCompanys: "",
-  currentCompanyManager: null
+  currentCompanyManager: null,
+  jobApplications: "",
+  jobStaff: ""
 };
 
 const CREATE_GROUP = "CREATE_GROUP";
@@ -24,9 +26,34 @@ const SET_TRAFFIC = "GET_TRAFFIC";
 const GET_LAT_LONG = "GET_LAT_LONG";
 const PRE_SET_CREATE = "PRE_SET_CREATE";
 const UPDATE_STATE_COMP_ID = "UPDATE_STATE_COMP_ID";
+const SEND_APPLICATION = "SEND_APPLICATION";
+const GET_PENDING_APPLICATIONS = "GET_PENDING_APPLICATIONS";
+const ACCEPT_APPLICATION = "ACCEPT_APPLICATION";
+const DENY_APPLICATION_ID = "DENY_APPLICATION_ID";
+const GET_ALL_STAFF = "GET_ALL_STAFF";
 
 export default function company(state = initialState, action) {
   switch (action.type) {
+    case `${GET_ALL_STAFF}_FULFILLED`:
+      console.log(action.payload.data);
+      return { ...state, jobStaff: action.payload.data };
+    //ACCEPTING USERS APPLICATION
+    case `${DENY_APPLICATION_ID}_FULFILLED`:
+      console.log(action.payload.data);
+      return { ...state, jobApplications: action.payload.data };
+    case `${ACCEPT_APPLICATION}_FULFILLED`:
+      console.log(action.payload.data);
+      return { ...state, jobApplications: action.payload.data };
+    //get pending applications
+    case `${GET_PENDING_APPLICATIONS}_FULFILLED`:
+      console.log(action.payload.data);
+      return { ...state, jobApplications: action.payload.data };
+    //sending application
+    case `${SEND_APPLICATION}_PENDING`:
+      return { ...state, loading: true };
+    case `${SEND_APPLICATION}_FULFILLED`:
+      console.log(action.payload.data);
+      return { ...state, loading: false };
     //create group
     case `${CREATE_GROUP}_PENDING`:
       return { ...state, loading: true };
@@ -39,11 +66,15 @@ export default function company(state = initialState, action) {
     //UPDATING CURRENT COMPANY LATITUDE AND LONGITUDE
 
     //get company
+    case `${GET_ALL_STAFF}_PENDING`:
+    case `${DENY_APPLICATION_ID}_PENDING`:
+    case `${ACCEPT_APPLICATION}_PENDING`:
+    case `${GET_PENDING_APPLICATIONS}_PENDING`:
     case `${GET_LAT_LONG}_PENDING`:
     case `${SET_DIRECTIONS}_PENDING`:
     case `${SET_TRAFFIC}_PENDING`:
     case `${GET_COMPANY}_PENDING`:
-      console.log("pending get company");
+      console.log("pending");
       return { ...state, loading: true };
     case `${GET_COMPANY}_FULFILLED`:
       console.log(action.payload.data.slice(1));
@@ -111,6 +142,44 @@ export default function company(state = initialState, action) {
 }
 
 //ACTIONS
+export function getAllEmployees(compId) {
+  return {
+    type: GET_ALL_STAFF,
+    payload: axios.get(`/jobs/staff/${compId}`)
+  };
+}
+export function denyUserApplication(id, compId) {
+  console.log(id);
+  return {
+    type: DENY_APPLICATION_ID,
+    payload: axios.delete(`/jobs/application/decision/${id}?company=${compId}`)
+  };
+}
+
+export function acceptCurrentUsersApplication(userId, companyId, appId) {
+  return {
+    type: ACCEPT_APPLICATION,
+    payload: axios.post("/jobs/application/decision", {
+      userId,
+      companyId,
+      appId
+    })
+  };
+}
+export function getPendingApplications(companyId) {
+  return {
+    type: GET_PENDING_APPLICATIONS,
+    payload: axios.get(`/jobs/applications?company=${companyId}`)
+  };
+}
+export function sendApplication(companyId, userId) {
+  console.log(companyId);
+  console.log(userId);
+  return {
+    type: SEND_APPLICATION,
+    payload: axios.post("/jobs/application", { companyId, userId })
+  };
+}
 
 export function updateStateCompId(val) {
   return {

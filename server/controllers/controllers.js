@@ -1,3 +1,4 @@
+const _ = require("lodash.map");
 ///////////////////////////////////////////////////////
 //USER CONTROLLERS
 
@@ -37,6 +38,36 @@ const updateUser = (req, res) => {
 ////////////////////////////////////////////////////////////////
 //EMPLOYEE CONTROLLERS
 
+//leave company
+const leaveCompany = (req, res, next) => {
+  let { id } = req.params;
+  let { userid } = req.body;
+  console.log(id);
+  console.log(userid);
+  req.app
+    .get("db")
+    .findEmployeeWithGroup([userid, id])
+    .then(empId => {
+      console.log("FINDING EMPLOYEE SUCCESSFULL");
+      console.log(empId[0].employee_id);
+      req.app
+        .get("db")
+        .removeEmployee([empId[0].employee_id])
+        .then(results => {
+          console.log("REMOVING EMPLOYEE SUCCESSFULL");
+          res.status(200).json(results);
+        })
+        .catch(err => {
+          console.log(`ERROR IN REMOVING EMPLOYEE : => ${err}`);
+          res.status(500).json(err);
+        });
+    })
+    .catch(error => {
+      console.log(`ERROR IN FINDING EMPLOYEE WITH GROUP ID : => ${error}`);
+      res.status(500).json(error);
+    });
+};
+
 //CREATING AN EMPLOYEE FOR THE COMPANY WORKS
 const createEmployee = (req, res) => {
   let { company_id, user_id } = req.body;
@@ -49,7 +80,22 @@ const createEmployee = (req, res) => {
       res.status(500).json(err);
     });
 };
-
+//get employees with company id
+const getEmployeesWithCompanyId = (req, res, next) => {
+  let { id } = req.params;
+  console.log("GETTING EMPLOYEES WITH COMPANY ID WAS HIT");
+  console.log(id);
+  req.app
+    .get("db")
+    .getemployees([id])
+    .then(results => {
+      console.log(`AYYEE WE GOT THE EMPLOYEES WITH COMPANY ID`);
+      res.status(200).json(results);
+    })
+    .catch(error => {
+      console.log(`ERROR IN GETTING EMPLOYEES WITH COMPANY ID : => ${error}`);
+    });
+};
 //EMPLOYEES OF THE COMPANY WORKS
 const getEmployees = (req, res) => {
   console.log("GET EMPLOYEES WAS HIT IN THE REDUCER");
@@ -105,6 +151,7 @@ const getCompanySchedules = (req, res, next) => {
       console.log(results);
       console.log("THIS WAS HIT HEYOO");
       console.log(`GETTING COMPANY WEEK OF SUCCESSFUL : => ${results}`);
+
       res.status(200).json(results);
     })
     .catch(error => {
@@ -112,6 +159,7 @@ const getCompanySchedules = (req, res, next) => {
       res.status(500).json(error);
     });
 };
+
 //MANAGER GETTING SCHEDULES
 const getSchedules = (req, res) => {
   let { user, weekof } = req.query;
@@ -133,8 +181,9 @@ const getSchedules = (req, res) => {
             .get("db")
             .getschedules([comp_id[0].company_id, weekof])
             .then(schedules => {
-              res.status(200).json(schedules);
+              console.log(schedules);
               console.log(`SCHEDULES RECEIVED HERE THEY ARE : => ${schedules}`);
+              res.status(200).json(schedules);
             })
             .catch(e => {
               res.status(500).json(e);
@@ -173,177 +222,138 @@ const mySchedule = (req, res) => {
 const createCompanyIdSchedule = (req, res, next) => {
   let { id } = req.params;
   let { newCurr, arr, userId } = req.body;
+  console.log(arr);
   console.log(userId);
-  req.app
-    .get("db")
-    .findEmployeeWithGroup([userId, id])
-    .then(empId => {
-      console.log(+empId[0].employee_id);
-      req.app
-        .get("db")
-        .createCompanySchedule([
-          +empId[0].employee_id,
-          id,
-          newCurr,
-          arr[0].schedule[0].weekOf,
-          arr[0].schedule[1].mondaymorningclockin +
-            arr[0].schedule[1].mondaymorningclockout,
-          arr[0].schedule[2].mondaynightclockin +
-            arr[0].schedule[2].mondaynightclockout,
+  // req.app
+  //   .get("db")
+  //   .findEmployeeWithGroup([userId, id])
+  //   .then(empId => {
+  //     console.log(+empId[0].employee_id);
+  _(arr, e => {
+    req.app
+      .get("db")
+      .createCompanySchedule([
+        e.employee_id,
+        id,
+        newCurr,
+        e.schedule[0].weekOf,
+        e.schedule[1].mondaymorningclockin +
+          e.schedule[1].mondaymorningclockout,
+        e.schedule[2].mondaynightclockin + e.schedule[2].mondaynightclockout,
 
-          arr[0].schedule[3].tuesdaymorningclockin +
-            arr[0].schedule[3].tuesdaymorningclockout,
-          arr[0].schedule[4].tuesdaynightclockin +
-            arr[0].schedule[4].tuesdaynightclockout,
+        e.schedule[3].tuesdaymorningclockin +
+          e.schedule[3].tuesdaymorningclockout,
+        e.schedule[4].tuesdaynightclockin + e.schedule[4].tuesdaynightclockout,
 
-          arr[0].schedule[5].wednesdaymorningclockin +
-            arr[0].schedule[5].wednesdaymorningclockout,
-          arr[0].schedule[6].wednesdaynightclockin +
-            arr[0].schedule[6].wednesdaynightclockout,
+        e.schedule[5].wednesdaymorningclockin +
+          e.schedule[5].wednesdaymorningclockout,
+        e.schedule[6].wednesdaynightclockin +
+          e.schedule[6].wednesdaynightclockout,
 
-          arr[0].schedule[7].thursdaymorningclockin +
-            arr[0].schedule[7].thursdaymorningclockout,
-          arr[0].schedule[8].thursdaynightclockin +
-            arr[0].schedule[8].thursdaynightclockout,
+        e.schedule[7].thursdaymorningclockin +
+          e.schedule[7].thursdaymorningclockout,
+        e.schedule[8].thursdaynightclockin +
+          e.schedule[8].thursdaynightclockout,
 
-          arr[0].schedule[9].fridaymorningclockin +
-            arr[0].schedule[9].fridaymorningclockout,
-          arr[0].schedule[10].fridaynightclockin +
-            arr[0].schedule[10].fridaynightclockout,
+        e.schedule[9].fridaymorningclockin +
+          e.schedule[9].fridaymorningclockout,
+        e.schedule[10].fridaynightclockin + e.schedule[10].fridaynightclockout,
 
-          arr[0].schedule[11].saturdaymorningclockin +
-            arr[0].schedule[11].saturdaymorningclockout,
-          arr[0].schedule[12].saturdaynightclockin +
-            arr[0].schedule[12].saturdaynightclockout,
+        e.schedule[11].saturdaymorningclockin +
+          e.schedule[11].saturdaymorningclockout,
+        e.schedule[12].saturdaynightclockin +
+          e.schedule[12].saturdaynightclockout,
 
-          arr[0].schedule[13].sundaymorningclockin +
-            arr[0].schedule[13].sundaymorningclockout,
-          arr[0].schedule[14].sundaynightclockin +
-            arr[0].schedule[14].sundaynightclockout
-        ])
-        .then(results => {
-          console.log("SUCCESS IN CREATING COMPANY SCHEDULE WITH COMPANY ID");
-          // res.status(200).json(results)
-        })
-        .catch(err => {
-          console.log(`ERROR IN CREATING SCHEDULE WITH COMPANY ID : => ${err}`);
-          res.status(500).json(err);
-        });
-    })
-    .catch(error => {
-      console.log(
-        `ERROR FINDING EMPLOYEE IN CREATE COMPANY WITH COMPANY ID: => ${error}`
-      );
-      res.status(500).json(error);
-    });
+        e.schedule[13].sundaymorningclockin +
+          e.schedule[13].sundaymorningclockout,
+        e.schedule[14].sundaynightclockin + e.schedule[14].sundaynightclockout
+      ])
+      .then(results => {
+        console.log("SUCCESS IN CREATING COMPANY SCHEDULE WITH COMPANY ID");
+        res.status(200).json(results);
+      })
+      .catch(err => {
+        console.log(`ERROR IN CREATING SCHEDULE WITH COMPANY ID : => ${err}`);
+        res.status(500).json(err);
+      });
+  });
+  // })
+  // .catch(error => {
+  //   console.log(
+  //     `ERROR FINDING EMPLOYEE IN CREATE COMPANY WITH COMPANY ID: => ${error}`
+  //   );
+  //   res.status(500).json(error);
+  // });
 };
 //CREATING SCHEDULE
 const createSchedule = (req, res) => {
   console.log("CREATE SCHEDULE CONTROLLER HIT!");
   let { newCurr, arr, userId } = req.body;
-  console.log(`ARRAY LENGTH : => ${arr.length}`);
+  console.log(`ARRAY LENGTH : => ${arr[0]}`);
+  console.log(arr);
   console.log(arr[0].schedule[0].weekOf);
-  // console.log(`THIS IS THE ARRAY OF THE BODY : => ${arr[0].weekOf}`);
-  // console.log("create schedule hit");
-  // console.log(`currentUser: ${userId}`);
+  let companyId;
   req.app
     .get("db")
-    .findEmployee(userId)
-    .then(currentEmployeeId => {
-      console.log(
-        `current employee id :  ${Number(
-          JSON.stringify(currentEmployeeId)[16]
-        )}`
-      );
-      //
+    .findcompany([arr[0].employee_id])
+    .then(compId => {
+      _(arr, e => {
+        req.app
+          .get("db")
+          .createschedule([
+            compId[0].company_id,
+            e.employee_id,
+            newCurr,
+            e.schedule[0].weekOf,
+            e.schedule[1].mondaymorningclockin +
+              e.schedule[1].mondaymorningclockout,
+            e.schedule[2].mondaynightclockin +
+              e.schedule[2].mondaynightclockout,
 
-      req.app
-        .get("db")
-        .createschedule([
-          Number(JSON.stringify(currentEmployeeId)[16]),
-          newCurr,
-          arr[0].schedule[0].weekOf,
-          arr[0].schedule[1].mondaymorningclockin +
-            arr[0].schedule[1].mondaymorningclockout,
-          arr[0].schedule[2].mondaynightclockin +
-            arr[0].schedule[2].mondaynightclockout,
+            e.schedule[3].tuesdaymorningclockin +
+              e.schedule[3].tuesdaymorningclockout,
+            e.schedule[4].tuesdaynightclockin +
+              e.schedule[4].tuesdaynightclockout,
 
-          arr[0].schedule[3].tuesdaymorningclockin +
-            arr[0].schedule[3].tuesdaymorningclockout,
-          arr[0].schedule[4].tuesdaynightclockin +
-            arr[0].schedule[4].tuesdaynightclockout,
+            e.schedule[5].wednesdaymorningclockin +
+              e.schedule[5].wednesdaymorningclockout,
+            e.schedule[6].wednesdaynightclockin +
+              e.schedule[6].wednesdaynightclockout,
 
-          arr[0].schedule[5].wednesdaymorningclockin +
-            arr[0].schedule[5].wednesdaymorningclockout,
-          arr[0].schedule[6].wednesdaynightclockin +
-            arr[0].schedule[6].wednesdaynightclockout,
+            e.schedule[7].thursdaymorningclockin +
+              e.schedule[7].thursdaymorningclockout,
+            e.schedule[8].thursdaynightclockin +
+              e.schedule[8].thursdaynightclockout,
 
-          arr[0].schedule[7].thursdaymorningclockin +
-            arr[0].schedule[7].thursdaymorningclockout,
-          arr[0].schedule[8].thursdaynightclockin +
-            arr[0].schedule[8].thursdaynightclockout,
+            e.schedule[9].fridaymorningclockin +
+              e.schedule[9].fridaymorningclockout,
+            e.schedule[10].fridaynightclockin +
+              e.schedule[10].fridaynightclockout,
 
-          arr[0].schedule[9].fridaymorningclockin +
-            arr[0].schedule[9].fridaymorningclockout,
-          arr[0].schedule[10].fridaynightclockin +
-            arr[0].schedule[10].fridaynightclockout,
+            e.schedule[11].saturdaymorningclockin +
+              e.schedule[11].saturdaymorningclockout,
+            e.schedule[12].saturdaynightclockin +
+              e.schedule[12].saturdaynightclockout,
 
-          arr[0].schedule[11].saturdaymorningclockin +
-            arr[0].schedule[11].saturdaymorningclockout,
-          arr[0].schedule[12].saturdaynightclockin +
-            arr[0].schedule[12].saturdaynightclockout,
-
-          arr[0].schedule[13].sundaymorningclockin +
-            arr[0].schedule[13].sundaymorningclockout,
-          arr[0].schedule[14].sundaynightclockin +
-            arr[0].schedule[14].sundaynightclockout
-        ])
-        .then(results => {
-          req.app
-            .get("db")
-            .findcompany(Number(JSON.stringify(currentEmployeeId)[16]))
-            .then(comp_id => {
-              console.log(`COMPANY ID : =>${comp_id[0].company_id}`);
-              console.log(
-                `NOW THIS IS ACTUALLY THE CEI : => ${Number(
-                  JSON.stringify(currentEmployeeId)[16]
-                )}`
-              );
-              console.log(
-                `NOW THIS IS ACTUALLY THE CURRENT DATE : => ${newCurr}`
-              );
-              let { company_id } = comp_id[0];
-              req.app
-                .get("db")
-                .updatecompanyschedule(
-                  // employee_id,
-                  [
-                    Number(JSON.stringify(currentEmployeeId)[16]),
-                    newCurr,
-                    company_id
-                  ]
-                )
-                .then(totalres => {
-                  console.log(`CREATE SCHEDULE FULLY COMPLETED CORRECTLY`);
-                  res.status(200).json(totalres);
-                })
-                .catch(errorr => {
-                  console.log(`ERROR IN 3RD ITERATION ON CATCH: ${errorr}`);
-                  res.status(500).json(errorr);
-                });
-            })
-            .catch(err => {
-              console.log(`ERROR FINDING COMPANY OF EMPLOYEE: ${err}`);
-              res.status(500).json(err);
-            });
-        })
-        .catch(err => {
-          console.log(`ERROR IN CREATING SCHEDULE :${err}`);
-          res.status(500).json(err);
-        });
+            e.schedule[13].sundaymorningclockin +
+              e.schedule[13].sundaymorningclockout,
+            e.schedule[14].sundaynightclockin +
+              e.schedule[14].sundaynightclockout
+          ])
+          .then(results => {
+            console.log(results);
+            // res.status(200).json(results);
+          })
+          .catch(err => {
+            console.log(`ERROR IN CREATING SCHEDULE :${err}`);
+            res.status(500).json(err);
+          });
+      });
     })
-    .catch(errrorrr => `ERROR FINDING EMPLOYEE ${errrorrr}`);
-  // console.log(`CEI OVER HERE ${cei}`);
+    .catch(error => {
+      console.log(`ERROR FINDING COMPANY WITH EMPLOYEE ID : => ${error}`);
+      res.status(500).json(error);
+    });
 };
 const updateCompanyIdSchedule = (req, res, next) => {
   let { arr, userId, weekof } = req.body;
@@ -351,60 +361,58 @@ const updateCompanyIdSchedule = (req, res, next) => {
   console.log(arr);
   console.log(userId);
   console.log(weekof);
-  req.app
-    .get("db")
-    .findEmployeeWithGroup([userId, id])
-    .then(empId => {
-      console.log(empId);
-      req.app
-        .get("db")
-        .updateScheduleswithcompanyid([
-          empId[0].employee_id,
-          arr[0].schedule[1].mondaymorningclockin +
-            arr[0].schedule[1].mondaymorningclockout,
-          arr[0].schedule[2].mondaynightclockin +
-            arr[0].schedule[2].mondaynightclockout,
+  // req.app
+  //   .get("db")
+  //   .findEmployeeWithGroup([userId, id])
+  //   .then(empId => {
+  //     console.log(empId);
+  _(arr, e => {
+    req.app
+      .get("db")
+      .updateScheduleswithcompanyid([
+        e.employee_id,
+        e.schedule[1].mondaymorningclockin +
+          e.schedule[1].mondaymorningclockout,
+        e.schedule[2].mondaynightclockin + e.schedule[2].mondaynightclockout,
 
-          arr[0].schedule[3].tuesdaymorningclockin +
-            arr[0].schedule[3].tuesdaymorningclockout,
-          arr[0].schedule[4].tuesdaynightclockin +
-            arr[0].schedule[4].tuesdaynightclockout,
+        e.schedule[3].tuesdaymorningclockin +
+          e.schedule[3].tuesdaymorningclockout,
+        e.schedule[4].tuesdaynightclockin + e.schedule[4].tuesdaynightclockout,
 
-          arr[0].schedule[5].wednesdaymorningclockin +
-            arr[0].schedule[5].wednesdaymorningclockout,
-          arr[0].schedule[6].wednesdaynightclockin +
-            arr[0].schedule[6].wednesdaynightclockout,
+        e.schedule[5].wednesdaymorningclockin +
+          e.schedule[5].wednesdaymorningclockout,
+        e.schedule[6].wednesdaynightclockin +
+          e.schedule[6].wednesdaynightclockout,
 
-          arr[0].schedule[7].thursdaymorningclockin +
-            arr[0].schedule[7].thursdaymorningclockout,
-          arr[0].schedule[8].thursdaynightclockin +
-            arr[0].schedule[8].thursdaynightclockout,
+        e.schedule[7].thursdaymorningclockin +
+          e.schedule[7].thursdaymorningclockout,
+        e.schedule[8].thursdaynightclockin +
+          e.schedule[8].thursdaynightclockout,
 
-          arr[0].schedule[9].fridaymorningclockin +
-            arr[0].schedule[9].fridaymorningclockout,
-          arr[0].schedule[10].fridaynightclockin +
-            arr[0].schedule[10].fridaynightclockout,
+        e.schedule[9].fridaymorningclockin +
+          e.schedule[9].fridaymorningclockout,
+        e.schedule[10].fridaynightclockin + e.schedule[10].fridaynightclockout,
 
-          arr[0].schedule[11].saturdaymorningclockin +
-            arr[0].schedule[11].saturdaymorningclockout,
-          arr[0].schedule[12].saturdaynightclockin +
-            arr[0].schedule[12].saturdaynightclockout,
+        e.schedule[11].saturdaymorningclockin +
+          e.schedule[11].saturdaymorningclockout,
+        e.schedule[12].saturdaynightclockin +
+          e.schedule[12].saturdaynightclockout,
 
-          arr[0].schedule[13].sundaymorningclockin +
-            arr[0].schedule[13].sundaymorningclockout,
-          arr[0].schedule[14].sundaynightclockin +
-            arr[0].schedule[14].sundaynightclockout,
-          arr[0].schedule[0].weekOf
-        ])
-        .then(results => {
-          console.log("SUCCESS IN UPDATING WOO HOO");
-        })
-        .catch(err => {
-          console.log(`ERROR IN UPDATING SCHEDULE WITH COMPANY ID : => ${err}`);
-          res.status(500).json(err);
-        });
-    })
-    .catch();
+        e.schedule[13].sundaymorningclockin +
+          e.schedule[13].sundaymorningclockout,
+        e.schedule[14].sundaynightclockin + e.schedule[14].sundaynightclockout,
+        e.schedule[0].weekOf
+      ])
+      .then(results => {
+        console.log("SUCCESS IN UPDATING WOO HOO");
+      })
+      .catch(err => {
+        console.log(`ERROR IN UPDATING SCHEDULE WITH COMPANY ID : => ${err}`);
+        res.status(500).json(err);
+      });
+  });
+  // })
+  // .catch();
 };
 const updateSchedule = (req, res) => {
   console.log("UPDATE SCHEDULE CONTROLLER HIT!");
@@ -412,54 +420,52 @@ const updateSchedule = (req, res) => {
   console.log(`THIS IS THE WEEK : => ${week}`);
   console.log(`THIS IS THE USER ID : => ${userId}`);
   console.log(arr[0].schedule[0].weekOf);
-  req.app
-    .get("db")
-    .updateschedules([
-      arr[0].employee_id,
-      arr[0].schedule[1].mondaymorningclockin +
-        arr[0].schedule[1].mondaymorningclockout,
-      arr[0].schedule[2].mondaynightclockin +
-        arr[0].schedule[2].mondaynightclockout,
+  _(arr, e => {
+    req.app
+      .get("db")
+      .updateschedules([
+        e.employee_id,
+        e.schedule[1].mondaymorningclockin +
+          e.schedule[1].mondaymorningclockout,
+        e.schedule[2].mondaynightclockin + e.schedule[2].mondaynightclockout,
 
-      arr[0].schedule[3].tuesdaymorningclockin +
-        arr[0].schedule[3].tuesdaymorningclockout,
-      arr[0].schedule[4].tuesdaynightclockin +
-        arr[0].schedule[4].tuesdaynightclockout,
+        e.schedule[3].tuesdaymorningclockin +
+          e.schedule[3].tuesdaymorningclockout,
+        e.schedule[4].tuesdaynightclockin + e.schedule[4].tuesdaynightclockout,
 
-      arr[0].schedule[5].wednesdaymorningclockin +
-        arr[0].schedule[5].wednesdaymorningclockout,
-      arr[0].schedule[6].wednesdaynightclockin +
-        arr[0].schedule[6].wednesdaynightclockout,
+        e.schedule[5].wednesdaymorningclockin +
+          e.schedule[5].wednesdaymorningclockout,
+        e.schedule[6].wednesdaynightclockin +
+          e.schedule[6].wednesdaynightclockout,
 
-      arr[0].schedule[7].thursdaymorningclockin +
-        arr[0].schedule[7].thursdaymorningclockout,
-      arr[0].schedule[8].thursdaynightclockin +
-        arr[0].schedule[8].thursdaynightclockout,
+        e.schedule[7].thursdaymorningclockin +
+          e.schedule[7].thursdaymorningclockout,
+        e.schedule[8].thursdaynightclockin +
+          e.schedule[8].thursdaynightclockout,
 
-      arr[0].schedule[9].fridaymorningclockin +
-        arr[0].schedule[9].fridaymorningclockout,
-      arr[0].schedule[10].fridaynightclockin +
-        arr[0].schedule[10].fridaynightclockout,
+        e.schedule[9].fridaymorningclockin +
+          e.schedule[9].fridaymorningclockout,
+        e.schedule[10].fridaynightclockin + e.schedule[10].fridaynightclockout,
 
-      arr[0].schedule[11].saturdaymorningclockin +
-        arr[0].schedule[11].saturdaymorningclockout,
-      arr[0].schedule[12].saturdaynightclockin +
-        arr[0].schedule[12].saturdaynightclockout,
+        e.schedule[11].saturdaymorningclockin +
+          e.schedule[11].saturdaymorningclockout,
+        e.schedule[12].saturdaynightclockin +
+          e.schedule[12].saturdaynightclockout,
 
-      arr[0].schedule[13].sundaymorningclockin +
-        arr[0].schedule[13].sundaymorningclockout,
-      arr[0].schedule[14].sundaynightclockin +
-        arr[0].schedule[14].sundaynightclockout,
-      arr[0].schedule[0].weekOf
-    ])
-    .then(results => {
-      console.log(`UPDATING SCHEDULES SUCCESSFUL`);
-      res.status(200).json(results);
-    })
-    .catch(err => {
-      console.log(`ERROR UPDATING SCHEDULES : => ${err}`);
-      res.status(500).json(err);
-    });
+        e.schedule[13].sundaymorningclockin +
+          e.schedule[13].sundaymorningclockout,
+        e.schedule[14].sundaynightclockin + e.schedule[14].sundaynightclockout,
+        e.schedule[0].weekOf
+      ])
+      .then(results => {
+        console.log(`UPDATING SCHEDULES SUCCESSFUL`);
+        res.status(200).json(results);
+      })
+      .catch(err => {
+        console.log(`ERROR UPDATING SCHEDULES : => ${err}`);
+        res.status(500).json(err);
+      });
+  });
 };
 //deleting schedule with group id
 const deleteschedulewithgroupid = (req, res, next) => {
@@ -507,6 +513,104 @@ const deleteSchedule = (req, res) => {
 
 //////////////////////////////////////////////////////////////////////
 //COMPANY CONTROLLERS
+
+//accept users application
+const denyUserApplication = (req, res, next) => {
+  let { id } = req.params;
+  let { company } = req.query;
+  console.log(id);
+  req.app
+    .get("db")
+    .denyUsersApplication([id, company])
+    .then(r => {
+      console.log("DENYING USERS APPLICATION SUCCESSFUL");
+      res.status(200).json(results);
+    })
+    .catch(error => {
+      console.log(`ERROR IN DENYING USERS APPLICATION`);
+      req.app
+        .get("db")
+        .getPendingApplications([company])
+        .then(results => {
+          console.log(
+            "SUCCESSFUL IN GETTING ALL PENDING APPLICATIONS AFTER DENYING USER"
+          );
+          res.status(200).json(results);
+        })
+        .catch(err => {
+          console.log(
+            `ERROR IN GETTING PENDING APPLICATIONS AFTER DENYING USERS : => ${err}`
+          );
+        });
+    });
+};
+const acceptUserApplication = (req, res, next) => {
+  let { userId, companyId, appId } = req.body;
+  console.log(userId);
+  console.log(companyId);
+  req.app
+    .get("db")
+    .addApplicationEmployee([companyId, userId, 0, appId])
+    .then(results => {
+      console.log("ADDING USER AS EMPLOYEE SUCCESSFUL");
+      req.app
+        .get("db")
+        .getPendingApplications([companyId])
+        .then(applications => {
+          console.log(
+            "SUCCESSFULL IN GETTING PENDING APPLICATIONS AFTER ACCEPTING USER"
+          );
+          res.status(200).json(applications);
+        })
+        .catch(err => {
+          console.log(
+            `ERROR IN GETTING APPLICATIONS AFTER ACCEPTING USERS APPLICATION `
+          );
+          res.status(500).json(err);
+        });
+    })
+    .catch(error => {
+      console.log(`ERROR IN ADDING USER AS EMPLOYEE : => ${error}`);
+    });
+};
+
+//get company applications
+const getApplications = (req, res, next) => {
+  let { company } = req.query;
+  console.log(company);
+  req.app
+    .get("db")
+    .getPendingApplications([company])
+    .then(applications => {
+      console.log("SUCCESS IN GETTING ALL PENDING APPLICATIONS");
+      res.status(200).json(applications);
+    })
+    .catch(error => {
+      console.log(`ERROR IN GETTING ALL PENDING APPLICATIONS : => ${error}`);
+      res.status(500).json(error);
+    });
+};
+
+//apply for a company
+const applicationRequest = (req, res, next) => {
+  let { companyId, userId } = req.body;
+  console.log(companyId);
+  console.log(userId);
+  req.app
+    .get("db")
+    .jobApplication([companyId, userId])
+    .then(results => {
+      console.log(results);
+      //res.send
+      console.log("SUCCESSFULLY INSERTED INTO APPLICATION TABLE");
+    })
+    .catch(error => {
+      console.log(
+        `ERROR IN INSERTING APPLICATION INTO APPLICATION TABLE : => ${error}`
+      );
+      res.status(500).json(error);
+    });
+};
 
 //CREATING THE COMPANY FOR THE USER, AND MAKING AN EMPLOYEE OF THE COMPANY OF THE USER WHO CREATED THE COMPANY WORKS
 const createCompany = (req, res) => {
@@ -604,5 +708,11 @@ module.exports = {
   getCompanySchedules,
   createCompanyIdSchedule,
   updateCompanyIdSchedule,
-  deleteschedulewithgroupid
+  deleteschedulewithgroupid,
+  getEmployeesWithCompanyId,
+  leaveCompany,
+  applicationRequest,
+  getApplications,
+  acceptUserApplication,
+  denyUserApplication
 };

@@ -25,7 +25,16 @@ const CREATE_GROUP_SCHEDULE = "CREATE_GROUP_SCHEDULE";
 const UPDATE_GROUP_SCHEDULE = "UPDATE_GROUP_SCHEDULE";
 const DELETE_SCHEDULE_WITH_ID = "DELETE_SCHEDULE_WITH_ID";
 const FILTER_VALUE = "FILTER_VALUE";
+const COMPANY_GET_EMPLOYEES = "COMPANY_GET_EMPLOYEES";
 //////////////////ACTION CREATORS
+export function getEmployeesByCompanyId(id) {
+  console.log(id);
+  console.log("GET EMPLOYEES WITH COMPANY ID WAS HIT IN THE REDUCER");
+  return {
+    type: COMPANY_GET_EMPLOYEES,
+    payload: axios.get(`/jobs/staff/${id}`)
+  };
+}
 export function updateFilterValue(val) {
   console.log(val);
   return {
@@ -119,11 +128,10 @@ export function updateschedule(week, userId, arr) {
     payload: axios.put("/updateschedule", { week, userId, arr })
   };
 }
-export function handleOpen(prop) {
-  console.log(prop);
+export function handleOpen(propertyyy, intyy) {
   return {
     type: HANDLE_OPEN,
-    payload: prop
+    payload: { propertyyy, intyy }
   };
 }
 export function handleStateUpdate(i, int, prop, val) {
@@ -157,6 +165,10 @@ export default function schedulesreducer(state = initialState, action) {
     case HANDLE_UPDATE:
       console.log("HANDLE UPDATE REDUCER WAS HIT 1000X");
       return { ...state, update: action.payload };
+    case `${COMPANY_GET_EMPLOYEES}_PENDING`:
+      console.log("company get employee pending");
+      return { ...state };
+    case `${COMPANY_GET_EMPLOYEES}_FULFILLED`:
     case `${GET_EMPLOYEES}_FULFILLED`:
       console.log(action.payload.data);
       console.log("get employees was hittttt boyy");
@@ -402,12 +414,24 @@ export default function schedulesreducer(state = initialState, action) {
       };
     case HANDLE_OPEN:
       console.log("OPEN UP");
+      let { propertyyy, intyy } = action.payload;
+      console.log(propertyyy);
+      console.log(intyy);
       return {
         ...state,
-        [action.payload]: !state[action.payload]
+        adminSchedules: {
+          ...state.adminSchedules,
+          [intyy]: {
+            ...state.adminSchedules[intyy],
+            [propertyyy]: !state.adminSchedules[intyy][propertyyy]
+          }
+        }
       };
+    // }
+    //   [action.payload[i]]: !state[action.payload]
+    // };
     case HANDLE_OFF:
-      let { who, property, j } = action.payload;
+      let { j, who, property } = action.payload;
       let clockin = `${property}clockin`;
       let clockout = `${property}clockout`;
       return {

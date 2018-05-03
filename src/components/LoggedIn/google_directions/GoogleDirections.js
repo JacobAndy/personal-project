@@ -62,7 +62,7 @@ class GoogleDirections extends Component {
           process.env.REACT_APP_GOOGLE_MAP_KEY
         }`,
         loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `800px`, width: "800px" }} />,
+        containerElement: <div style={{ height: `92.5vh`, width: "1200px" }} />,
         mapElement: <div style={{ height: `100%`, width: "100%" }} />
       }),
       withScriptjs,
@@ -101,7 +101,11 @@ class GoogleDirections extends Component {
     <Directions />;
     let mapCompany = this.props.companys.map((e, i) => {
       return (
-        <div onClick={() => this.props.setDirections(e.company_id)} key={i}>
+        <div
+          className="companys-in-map"
+          onClick={() => this.props.setDirections(e.company_id)}
+          key={i}
+        >
           <h3>{e.name}</h3>
           <h3>Location: {e.location}</h3>
         </div>
@@ -116,11 +120,11 @@ class GoogleDirections extends Component {
           </div>
         ) : this.props.currentUser[0] && userLat && userLong ? (
           <div>
-            <h3>Directions</h3>
+            <h3 className="maptitle">Directions</h3>
             <div className="GoogleDirections">
               <Directions />
               <div className="mappedDirectionCompany">
-                <h3 className="directionstitle">Jobs</h3>
+                <h3 className="jobs">Jobs</h3>
                 {mapCompany}
               </div>
             </div>

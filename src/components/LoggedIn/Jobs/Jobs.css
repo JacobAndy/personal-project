@@ -1,0 +1,25 @@
+.staff-popover {
+}
+.personal-jobs,
+.inactive-job {
+  margin: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.inactive-job {
+}
+.jobs-holder {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+}
+.each-job {
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 300px;
+  height: 170px;
+  padding: 15px;
+}

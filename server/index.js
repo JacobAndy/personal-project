@@ -32,7 +32,13 @@ const {
   getCompanySchedules,
   createCompanyIdSchedule,
   updateCompanyIdSchedule,
-  deleteschedulewithgroupid
+  deleteschedulewithgroupid,
+  getEmployeesWithCompanyId,
+  leaveCompany,
+  applicationRequest,
+  getApplications,
+  acceptUserApplication,
+  denyUserApplication
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -112,8 +118,20 @@ app.put("/update", updateUser);
 //getting employees WORKS
 app.get("/employees/:id", getEmployees);
 
+//get employees with company id
+app.get(`/jobs/staff/:id`, getEmployeesWithCompanyId);
+
 //////////////////////////////////////////////////////////
 //COMPANY END POINTS
+
+//accepting job applications
+app.post("/jobs/application/decision", acceptUserApplication);
+
+//deny job application
+app.delete("/jobs/application/decision/:id", denyUserApplication);
+
+//getting applications
+app.get(`/jobs/applications`, getApplications);
 
 //LOCATION CONVERTER
 app.post("/job/location/convert", (req, res, next) => {
@@ -134,6 +152,9 @@ app.post("/job/location/convert", (req, res, next) => {
 //THIS ALSO CREATES EMPLOYEE REFERENCING USER AND GROUP
 app.post("/createcompany", createCompany);
 
+//apply for a company
+app.post("/jobs/application", applicationRequest);
+
 //get company WORKS
 app.get("/company", getCompany);
 
@@ -142,6 +163,9 @@ app.get("/alljobs", getAllJobs);
 
 //getting location of a specefic company
 app.get("/job/location/:id", getLocation);
+
+//leave company
+app.put(`/leavecompany/:id`, leaveCompany);
 
 //////////////////////////////////////////////////////////
 //SCHEDULE END POINTS
@@ -163,6 +187,7 @@ app.delete("/rm/schedule/", deleteSchedule);
 
 //delete schedule with group id
 app.delete(`/deletewithid`, deleteschedulewithgroupid);
+
 //getting schedules
 app.get("/weekof", getSchedules);
 

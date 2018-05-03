@@ -34,7 +34,7 @@ body {
   align-items: center;
 }
 .employee-display {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

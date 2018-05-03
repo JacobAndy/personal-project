@@ -29,6 +29,19 @@ class Nav extends Component {
     console.log(this.props);
     return (
       <div>
+        {this.props.currentUser[0] ? (
+          <Link to="/profile">
+            <div className="user-profile-details">
+              <img
+                src={this.props.photo}
+                className="nav-bar-userpicture"
+                width="40px"
+                height="40px"
+              />
+              <h6>{this.props.name}</h6>
+            </div>
+          </Link>
+        ) : null}
         {!this.state.burgerFlag ? (
           <div id="main">
             <div className="entity">

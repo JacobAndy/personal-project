@@ -35,7 +35,7 @@ class Traffic extends Component {
           process.env.REACT_APP_GOOGLE_MAP_KEY
         }`,
         loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `800px`, width: "800px" }} />,
+        containerElement: <div style={{ height: `92.5vh`, width: "1200px" }} />,
         mapElement: <div style={{ height: `100%`, width: "100%" }} />
       }),
       withScriptjs,
@@ -60,7 +60,11 @@ class Traffic extends Component {
     console.log(this.props.companys);
     let mapCompany = this.props.companys.map((e, i) => {
       return (
-        <div onClick={() => this.props.setTraffic(e.company_id)} key={i}>
+        <div
+          className="companys-in-map"
+          onClick={() => this.props.setTraffic(e.company_id)}
+          key={i}
+        >
           <h3>{e.name}</h3>
           <h3>Location: {e.location}</h3>
         </div>
@@ -69,17 +73,17 @@ class Traffic extends Component {
     return (
       <div>
         <LoginNav />
-        {!this.props.companys.length ? (
+        {!this.props.companys.length && this.props.currentUser[0] ? (
           <div>
             <h3>you have no business</h3>
           </div>
         ) : this.props.currentUser[0] ? (
           <div>
-            <h3>Live Traffic Feed</h3>
+            <h3 className="maptitle">Live Traffic Feed</h3>
             <div className="GoogleDirections">
               <GoogleTraffic />
               <div className="mappedDirectionCompany">
-                <h3 className="directionstitle">Jobs</h3>
+                <h3 className="jobs">Jobs</h3>
                 {mapCompany}
               </div>
             </div>

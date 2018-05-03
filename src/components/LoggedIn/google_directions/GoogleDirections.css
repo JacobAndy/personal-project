@@ -4,12 +4,21 @@
   align-content: center;
   justify-content: center;
   flex-direction: row;
-  right: 170px;
+  right: -10px;
+  bottom: 0;
 }
 .mappedDirectionCompany {
+  position: relative;
   margin: 0 0 0 170px;
-  right: 10px;
+  width: 260px;
+  right: 100px;
 }
-.directionstitle {
+.jobs {
+  text-align: center;
+}
+.companys-in-map {
+  margin-bottom: 45px;
+}
+.maptitle {
   text-align: center;
 }

@@ -112,8 +112,14 @@ class Profile extends Component {
             <button onClick={this.submitVals}>Update Information</button>
           </div>
         ) : (
-          <div>
+          <div className="profile">
             <h2>welcome!{name}</h2>
+            <img
+              className="profile-image"
+              src={this.props.photo}
+              width="50px"
+              height="50px"
+            />
           </div>
         )}
       </div>

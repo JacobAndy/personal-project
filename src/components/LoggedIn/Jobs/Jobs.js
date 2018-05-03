@@ -6,9 +6,22 @@ import {
   getCompany,
   getJobs,
   createGroup,
-  getLatLong
+  getLatLong,
+  sendApplication,
+  getPendingApplications,
+  acceptCurrentUsersApplication,
+  denyUserApplication
 } from "../../../ducks/company";
+import { getStaff, leaveCompany, addEditToggle } from "../../../ducks/employee";
 import Error from "../../Error/Error";
+import Popover, { PopoverAnimationFromTop } from "material-ui/Popover";
+import Menu from "material-ui/Menu";
+import MenuItem from "material-ui/MenuItem";
+import _ from "lodash.map";
+import filt from "lodash.filter";
+import MapCompanys from "./MapCompanys";
+import MapApp from "./MapApp";
+import MapJobs from "./MapJobs";
 
 class Jobs extends Component {
   constructor() {
@@ -16,17 +29,32 @@ class Jobs extends Component {
     this.state = {
       createGroupFlag: false,
       companyName: "",
-      location: ""
+      location: "",
+      popover: false,
+      editGroupFlag: false,
+      popoverApplication: false,
+      searchForYourJobs: "",
+      searchForAppJobs: "",
+      companysSearch: "",
+      jobsSearch: ""
     };
+    this.handlePopOverOpen = this.handlePopOverOpen.bind(this);
+    this.handlePopOverClose = this.handlePopOverClose.bind(this);
     this.toggleCreateGroup = this.toggleCreateGroup.bind(this);
     this.handleCompanyLocation = this.handleCompanyLocation.bind(this);
     this.handleCompanyName = this.handleCompanyName.bind(this);
     this.getLocations = this.getLocations.bind(this);
+    this.handlePopOverOpenApplication = this.handlePopOverOpenApplication.bind(
+      this
+    );
+    this.handlePopOverCloseApplication = this.handlePopOverCloseApplication.bind(
+      this
+    );
   }
   componentDidMount() {
-    this.props.getCompany(this.props.user_id);
     this.props.getJobs();
   }
+
   toggleCreateGroup() {
     this.setState({ createGroupFlag: !this.state.createGroupFlag });
   }
@@ -35,6 +63,24 @@ class Jobs extends Component {
   }
   handleCompanyLocation(e) {
     this.setState({ location: e });
+  }
+  handlePopOverClose() {
+    this.setState({ popover: false });
+  }
+  handlePopOverOpen = event => {
+    this.setState({ popover: true, anchorEl: event.currentTarget });
+  };
+  handlePopOverOpenApplication = event => {
+    this.setState({ popoverApplication: true, anchorEl: event.currentTarget });
+  };
+  handlePopOverCloseApplication() {
+    this.setState({ popoverApplication: false });
+  }
+  handleJobSearch(val) {
+    this.setState({ jobsSearch: val });
+  }
+  handleCompanySearch(val) {
+    this.setState({ companysSearch: val });
   }
 
   getLocations() {
@@ -104,25 +150,33 @@ class Jobs extends Component {
     this.toggleCreateGroup();
   }
   render() {
+    console.log(this.props);
     let newVar = [];
-    let mappedComp = this.props.companys.map((e, i) => {
+    let mappedApplications = _(this.props.jobApplications, e => {
+      return <MapApp app={e} />;
+    });
+    let mappedComp = filt(this.props.companys, e => {
+      if (e.name.includes(this.state.companysSearch)) {
+        return e;
+      }
+    }).map((e, i, j) => {
       newVar.push(e.company_id);
       return (
-        <div key={i}>
-          <h5>{e.name}</h5>
-        </div>
+        <MapCompanys
+          num={this.props[`num` + i]}
+          comp={e}
+          user={this.props.user_id}
+          mapApp={mappedApplications}
+        />
       );
     });
-    let mappedJobs = this.props.jobs.map((e, i, a) => {
+    let mappedJobs = filt(this.props.jobs, e => {
+      if (e.name.includes(this.state.jobsSearch)) {
+        return e;
+      }
+    }).map((e, i, a) => {
       if (!newVar.includes(e.company_id)) {
-        // console.log("heyy boy");
-        return (
-          <div key={i}>
-            <h5>Name: {e.name}</h5>
-            <h5>Location: {e.location}</h5>
-            <button>Apply</button>
-          </div>
-        );
+        return <MapJobs company={e} user={this.props.user_id} />;
       }
     });
     console.log(this.props);
@@ -146,15 +200,23 @@ class Jobs extends Component {
         ) : this.props.currentUser[0] ? (
           <div>
             <Nav />
-            <div>
-              <input placeholder="search your jobs" />
-              <h3>Your Jobs</h3>
-              {mappedComp}
-            </div>
-            <div>
-              <input placeholder="search for a job" />
-              <h3>Apply For Jobs</h3>
-              {mappedJobs}
+            <div className="jobs-holder">
+              <div className="personal-jobs">
+                <input
+                  placeholder="search your jobs"
+                  onChange={e => this.handleCompanySearch(e.target.value)}
+                />
+                <h3>Your Jobs</h3>
+                {mappedComp}
+              </div>
+              <div className="inactive-job">
+                <input
+                  placeholder="search for a job"
+                  onChange={e => this.handleJobSearch(e.target.value)}
+                />
+                <h3>Apply For Jobs</h3>
+                {mappedJobs}
+              </div>
             </div>
             <button onClick={this.toggleCreateGroup}>Create a Business</button>
           </div>
@@ -172,7 +234,8 @@ let mapStateToProps = state => {
   let userid;
   return {
     ...state.company,
-    ...state.users
+    ...state.users,
+    ...state.employee
   };
 };
 
@@ -180,5 +243,12 @@ export default connect(mapStateToProps, {
   getCompany,
   getJobs,
   createGroup,
-  getLatLong
+  getLatLong,
+  getStaff,
+  leaveCompany,
+  addEditToggle,
+  sendApplication,
+  getPendingApplications,
+  acceptCurrentUsersApplication,
+  denyUserApplication
 })(Jobs);
