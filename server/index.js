@@ -8,6 +8,7 @@ const passport = require("passport");
 const port = process.env.PORT || 3003;
 const { strat, logout } = require(`${__dirname}/controllers/strategy`);
 const NodeGeocoder = require("node-geocoder");
+const express = require("express");
 
 const options = {
   provider: "google",
