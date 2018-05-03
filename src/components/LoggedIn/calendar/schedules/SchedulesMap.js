@@ -53,9 +53,10 @@ class MappedSchedules extends Component {
       handleOff,
       userinfo,
       person,
-      i
+      i,
+      manager
     } = this.props;
-    console.log(i);
+    console.log(manager);
     return (
       <div className="employee-display">
         <div className="individual">
@@ -98,7 +99,7 @@ class MappedSchedules extends Component {
                     ? null
                     : `-${person.schedule[1].mondaymorningclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -166,7 +167,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[2].mondaynightclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -236,7 +237,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[3].tuesdaymorningclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -304,7 +305,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[4].tuesdaynightclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -375,7 +376,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[5].wednesdaymorningclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -445,7 +446,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[6].wednesdaynightclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -515,7 +516,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[7].thursdaymorningclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -585,7 +586,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[8].thursdaynightclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -655,7 +656,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[9].fridaymorningclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -723,7 +724,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[10].fridaynightclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -793,7 +794,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[11].saturdaymorningclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -863,7 +864,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[12].saturdaynightclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -933,7 +934,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[13].sundaymorningclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"
@@ -1001,7 +1002,7 @@ class MappedSchedules extends Component {
                       ? null
                       : `-${person.schedule[14].sundaynightclockout}`}
                 </p>
-                {!this.props.currentCompanyManager ? (
+                {manager ? (
                   <div>
                     <div
                       className="right-arrow-small"

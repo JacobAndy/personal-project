@@ -62,7 +62,8 @@ export function updateCompanyWeekOf(compId, arr, userId, weekof) {
   };
 }
 export function deleteWeek(arr, week) {
-  let user = arr.map(e => e.employee_id);
+  console.log(arr);
+  let user = arr[0].employee_id;
   console.log(user);
   return {
     type: DELETE_WEEK,

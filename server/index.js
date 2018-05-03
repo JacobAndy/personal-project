@@ -38,7 +38,8 @@ const {
   applicationRequest,
   getApplications,
   acceptUserApplication,
-  denyUserApplication
+  denyUserApplication,
+  sendMassEmail
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -123,6 +124,9 @@ app.get(`/jobs/staff/:id`, getEmployeesWithCompanyId);
 
 //////////////////////////////////////////////////////////
 //COMPANY END POINTS
+
+//send mass emails
+app.post("/sendemail/employees/all", sendMassEmail);
 
 //accepting job applications
 app.post("/jobs/application/decision", acceptUserApplication);

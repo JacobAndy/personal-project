@@ -1,4 +1,22 @@
 const _ = require("lodash.map");
+//nodemailer
+const nodemailer = require("nodemailer");
+let transporter = nodemailer.createTransport({
+  service: "Gmail",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.NODE_MAILER_USER_NAME,
+    pass: process.env.NODE_MAILER_PASSWORD
+  }
+});
+
+//twilio
+const client = require("twilio")(
+  process.env.ACCOUNT_SID,
+  process.env.AUTH_TOKEN
+);
+
 ///////////////////////////////////////////////////////
 //USER CONTROLLERS
 
@@ -37,6 +55,30 @@ const updateUser = (req, res) => {
 
 ////////////////////////////////////////////////////////////////
 //EMPLOYEE CONTROLLERS
+
+//send mass emails
+const sendMassEmail = (req, res, next) => {
+  let { employees, email, subject } = req.body;
+  console.log(employees);
+  console.log(email);
+  _(employees, e => {
+    let mailOptions = {
+      from: '"Entity Schedules" <entityschedules@gmail.com>',
+      to: e.email,
+      subject: subject,
+      text: email,
+      html: `<h4>Hello ${e.full_name}</h4>
+    <p>${email}</p>`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Message sent: %s", info.messageId);
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    });
+  });
+};
 
 //leave company
 const leaveCompany = (req, res, next) => {
@@ -224,12 +266,38 @@ const createCompanyIdSchedule = (req, res, next) => {
   let { newCurr, arr, userId } = req.body;
   console.log(arr);
   console.log(userId);
+  console.log("CREATED SCHEDULE WITH COMPANY ID OVER HERE");
   // req.app
   //   .get("db")
   //   .findEmployeeWithGroup([userId, id])
   //   .then(empId => {
   //     console.log(+empId[0].employee_id);
   _(arr, e => {
+    // client.messages
+    //   .create({
+    //     body: `Hey ${
+    //       e.full_name
+    //     }, this is Entity Schedules letting you know that your schedule has been posted`,
+    //     from: "4156505615"
+    // to: e.phone_number
+    // })
+    // .then(message => console.log(message.sid))
+    // .done();
+    let mailOptions = {
+      from: '"Entity Schedules" <entityschedules@gmail.com>',
+      to: "odistiinct@gmail.com",
+      subject: `Week ${e.schedule[0].weekOf} posted`,
+      text: "Schedule is now available",
+      html: `<h4>Hello ${e.full_name}</h4>
+    <p>Your schedule for ${e.schedule[0].weekOf} is available</p>`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Message sent: %s", info.messageId);
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    });
     req.app
       .get("db")
       .createCompanySchedule([
@@ -286,7 +354,7 @@ const createCompanyIdSchedule = (req, res, next) => {
   // });
 };
 //CREATING SCHEDULE
-const createSchedule = (req, res) => {
+const createSchedule = (req, res, next) => {
   console.log("CREATE SCHEDULE CONTROLLER HIT!");
   let { newCurr, arr, userId } = req.body;
   console.log(`ARRAY LENGTH : => ${arr[0]}`);
@@ -298,6 +366,31 @@ const createSchedule = (req, res) => {
     .findcompany([arr[0].employee_id])
     .then(compId => {
       _(arr, e => {
+        // client.messages
+        //   .create({
+        //     body: `Hey ${
+        //       e.full_name
+        //     }, this is Entity Schedules letting you know that your schedule has been posted`,
+        //     from: "4156505615"
+        // to: e.phone_number
+        // })
+        // .then(message => console.log(message.sid))
+        // .done();
+        let mailOptions = {
+          from: '"Entity Schedules" <entityschedules@gmail.com>',
+          to: "odistiinct@gmail.com",
+          subject: `Week ${e.schedule[0].weekOf} posted`,
+          text: "Schedule is now available",
+          html: `<h4>Hello ${e.full_name}</h4>
+        <p>Your schedule for ${e.schedule[0].weekOf} is available</p>`
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            return console.log(error);
+          }
+          console.log("Message sent: %s", info.messageId);
+          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        });
         req.app
           .get("db")
           .createschedule([
@@ -367,6 +460,33 @@ const updateCompanyIdSchedule = (req, res, next) => {
   //   .then(empId => {
   //     console.log(empId);
   _(arr, e => {
+    // client.messages
+    //   .create({
+    //     body: `Hey ${
+    //       e.full_name
+    //     }, this is Entity Schedules letting you know that your schedule has been updated`,
+    //     from: "4156505615"
+    // to: e.phone_number
+    // })
+    // .then(message => console.log(message.sid))
+    // .done();
+    let mailOptions = {
+      from: '"Entity Schedules" <entityschedules@gmail.com>',
+      to: "odistiinct@gmail.com",
+      subject: `Week ${e.schedule[0].weekOf} has been edited`,
+      text: "Schedule has been updated and is now available",
+      html: `<h4>Hello ${e.full_name}</h4>
+    <p>Your schedule for ${
+      e.schedule[0].weekOf
+    } was updated and is available</p>`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Message sent: %s", info.messageId);
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    });
     req.app
       .get("db")
       .updateScheduleswithcompanyid([
@@ -405,6 +525,7 @@ const updateCompanyIdSchedule = (req, res, next) => {
       ])
       .then(results => {
         console.log("SUCCESS IN UPDATING WOO HOO");
+        res.status(200).json(results);
       })
       .catch(err => {
         console.log(`ERROR IN UPDATING SCHEDULE WITH COMPANY ID : => ${err}`);
@@ -421,6 +542,33 @@ const updateSchedule = (req, res) => {
   console.log(`THIS IS THE USER ID : => ${userId}`);
   console.log(arr[0].schedule[0].weekOf);
   _(arr, e => {
+    // client.messages
+    //   .create({
+    //     body: `Hey ${
+    //       e.full_name
+    //     }, this is Entity Schedules letting you know that your schedule has been updated`,
+    //     from: "4156505615"
+    // to: e.phone_number
+    // })
+    // .then(message => console.log(message.sid))
+    // .done();
+    let mailOptions = {
+      from: '"Entity Schedules" <entityschedules@gmail.com>',
+      to: "odistiinct@gmail.com",
+      subject: `Week ${e.schedule[0].weekOf} has been edited`,
+      text: "Schedule has been updated and is now available",
+      html: `<h4>Hello ${e.full_name}</h4>
+    <p>Your schedule for ${
+      e.schedule[0].weekOf
+    } was updated and is available</p>`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Message sent: %s", info.messageId);
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    });
     req.app
       .get("db")
       .updateschedules([
@@ -473,25 +621,25 @@ const deleteschedulewithgroupid = (req, res, next) => {
   console.log(user);
   console.log(company);
   console.log(week);
+  // req.app
+  //   .get("db")
+  //   .findEmployeeWithGroup([user, company])
+  //   .then(empId => {
   req.app
     .get("db")
-    .findEmployeeWithGroup([user, company])
-    .then(empId => {
-      req.app
-        .get("db")
-        .deleteweek([empId[0].employee_id, week])
-        .then(results => {
-          res.status(200).json(results);
-          console.log("SUCCESS IN DELETING WEEK WITH GROUP ID");
-        })
-        .catch(err => {
-          console.log(`ERROR IN DELETING WEEK WITH GROUP ID : => ${err}`);
-        });
+    .deleteweek([company, week])
+    .then(results => {
+      res.status(200).json(results);
+      console.log("SUCCESS IN DELETING WEEK WITH GROUP ID");
     })
-    .catch(error => {
-      console.log(`ERROR IN FINDING EMPLOYEE WITH GROUP ID${error}`);
-      res.status(500).json(error);
+    .catch(err => {
+      console.log(`ERROR IN DELETING WEEK WITH GROUP ID : => ${err}`);
     });
+  // })
+  // .catch(error => {
+  //   console.log(`ERROR IN FINDING EMPLOYEE WITH GROUP ID${error}`);
+  //   res.status(500).json(error);
+  // });
 };
 //DELETING SCHEDULE
 const deleteSchedule = (req, res) => {
@@ -500,14 +648,24 @@ const deleteSchedule = (req, res) => {
   console.log(weekof);
   req.app
     .get("db")
-    .deleteweek([user, weekof])
-    .then(results => {
-      console.log("DELETE WEEK SUCCESSFUL");
-      res.status(200).json(results);
+    .findcompany([user])
+    .then(compId => {
+      console.log(compId);
+      req.app
+        .get("db")
+        .deleteweek([compId[0].company_id, weekof])
+        .then(results => {
+          console.log("DELETE WEEK SUCCESSFUL");
+          res.status(200).json(results);
+        })
+        .catch(err => {
+          console.log(`ERROR IN DELETING WEEK AFTER FINDING COMPANY ID${err}`);
+          res.status(500).json(err);
+        });
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
+    .catch(error => {
+      console.log(`ERROR IN FINDING COMPANY : => ${error}`);
+      res.status(500).json(error);
     });
 };
 
@@ -714,5 +872,6 @@ module.exports = {
   applicationRequest,
   getApplications,
   acceptUserApplication,
-  denyUserApplication
+  denyUserApplication,
+  sendMassEmail
 };

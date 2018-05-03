@@ -6,7 +6,8 @@ import { connect } from "react-redux";
 import { leaveCompany } from "../../../ducks/employee";
 import {
   getPendingApplications,
-  getAllEmployees
+  getAllEmployees,
+  sendMassEmail
 } from "../../../ducks/company";
 
 class MapCompanys extends Component {
@@ -17,7 +18,10 @@ class MapCompanys extends Component {
       popoverApplication: false,
       editToggle: false,
       updatedCompanyNameInput: "",
-      updatedCompanyAddressInput: ""
+      updatedCompanyAddressInput: "",
+      massEmail: false,
+      email: "",
+      emailSubject: ""
     };
     this.handlePopOverOpen = this.handlePopOverOpen.bind(this);
     this.handlePopOverClose = this.handlePopOverClose.bind(this);
@@ -34,6 +38,10 @@ class MapCompanys extends Component {
     this.handleUpdateCompanyAddress = this.handleUpdateCompanyAddress.bind(
       this
     );
+    this.toggleMassEmail = this.toggleMassEmail.bind(this);
+    this.handleMassEmail = this.handleMassEmail.bind(this);
+    this.sendEmail = this.sendEmail.bind(this);
+    this.handleEmailSubject = this.handleEmailSubject.bind(this);
   }
   handlePopOverClose() {
     this.setState({ popover: false });
@@ -56,11 +64,36 @@ class MapCompanys extends Component {
   handleUpdateCompanyAddress(val) {
     this.setState({ updatedCompanyAddressInput: val });
   }
+  handleEmailSubject(val) {
+    this.setState({ emailSubject: val });
+  }
   handleUpdatedInfo() {
     this.editToggleChange();
     alert(
       "This feature of Updating the company details has not been registered yet"
     );
+  }
+  sendEmail(companyId) {
+    this.props
+      .getAllEmployees(companyId)
+      .then(() =>
+        this.props.sendMassEmail(
+          this.props.jobStaff,
+          this.state.email,
+          this.state.emailSubject
+        )
+      )
+      .catch(error => console.log("ERROR IN GETTING EMPLOYEES"));
+    !this.state.email
+      ? alert("Please include context in your email")
+      : // this.setState({ email: "" }),
+        (console.log(this.state.email), this.toggleMassEmail());
+  }
+  toggleMassEmail() {
+    this.setState({ massEmail: !this.state.massEmail });
+  }
+  handleMassEmail(val) {
+    this.setState({ email: val });
   }
   render() {
     let { num, comp, user, mapApp } = this.props;
@@ -76,7 +109,7 @@ class MapCompanys extends Component {
       : null;
     return (
       <div>
-        {!this.state.editToggle ? (
+        {!this.state.editToggle && !this.state.massEmail ? (
           <div className="each-job" key={comp.company_id}>
             <h5>{comp.name}</h5>
             <h4
@@ -103,7 +136,10 @@ class MapCompanys extends Component {
               </Popover>
             </div>
             {comp.founder == user ? (
-              <button onClick={this.editToggleChange}>Edit Settings</button>
+              <div>
+                <button onClick={this.editToggleChange}>Edit Settings</button>
+                <button onClick={this.toggleMassEmail}>Email</button>
+              </div>
             ) : null}
             <button
               onClick={() => {
@@ -142,7 +178,7 @@ class MapCompanys extends Component {
               </Popover>
             </div>
           </div>
-        ) : (
+        ) : this.state.editToggle && !this.state.massEmail ? (
           <div className="each-job">
             <input
               placeholder={comp.name}
@@ -164,7 +200,22 @@ class MapCompanys extends Component {
               Update Company
             </button>
           </div>
-        )}
+        ) : !this.state.editToggle && this.state.massEmail ? (
+          <div className="each-job">
+            <input
+              placeholder="Email Subject"
+              onChange={e => this.handleEmailSubject(e.target.value)}
+            />
+            <input
+              placeholder="Email Contents"
+              onChange={e => this.handleMassEmail(e.target.value)}
+            />
+            <button onClick={this.toggleMassEmail}>cancel</button>
+            <button onClick={() => this.sendEmail(comp.company_id)}>
+              Send Email
+            </button>
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -178,5 +229,6 @@ let mapStateToProps = state => {
 export default connect(mapStateToProps, {
   getPendingApplications,
   leaveCompany,
-  getAllEmployees
+  getAllEmployees,
+  sendMassEmail
 })(MapCompanys);

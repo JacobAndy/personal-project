@@ -129,7 +129,13 @@ class Schedules extends Component {
         }),
         (e, i) => {
           console.log(e);
-          return <MappedSchedules person={e} i={i} />;
+          return (
+            <MappedSchedules
+              person={e}
+              i={i}
+              manager={this.props.currentCompanyManager}
+            />
+          );
         }
       );
     }
@@ -158,7 +164,7 @@ class Schedules extends Component {
             {mappedEmployement}
           </SelectField>
         </div>
-        {!this.props.currentCompanyManager ? (
+        {this.props.currentCompanyManager ? (
           <div>
             <RaisedButton
               onClick={() => {

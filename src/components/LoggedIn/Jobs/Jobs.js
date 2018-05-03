@@ -155,21 +155,23 @@ class Jobs extends Component {
     let mappedApplications = _(this.props.jobApplications, e => {
       return <MapApp app={e} />;
     });
-    let mappedComp = filt(this.props.companys, e => {
-      if (e.name.includes(this.state.companysSearch)) {
-        return e;
-      }
-    }).map((e, i, j) => {
-      newVar.push(e.company_id);
-      return (
-        <MapCompanys
-          num={this.props[`num` + i]}
-          comp={e}
-          user={this.props.user_id}
-          mapApp={mappedApplications}
-        />
-      );
-    });
+    let mappedComp =
+      // filt(this.props.companys, e => {
+      //   if (e.name.includes(this.state.companysSearch)) {
+      //     return e;
+      //   }
+      // })
+      this.props.companys.map((e, i, j) => {
+        newVar.push(e.company_id);
+        return (
+          <MapCompanys
+            num={this.props[`num` + i]}
+            comp={e}
+            user={this.props.user_id}
+            mapApp={mappedApplications}
+          />
+        );
+      });
     let mappedJobs = filt(this.props.jobs, e => {
       if (e.name.includes(this.state.jobsSearch)) {
         return e;
@@ -202,10 +204,10 @@ class Jobs extends Component {
             <Nav />
             <div className="jobs-holder">
               <div className="personal-jobs">
-                <input
+                {/* <input
                   placeholder="search your jobs"
                   onChange={e => this.handleCompanySearch(e.target.value)}
-                />
+                /> */}
                 <h3>Your Jobs</h3>
                 {mappedComp}
               </div>

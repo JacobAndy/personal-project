@@ -31,6 +31,7 @@ const GET_PENDING_APPLICATIONS = "GET_PENDING_APPLICATIONS";
 const ACCEPT_APPLICATION = "ACCEPT_APPLICATION";
 const DENY_APPLICATION_ID = "DENY_APPLICATION_ID";
 const GET_ALL_STAFF = "GET_ALL_STAFF";
+const SEND_MASS_EMAIL = "SEND_MASS_EMAIL";
 
 export default function company(state = initialState, action) {
   switch (action.type) {
@@ -142,6 +143,18 @@ export default function company(state = initialState, action) {
 }
 
 //ACTIONS
+export function sendMassEmail(employees, email, subject) {
+  console.log(employees);
+  console.log(email);
+  return {
+    type: SEND_MASS_EMAIL,
+    payload: axios.post("/sendemail/employees/all", {
+      employees,
+      email,
+      subject
+    })
+  };
+}
 export function getAllEmployees(compId) {
   return {
     type: GET_ALL_STAFF,

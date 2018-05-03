@@ -1,1 +1,1 @@
-DELETE FROM schedules where employee_id=$1 AND week_of=$2;
+DELETE FROM schedules where company_id=$1 AND week_of=$2;
