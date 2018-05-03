@@ -161,21 +161,22 @@ export function getAllEmployees(compId) {
     payload: axios.get(`/jobs/staff/${compId}`)
   };
 }
-export function denyUserApplication(id, compId) {
+export function denyUserApplication(id, userId) {
   console.log(id);
   return {
     type: DENY_APPLICATION_ID,
-    payload: axios.delete(`/jobs/application/decision/${id}?company=${compId}`)
+    payload: axios.delete(`/jobs/application/decision/${id}?user=${userId}`)
   };
 }
 
-export function acceptCurrentUsersApplication(userId, companyId, appId) {
+export function acceptCurrentUsersApplication(userId, companyId, appId, email) {
   return {
     type: ACCEPT_APPLICATION,
     payload: axios.post("/jobs/application/decision", {
       userId,
       companyId,
-      appId
+      appId,
+      email
     })
   };
 }

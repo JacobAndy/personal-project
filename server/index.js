@@ -44,6 +44,7 @@ const {
 
 app.use(json());
 app.use(cors());
+app.use(express.static(`${__dirname}/../build`));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -200,6 +201,10 @@ app.get(`/company/weekof`, getCompanySchedules);
 //getting my schedule
 // app.get("/myschedule", mySchedule);
 
+const path = require("path");
+app.get("*", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "/../build/index.html"));
+});
 //listening to port  WORKS
 app.listen(port, () => {
   console.log(`listening on port ${port}`);

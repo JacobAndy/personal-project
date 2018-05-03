@@ -63,7 +63,7 @@ const sendMassEmail = (req, res, next) => {
   console.log(email);
   _(employees, e => {
     let mailOptions = {
-      from: '"Entity Schedules" <entityschedules@gmail.com>',
+      from: '"Andy Schedules" <andyschedules@gmail.com>',
       to: e.email,
       subject: subject,
       text: email,
@@ -284,8 +284,8 @@ const createCompanyIdSchedule = (req, res, next) => {
     // .then(message => console.log(message.sid))
     // .done();
     let mailOptions = {
-      from: '"Entity Schedules" <entityschedules@gmail.com>',
-      to: "odistiinct@gmail.com",
+      from: '"Andy Schedules" <andyschedules@gmail.com>',
+      to: e.email,
       subject: `Week ${e.schedule[0].weekOf} posted`,
       text: "Schedule is now available",
       html: `<h4>Hello ${e.full_name}</h4>
@@ -377,8 +377,8 @@ const createSchedule = (req, res, next) => {
         // .then(message => console.log(message.sid))
         // .done();
         let mailOptions = {
-          from: '"Entity Schedules" <entityschedules@gmail.com>',
-          to: "odistiinct@gmail.com",
+          from: '"Andy Schedules" <andyschedules@gmail.com>',
+          to: e.email,
           subject: `Week ${e.schedule[0].weekOf} posted`,
           text: "Schedule is now available",
           html: `<h4>Hello ${e.full_name}</h4>
@@ -471,8 +471,8 @@ const updateCompanyIdSchedule = (req, res, next) => {
     // .then(message => console.log(message.sid))
     // .done();
     let mailOptions = {
-      from: '"Entity Schedules" <entityschedules@gmail.com>',
-      to: "odistiinct@gmail.com",
+      from: '"Andy Schedules" <andyschedules@gmail.com>',
+      to: e.email,
       subject: `Week ${e.schedule[0].weekOf} has been edited`,
       text: "Schedule has been updated and is now available",
       html: `<h4>Hello ${e.full_name}</h4>
@@ -553,8 +553,8 @@ const updateSchedule = (req, res) => {
     // .then(message => console.log(message.sid))
     // .done();
     let mailOptions = {
-      from: '"Entity Schedules" <entityschedules@gmail.com>',
-      to: "odistiinct@gmail.com",
+      from: '"Andy Schedules" <andyschedules@gmail.com>',
+      to: e.email,
       subject: `Week ${e.schedule[0].weekOf} has been edited`,
       text: "Schedule has been updated and is now available",
       html: `<h4>Hello ${e.full_name}</h4>
@@ -675,8 +675,23 @@ const deleteSchedule = (req, res) => {
 //accept users application
 const denyUserApplication = (req, res, next) => {
   let { id } = req.params;
-  let { company } = req.query;
+  let { user } = req.query;
   console.log(id);
+  let mailOptions = {
+    from: '"Andy Schedules" <andyschedules@gmail.com>',
+    to: user,
+    subject: `Application Denied`,
+    text: "Your Application has been denied",
+    html: `<h4>Application Denied</h4>
+  <p>Your schedule was denied</p>`
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  });
   req.app
     .get("db")
     .denyUsersApplication([id, company])
@@ -703,9 +718,24 @@ const denyUserApplication = (req, res, next) => {
     });
 };
 const acceptUserApplication = (req, res, next) => {
-  let { userId, companyId, appId } = req.body;
+  let { userId, companyId, appId, email } = req.body;
   console.log(userId);
   console.log(companyId);
+  let mailOptions = {
+    from: '"Andy Schedules" <andyschedules@gmail.com>',
+    to: email,
+    subject: `Application Accepted`,
+    text: "Your Application has been Accepted",
+    html: `<h4>Application Accepted</h4>
+  <p>Your schedule was accepted</p>`
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  });
   req.app
     .get("db")
     .addApplicationEmployee([companyId, userId, 0, appId])

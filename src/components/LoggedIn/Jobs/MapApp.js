@@ -14,6 +14,7 @@ class MapApp extends Component {
   }
   render() {
     let { app } = this.props;
+    console.log(app);
     return (
       <div>
         <MenuItem>
@@ -22,10 +23,7 @@ class MapApp extends Component {
           <h3>{app.phone_number}</h3>
           <button
             onClick={() => {
-              this.props.denyUserApplication(
-                app.application_id,
-                app.company_id
-              );
+              this.props.denyUserApplication(app.application_id, app.email);
             }}
           >
             deny
@@ -35,7 +33,8 @@ class MapApp extends Component {
               this.props.acceptCurrentUsersApplication(
                 app.user_id,
                 app.company_id,
-                app.application_id
+                app.application_id,
+                app.email
               )
             }
           >
