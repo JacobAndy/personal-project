@@ -1,0 +1,33 @@
+.logholder {
+  display: flex;
+  background: #188ab1;
+}
+.item-holder {
+  /* margin-top: 2px; */
+  /* margin-left: 35px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+.image-holder-logout,
+.image-holder-login {
+  width: 65px;
+  height: 50px;
+  background: #234077;
+}
+.image-holder-logout {
+  background-repeat: no-repeat;
+  background-position: 15px;
+  background-size: 33px;
+  background-image: url("../account-off.svg");
+}
+.image-holder-login {
+  background-repeat: no-repeat;
+  background-position: 15px;
+  background-size: 33px;
+  background-image: url("../account-settings.svg");
+}
+.link-holder {
+  margin: 25px 0 0 65px;
+}

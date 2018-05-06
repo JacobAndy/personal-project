@@ -12,6 +12,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import _ from "lodash.map";
 import filt from "lodash.filter";
 import SelectField from "material-ui/SelectField";
+import swal from "sweetalert";
 import { getCompany, updateStateCompId } from "../../../../ducks/company";
 import {
   getEmployees,
@@ -30,6 +31,15 @@ import {
 } from "../../../../ducks/schedulesreducer";
 import SchedulesMap from "./SchedulesMap";
 import MappedSchedules from "./SchedulesMap";
+let underlined = {
+  borderColor: "black"
+};
+let iconColor = {
+  fill: "black"
+};
+let selectWidth = {
+  width: "70px"
+};
 
 class Schedules extends Component {
   constructor() {
@@ -44,6 +54,9 @@ class Schedules extends Component {
       q: `qrstu`,
       v: `vwxyz`
     };
+  }
+  componentDidMount() {
+    this.props.getCompany(this.props.user_id);
   }
   handlePopOverOpen = event => {
     this.setState({ popover: true, anchorEl: event.currentTarget });
@@ -140,13 +153,24 @@ class Schedules extends Component {
       );
     }
     let mappedEmployement = this.props.modifiedCompanys.map((e, i) => {
-      return <MenuItem value={e.company_id} primaryText={e.name} />;
+      return (
+        <MenuItem
+          style={{ color: "#2196F3", backgroundColor: "#BBDEFB" }}
+          value={e.company_id}
+          primaryText={e.name}
+        />
+      );
     });
+
     return (
       <div>
         <div className="Job-select">
           <SelectField
-            autoWidth={true}
+            labelStyle={{ color: "#2196F3" }}
+            listStyle={{ backgroundColor: "#BBDEFB" }}
+            style={{ width: "150px" }}
+            iconStyle={iconColor}
+            underlineStyle={underlined}
             value={
               this.state.selectedCompany || this.props.selectDefaultCompanyId
             }
@@ -158,6 +182,7 @@ class Schedules extends Component {
             }}
           >
             <MenuItem
+              style={{ color: "#2196F3", backgroundColor: "#BBDEFB" }}
               value={this.props.selectDefaultCompanyId}
               primaryText={this.props.currentCompanyName}
             />
@@ -169,16 +194,28 @@ class Schedules extends Component {
             <RaisedButton
               onClick={() => {
                 !this.props.currentCompanyIdForDate
-                  ? this.props.deleteWeek(
+                  ? (swal({
+                      title: `Schedule Deleted`,
+                      text: `Week ${this.props.weekOf} has been deleted`,
+                      icon: "success",
+                      button: "OK"
+                    }),
+                    this.props.deleteWeek(
                       this.props.adminSchedules,
                       this.props.weekOf
-                    )
+                    ))
                   : null;
-                this.props.deleteWeekWithCompanyId(
-                  this.props.user_id,
-                  this.props.currentCompanyIdForDate,
-                  this.props.weekOf
-                );
+                swal({
+                  title: `Schedule Deleted`,
+                  text: `Week ${this.props.weekOf} has been deleted`,
+                  icon: "success",
+                  button: "OK"
+                }),
+                  this.props.deleteWeekWithCompanyId(
+                    this.props.user_id,
+                    this.props.currentCompanyIdForDate,
+                    this.props.weekOf
+                  );
               }}
               className="clear-schedule"
               label="Clear Week"
@@ -190,27 +227,49 @@ class Schedules extends Component {
                 console.log(this.props);
                 !this.props.currentCompanyIdForDate
                   ? !this.props.update
-                    ? this.props.createSchedule(
+                    ? (swal({
+                        title: "Schedule Created",
+                        text: `Week ${this.props.weekOf} has been created`,
+                        icon: "success"
+                      }),
+                      this.props.createSchedule(
                         this.props.user_id,
                         this.props.adminSchedules
-                      )
-                    : this.props.updateschedule(
+                      ))
+                    : (swal({
+                        title: "Schedule Updated",
+                        text: `Week ${this.props.weekOf} has been updated`,
+                        icon: "success",
+                        button: "OK"
+                      }),
+                      this.props.updateschedule(
                         this.props.weekOf,
                         this.props.user_id,
                         this.props.adminSchedules
-                      )
+                      ))
                   : !this.props.update
-                    ? this.props.createCompanyWeekOf(
+                    ? (swal({
+                        title: "Schedule Created",
+                        text: `Week ${this.props.weekOf} has been created`,
+                        icon: "success"
+                      }),
+                      this.props.createCompanyWeekOf(
                         this.props.currentCompanyIdForDate,
                         this.props.adminSchedules,
                         this.props.user_id
-                      )
-                    : this.props.updateCompanyWeekOf(
+                      ))
+                    : (swal({
+                        title: "Schedule Updated",
+                        text: `Week ${this.props.weekOf} has been updated`,
+                        icon: "success",
+                        button: "OK"
+                      }),
+                      this.props.updateCompanyWeekOf(
                         this.props.currentCompanyIdForDate,
                         this.props.adminSchedules,
                         this.props.user_id,
                         this.props.weekOf
-                      );
+                      ));
               }}
               className="post-schedule"
               label="Post Schedule"
@@ -222,36 +281,36 @@ class Schedules extends Component {
         <WeekOf />
         <div className="calendar">
           <div className="open-shift">
-            <h5>Open Shifts</h5>
+            <h5>Employees</h5>
             <div className="down-arrow" />
           </div>
           <div className="date">
             <div className="date-info">
-              <h4>Monday</h4>
+              <h4 className="monday">Monday</h4>
               <div className="down-arrow-date0 down-arrow-date" />
             </div>
             <div className="date-info">
-              <h4>Tuesday</h4>
+              <h4 className="tuesday">Tuesday</h4>
               <div className="down-arrow-date1 down-arrow-date" />
             </div>
             <div className="date-info">
-              <h4>Wednesday</h4>
+              <h4 className="wednesday">Wednesday</h4>
               <div className="down-arrow-date2 down-arrow-date" />
             </div>
             <div className="date-info">
-              <h4>Thursday</h4>
+              <h4 className="thursday">Thursday</h4>
               <div className="down-arrow-date3 down-arrow-date" />
             </div>
             <div className="date-info">
-              <h4>Friday</h4>
+              <h4 className="friday">Friday</h4>
               <div className="down-arrow-date4 down-arrow-date" />
             </div>
             <div className="date-info">
-              <h4>Saturday</h4>
+              <h4 className="saturday">Saturday</h4>
               <div className="down-arrow-date5 down-arrow-date" />
             </div>
             <div className="date-info">
-              <h4>Sunday</h4>
+              <h4 className="sunday">Sunday</h4>
               <div className="down-arrow-date6 down-arrow-date" />
             </div>
           </div>
@@ -265,8 +324,8 @@ class Schedules extends Component {
 let mapStateToProps = state => {
   return {
     ...state.schedulesreducer,
-    user_id: state.users.user_id,
-    ...state.company
+    ...state.company,
+    user_id: state.users.user_id
   };
 };
 

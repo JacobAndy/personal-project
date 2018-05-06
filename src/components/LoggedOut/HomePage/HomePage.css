@@ -1,0 +1,35 @@
+.information {
+}
+.fullpage {
+}
+.fullpageh3 {
+  font-size: 44px;
+  font-weight: 600;
+  position: relative;
+  text-align: center;
+  top: 100px;
+}
+.interested,
+.our-services3,
+.about-us {
+  width: 28vw;
+  height: 30vh;
+  background-color: #2196f3;
+  border: 2px solid #333;
+  border-radius: 25px;
+  position: absolute;
+}
+.interested,
+.our-services3 {
+  top: 250px;
+}
+.interested {
+  left: 30px;
+}
+.our-services3 {
+  right: 30px;
+}
+.about-us {
+  left: 610px;
+  bottom: 30px;
+}

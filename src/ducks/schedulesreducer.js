@@ -44,6 +44,7 @@ export function updateFilterValue(val) {
 }
 
 export function deleteWeekWithCompanyId(userId, compId, weekof) {
+  console.log("with company id");
   return {
     type: DELETE_SCHEDULE_WITH_ID,
     payload: axios.delete(
@@ -266,6 +267,10 @@ export default function schedulesreducer(state = initialState, action) {
         };
       });
       return { ...state, adminSchedules: mappedEmployees, update: false };
+    case `${DELETE_SCHEDULE_WITH_ID}_FULFILLED`:
+    case `${CREATE_SCHEDULE}_FULFILLED`:
+    case `${UPDATE_SCHEDULE}_FULFILLED`:
+    case `${UPDATE_GROUP_SCHEDULE}_FULFILLED`:
     case `${COMPANY_WEEK_OF}_FULFILLED`:
     case `${GET_WEEK_OF}_FULFILLED`:
       console.log(action.payload.data);
@@ -454,10 +459,10 @@ export default function schedulesreducer(state = initialState, action) {
     // case `${COMPANY_WEEK_OF}_FULFILLED`:
     //   console.log(action.payload.data);
     //   return { ...state, adminSchedules: action.payload.data };
-    case `${CREATE_SCHEDULE}_FULFILLED`:
-      return { ...state, adminSchedules: action.payload.data };
-    case `${UPDATE_SCHEDULE}_FULFILLED`:
-      return { ...state, adminSchedules: action.payload.data };
+    // case `${CREATE_SCHEDULE}_FULFILLED`:
+    // return { ...state, adminSchedules: action.payload.data };
+    // case `${UPDATE_SCHEDULE}_FULFILLED`:
+    // return { ...state, adminSchedules: action.payload.data };
     case `${GET_WEEK_OF}_PENDING`:
       return { ...state, loading: true };
     case `${GET_WEEK_OF}_FULFILLED`:

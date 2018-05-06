@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
 /* global google */
 import React, { Component } from "react";
-import LoginNav from "../../Nav/LoginNav/LoginNav";
+import LoginNav from "../../Nav/LoginNav/Nav";
 import { connect } from "react-redux";
 import Error from "../../Error/Error";
 import { compose, withProps } from "recompose";
 import { getCompany, setTraffic } from "../../../ducks/company";
 import "../google_directions/GoogleDirections.css";
+import { getUser } from "../../../ducks/users";
 import {
   withGoogleMap,
   GoogleMap,
@@ -22,7 +23,9 @@ class Traffic extends Component {
   }
   componentDidMount() {
     console.log(this.props);
-    this.props.getCompany(this.props.user_id);
+    this.props.getUser().then(() => {
+      this.props.getCompany(this.props.currentUser[0].user_id);
+    });
     // this.props.getCompany(this.props.user_id);
   }
   render() {
@@ -104,5 +107,6 @@ let mapStateToProps = state => {
 };
 export default connect(mapStateToProps, {
   getCompany,
-  setTraffic
+  setTraffic,
+  getUser
 })(Traffic);

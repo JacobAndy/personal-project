@@ -27,7 +27,7 @@ const getUser = (req, res) => {
   } else {
     req.app
       .get("db")
-      .getuser([req.user.auth_id])
+      .getuser(req.user.auth_id)
       .then(response => {
         console.log(response);
         res.status(200).json(response);
@@ -94,10 +94,22 @@ const leaveCompany = (req, res, next) => {
       console.log(empId[0].employee_id);
       req.app
         .get("db")
-        .removeEmployee([empId[0].employee_id])
+        .removeEmployee([empId[0].employee_id, userid])
         .then(results => {
           console.log("REMOVING EMPLOYEE SUCCESSFULL");
-          res.status(200).json(results);
+          req.app
+            .get("db")
+            .getGroup([userid])
+            .then(groups => {
+              console.log(`SUCCESS IN GETTING GROUPS AFTER REMOVING EMPLOYEE`);
+              res.status(200).json(groups);
+            })
+            .catch(error => {
+              console.log(
+                `ERROR IN GETTING GROUP AFTER REMOVING EMPLOYEE : =>${error}`
+              );
+              res.status(500).json(error);
+            });
         })
         .catch(err => {
           console.log(`ERROR IN REMOVING EMPLOYEE : => ${err}`);
@@ -338,7 +350,21 @@ const createCompanyIdSchedule = (req, res, next) => {
       ])
       .then(results => {
         console.log("SUCCESS IN CREATING COMPANY SCHEDULE WITH COMPANY ID");
-        res.status(200).json(results);
+        // res.status(200).json(results);
+        req.app
+          .get("db")
+          .getschedules([id, arr[0].schedule[0].weekOf])
+          .then(schedules => {
+            console.log(schedules);
+            console.log(`SCHEDULES RECEIVED HERE THEY ARE : => ${schedules}`);
+            res.status(200).json(schedules);
+          })
+          .catch(e => {
+            res.status(500).json(e);
+            console.log(
+              `ERROR GETTING SCHEDULES AFTER POSTING SCHEDULE : => ${e}`
+            );
+          });
       })
       .catch(err => {
         console.log(`ERROR IN CREATING SCHEDULE WITH COMPANY ID : => ${err}`);
@@ -434,8 +460,24 @@ const createSchedule = (req, res, next) => {
               e.schedule[14].sundaynightclockout
           ])
           .then(results => {
-            console.log(results);
+            console.log(compId[0].company_id);
             // res.status(200).json(results);
+            req.app
+              .get("db")
+              .getschedules([compId[0].company_id, arr[0].schedule[0].weekOf])
+              .then(schedules => {
+                console.log(schedules);
+                console.log(
+                  `SCHEDULES RECEIVED HERE THEY ARE : => ${schedules}`
+                );
+                res.status(200).json(schedules);
+              })
+              .catch(e => {
+                res.status(500).json(e);
+                console.log(
+                  `ERROR GETTING SCHEDULES AFTER POSTING SCHEDULE : => ${e}`
+                );
+              });
           })
           .catch(err => {
             console.log(`ERROR IN CREATING SCHEDULE :${err}`);
@@ -525,13 +567,25 @@ const updateCompanyIdSchedule = (req, res, next) => {
       ])
       .then(results => {
         console.log("SUCCESS IN UPDATING WOO HOO");
-        res.status(200).json(results);
+        // res.status(200).json(results);
       })
       .catch(err => {
         console.log(`ERROR IN UPDATING SCHEDULE WITH COMPANY ID : => ${err}`);
         res.status(500).json(err);
       });
   });
+  req.app
+    .get("db")
+    .getschedules([id, weekof])
+    .then(schedules => {
+      console.log(schedules);
+      console.log(`SCHEDULES RECEIVED HERE THEY ARE1212 : => ${schedules}`);
+      res.status(200).json(schedules);
+    })
+    .catch(e => {
+      res.status(500).json(e);
+      console.log(`ERROR GETTING SCHEDULES AFTER POSTING SCHEDULE : => ${e}`);
+    });
   // })
   // .catch();
 };
@@ -552,6 +606,7 @@ const updateSchedule = (req, res) => {
     // })
     // .then(message => console.log(message.sid))
     // .done();
+
     let mailOptions = {
       from: '"Andy Schedules" <andyschedules@gmail.com>',
       to: e.email,
@@ -606,8 +661,36 @@ const updateSchedule = (req, res) => {
         e.schedule[0].weekOf
       ])
       .then(results => {
-        console.log(`UPDATING SCHEDULES SUCCESSFUL`);
-        res.status(200).json(results);
+        console.log(`UPDATING SCHEDULES SUCCESSFUL4545`);
+        req.app
+          .get("db")
+          .findcompany(arr[0].employee_id)
+          .then(compId => {
+            console.log(compId[0].company_id);
+            console.log(arr[0].schedule[0].weekOf);
+            req.app
+              .get("db")
+              .getschedules([compId[0].company_id, arr[0].schedule[0].weekOf])
+              .then(schedules => {
+                console.log(schedules);
+                console.log(
+                  `SCHEDULES RECEIVED HERE THEY ARE1212 : => ${schedules}`
+                );
+                res.status(200).json(schedules);
+              })
+              .catch(e => {
+                res.status(500).json(e);
+                console.log(
+                  `ERROR GETTING SCHEDULES AFTER POSTING SCHEDULE : => ${e}`
+                );
+              });
+          })
+          .catch(errorr => {
+            console.log(
+              `ERROR IN FINDING COMPANY AFTER UPDATING SCHEDULES : => ${errorr}`
+            );
+            res.status(500).json(errorr);
+          });
       })
       .catch(err => {
         console.log(`ERROR UPDATING SCHEDULES : => ${err}`);
@@ -621,16 +704,31 @@ const deleteschedulewithgroupid = (req, res, next) => {
   console.log(user);
   console.log(company);
   console.log(week);
+  console.log("DENIED APPLICATION CONTROLLER HIT");
   // req.app
   //   .get("db")
   //   .findEmployeeWithGroup([user, company])
   //   .then(empId => {
   req.app
     .get("db")
-    .deleteweek([company, week])
+    .deleteweek([+company, week])
     .then(results => {
-      res.status(200).json(results);
       console.log("SUCCESS IN DELETING WEEK WITH GROUP ID");
+      console.log(company);
+      req.app
+        .get("db")
+        .getschedules([+company, week])
+        .then(schedules => {
+          console.log(schedules);
+          console.log(`SCHEDULES RECEIVED HERE THEY ARE : => ${schedules}`);
+          res.status(200).json(schedules);
+        })
+        .catch(e => {
+          res.status(500).json(e);
+          console.log(
+            `ERROR GETTING SCHEDULES AFTER POSTING SCHEDULE : => ${e}`
+          );
+        });
     })
     .catch(err => {
       console.log(`ERROR IN DELETING WEEK WITH GROUP ID : => ${err}`);
@@ -653,10 +751,27 @@ const deleteSchedule = (req, res) => {
       console.log(compId);
       req.app
         .get("db")
-        .deleteweek([compId[0].company_id, weekof])
+        .deleteweek([+compId[0].company_id, weekof])
         .then(results => {
           console.log("DELETE WEEK SUCCESSFUL");
-          res.status(200).json(results);
+          console.log(compId[0].company_id);
+          // res.status(200).json(results);
+          req.app
+            .get("db")
+            .getschedules([+compId[0].company_id, weekof])
+            .then(schedules => {
+              console.log(schedules);
+              console.log(
+                `SUCCESS IN GETTING SCHEDULES RECEIVED HERE THEY ARE : => ${schedules}`
+              );
+              res.status(200).json(schedules);
+            })
+            .catch(e => {
+              res.status(500).json(e);
+              console.log(
+                `ERROR GETTING SCHEDULES AFTER POSTING SCHEDULE : => ${e}`
+              );
+            });
         })
         .catch(err => {
           console.log(`ERROR IN DELETING WEEK AFTER FINDING COMPANY ID${err}`);
@@ -674,16 +789,17 @@ const deleteSchedule = (req, res) => {
 
 //accept users application
 const denyUserApplication = (req, res, next) => {
+  console.log("DENIED APPLICATION CONTROLLER HIT");
   let { id } = req.params;
-  let { user } = req.query;
-  console.log(id);
+  let { user, company } = req.query;
+  console.log(user);
   let mailOptions = {
     from: '"Andy Schedules" <andyschedules@gmail.com>',
     to: user,
     subject: `Application Denied`,
     text: "Your Application has been denied",
     html: `<h4>Application Denied</h4>
-  <p>Your schedule was denied</p>`
+  <p>Your application was denied</p>`
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -694,7 +810,7 @@ const denyUserApplication = (req, res, next) => {
   });
   req.app
     .get("db")
-    .denyUsersApplication([id, company])
+    .denyUsersApplication([id])
     .then(r => {
       console.log("DENYING USERS APPLICATION SUCCESSFUL");
       res.status(200).json(results);
@@ -816,7 +932,20 @@ const createCompany = (req, res) => {
         .createEmployee([results[0]["company_id"], results[0]["founder"], 1])
         .then(newres => {
           console.log("MANAGER CREATED", newres);
-          res.status(200).json(newres);
+          req.app
+            .get("db")
+            .getGroup([founder])
+            .then(groups => {
+              console.log(
+                "SUCCESSFULL IN GETTING GROUPS AFTER CREATING GROUPS"
+              );
+              res.status(200).json(groups);
+            })
+            .catch(error => {
+              console.log(
+                `ERROR IN GETTING GROUP AFTER CREATING COMPANY : =>${error}`
+              );
+            });
         })
         .catch(error => {
           console.log(

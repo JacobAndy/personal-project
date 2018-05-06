@@ -1,23 +1,38 @@
 .GoogleDirections {
-  position: absolute;
   display: flex;
   align-content: center;
   justify-content: center;
   flex-direction: row;
-  right: -10px;
-  bottom: 0;
 }
 .mappedDirectionCompany {
-  position: relative;
-  margin: 0 0 0 170px;
-  width: 260px;
-  right: 100px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  margin: 1.5% 0 0 6vw;
+  width: 10vw;
 }
 .jobs {
   text-align: center;
 }
 .companys-in-map {
-  margin-bottom: 45px;
+  border-radius: 10px;
+  border: 1px solid #2196f3;
+  display: flex;
+  justify-content: center;
+  width: 14vw;
+  height: 6vh;
+  background: rgb(0, 0, 225, 0.5);
+  margin-bottom: 3vh;
+}
+.companys-in-map:hover {
+  background: rgba(0, 0, 225, 0.616);
+}
+.companys-in-map:hover > h3 {
+  color: whitesmoke;
+}
+.companys-in-map > h3 {
+  color: rgba(245, 245, 245, 0.74);
 }
 .maptitle {
   text-align: center;

@@ -15,4 +15,4 @@ FROM schedules s
 JOIN employee e on e.employee_id=s.employee_id
 JOIN users u on u.user_id=e.user_id
 where s.company_id=$1
-AND s.week_of = $2;
+AND s.week_of=$2;

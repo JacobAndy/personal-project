@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getUser, updateUser, updateLocation } from "../../../ducks/users";
-import LoginNav from "../../Nav/LoginNav/LoginNav";
+import LoginNav from "../../Nav/LoginNav/Nav";
 import "./Profile.css";
 import Error from "../../Error/Error";
 import { locationError } from "../../../ducks/users";
@@ -20,13 +20,7 @@ class Profile extends Component {
   }
   componentDidMount() {
     console.log("hit get user did mount");
-    this.props
-      .getUser()
-      .then(() => {
-        console.log(this.props.user_id);
-        this.props.getCompany(this.props.user_id);
-      })
-      .catch(err => console.log(err));
+    this.props.getUser().catch(err => console.log(err));
     navigator.geolocation.getCurrentPosition(
       position => {
         this.props.updateLocation(
@@ -113,13 +107,19 @@ class Profile extends Component {
           </div>
         ) : (
           <div className="profile">
-            <h2>welcome!{name}</h2>
             <img
               className="profile-image"
               src={this.props.photo}
-              width="50px"
-              height="50px"
+              width="400px"
+              height="400px"
             />
+            <h2 className="profile_name">{name}</h2>
+            <div className="info-holder">
+              <h2>Email: {user_email}</h2>
+              <h2>Phone Number: {number}</h2>
+              <h2>Address: {user_address}</h2>
+              <h2>Emergency Contact: {emerg_contact}</h2>
+            </div>
           </div>
         )}
       </div>

@@ -5,6 +5,15 @@ import MenuItem from "material-ui/MenuItem";
 import { connect } from "react-redux";
 import { updateFilterValue } from "../../../ducks/schedulesreducer";
 
+let underlined = {
+  borderColor: "black"
+};
+let iconColor = {
+  fill: "black"
+};
+let selectElement = {
+  width: "184px"
+};
 class Filter extends Component {
   constructor() {
     super();
@@ -38,7 +47,11 @@ class Filter extends Component {
         </div> */}
         <div className="filter-emp">
           <SelectField
-            autoWidth={true}
+            labelStyle={{ color: "#2196F3" }}
+            listStyle={{ backgroundColor: "#BBDEFB" }}
+            style={selectElement}
+            iconStyle={iconColor}
+            underlineStyle={underlined}
             value={this.state.employee}
             onChange={(event, i, val) => {
               console.log(val);
@@ -46,12 +59,36 @@ class Filter extends Component {
               this.props.updateFilterValue(val);
             }}
           >
-            <MenuItem value={1} primaryText="select First Name" />
-            <MenuItem value="A-F" primaryText="A-F" />
-            <MenuItem value="G-K" primaryText="G-K" />
-            <MenuItem value="L-P" primaryText="L-P" />
-            <MenuItem value="Q-U" primaryText="Q-U" />
-            <MenuItem value="V-Z" primaryText="V-Z" />
+            <MenuItem
+              style={{ color: "#2196F3" }}
+              value={1}
+              primaryText="All Employees"
+            />
+            <MenuItem
+              style={{ color: "#2196F3" }}
+              value="A-F"
+              primaryText="A-F"
+            />
+            <MenuItem
+              style={{ color: "#2196F3" }}
+              value="G-K"
+              primaryText="G-K"
+            />
+            <MenuItem
+              style={{ color: "#2196F3" }}
+              value="L-P"
+              primaryText="L-P"
+            />
+            <MenuItem
+              style={{ color: "#2196F3" }}
+              value="Q-U"
+              primaryText="Q-U"
+            />
+            <MenuItem
+              style={{ color: "#2196F3" }}
+              value="V-Z"
+              primaryText="V-Z"
+            />
           </SelectField>
         </div>
       </div>

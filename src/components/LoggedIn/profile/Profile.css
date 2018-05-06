@@ -14,11 +14,34 @@
   left: 31vw;
 }
 .profile {
+  margin-top: 45px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .profile-image {
+  /* position: absolute; */
+  top: 80px;
   border-radius: 50%;
+  border: 3px solid #333;
+  background: black;
+}
+.profile-image:hover {
+  opacity: 0.9;
+}
+.profile_name {
+}
+.info-holder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 10px;
+  width: 35vw;
+  border-radius: 45px;
+  height: 30vh;
+  background-color: #42a5f5;
+  border: 2px solid#333;
 }

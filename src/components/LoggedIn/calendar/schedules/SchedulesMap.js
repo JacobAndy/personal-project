@@ -28,11 +28,31 @@ import {
   deleteWeekWithCompanyId,
   getEmployeesByCompanyId
 } from "../../../../ducks/schedulesreducer";
+import { SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG } from "constants";
 
+let employeeUserMappedStyle = {
+  backgroundColor: "#90CAF9",
+  width: "230px"
+};
+let employeeUserMappedStyles = {
+  backgroundColor: "#90CAF9",
+  width: "230px"
+  // width: "380px"
+};
+
+function randomColor() {
+  let one = Math.random() * 256;
+  let two = Math.random() * 256;
+  let three = Math.random() * 256;
+  return `rgb(${one}, ${two}, ${three}, 0.5)`;
+  
+}
 class MappedSchedules extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      color: randomColor()
+    };
   }
   handlePopOverOpen = event => {
     this.setState({ popover: true, anchorEl: event.currentTarget });
@@ -43,10 +63,12 @@ class MappedSchedules extends Component {
   handleChange(val) {
     this.setState({ selectedCompany: val });
   }
+  
+
   render() {
     // console.log(this.state);
-
     console.log(this.props);
+    console.log(randomColor);
     let {
       handleOpen,
       handleStateUpdate,
@@ -60,11 +82,17 @@ class MappedSchedules extends Component {
     return (
       <div className="employee-display">
         <div className="individual">
-          <div className="employee">
+          <div
+            className="employee"
+            onClick={this.handlePopOverOpen}
+            style={{ backgroundColor: this.state.color}}
+          >
             <h4 className="employee-name">{person.full_name}</h4>
-            <div className="down-arrow-user" onClick={this.handlePopOverOpen} />
+            <div className="down-arrow-user" />
             <div className="popover">
               <Popover
+                className="user-info-popover"
+                style={employeeUserMappedStyle}
                 open={this.state.popover}
                 anchorEl={this.state.anchorEl}
                 anchorOrigin={{
@@ -75,36 +103,64 @@ class MappedSchedules extends Component {
                 onRequestClose={this.handlePopOverClose}
                 animation={PopoverAnimationFromTop}
               >
-                <Menu>
-                  <MenuItem primaryText={`Email: ${person.email}`} />
-                  <MenuItem primaryText={`Number: ${person.phone_number}`} />
-                  <MenuItem primaryText={`Address: ${person.address}`} />
+                <Menu
+                  className="user-info-popover"
+                  backgroundColor="#90CAF9"
+                  style={employeeUserMappedStyle}
+                >
                   <MenuItem
+                    style={employeeUserMappedStyles}
+                    primaryText={`Email: ${person.email}`}
+                  />
+                  <MenuItem
+                    style={employeeUserMappedStyles}
+                    primaryText={`Number: ${person.phone_number}`}
+                  />
+                  <MenuItem
+                    style={employeeUserMappedStyles}
+                    primaryText={`Address: ${person.address}`}
+                  />
+                  <MenuItem
+                    style={employeeUserMappedStyles}
                     primaryText={`emergency: ${person.emergency_contact}`}
                   />
                 </Menu>
               </Popover>
             </div>
           </div>
+
           <div className="schedule">
             <div className="employee-schedule">
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[1].mondaymorningclockin
-                    ? "not working"
-                    : person.schedule[1].mondaymorningclockin}
-                </p>
-                <p>
-                  {!person.schedule[1].mondaymorningclockout
-                    ? null
-                    : `-${person.schedule[1].mondaymorningclockout}`}
-                </p>
+              <div
+                className="morning-shift-monday"
+                onClick={() => handleOpen("mondaymorningopen", i)}
+              >
+                {!person.schedule[1].mondaymorningclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[1].mondaymorningclockin &&
+                !person.schedule[1].mondaymorningclockout ? (
+                  <div className="mondayMorningDayWorking">
+                    <p className="mondayCal">
+                      {person.schedule[1].mondaymorningclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[1].mondaymorningclockout ? null : (
+                  <div className="mondayMorningDayWorking">
+                    <p className="mondayCal">
+                      {person.schedule[1].mondaymorningclockin}-{
+                        person.schedule[1].mondaymorningclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("mondaymorningopen", i)}
-                    />
+                    <div className="right-arrow-small-monday" />
                     <Dialog
                       open={person.mondaymorningopen}
                       actions={[
@@ -154,25 +210,36 @@ class MappedSchedules extends Component {
                   </div>
                 ) : null}
               </div>
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[2].mondaynightclockin
-                    ? "not working"
-                    : person.schedule[2].mondaynightclockin}
-                </p>
-                <p>
-                  {!person.schedule[2].mondaynightclockout
-                    ? null
-                    : !person.schedule[2].mondaynightclockout
-                      ? null
-                      : `-${person.schedule[2].mondaynightclockout}`}
-                </p>
+              <div
+                className="night-shift-monday"
+                onClick={() => handleOpen("mondaynightopen", i)}
+              >
+                {!person.schedule[2].mondaynightclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[2].mondaynightclockin &&
+                !person.schedule[2].mondaynightclockout ? (
+                  <div className="mondayMorningDayWorking">
+                    <p className="mondayCal">
+                      {person.schedule[2].mondaynightclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[2].mondaynightclockout ? null : (
+                  <div className="mondayMorningDayWorking">
+                    <p className="mondayCal">
+                      {person.schedule[2].mondaynightclockin}-{
+                        person.schedule[2].mondaynightclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("mondaynightopen", i)}
-                    />
+                    <div className="right-arrow-small-monday" />
                     <Dialog
                       open={person.mondaynightopen}
                       actions={[
@@ -224,25 +291,36 @@ class MappedSchedules extends Component {
               </div>
             </div>
             <div className="employee-schedule">
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[3].tuesdaymorningclockin
-                    ? "not working"
-                    : person.schedule[3].tuesdaymorningclockin}
-                </p>
-                <p>
-                  {!person.schedule[3].tuesdaymorningclockout
-                    ? null
-                    : !person.schedule[3].tuesdaymorningclockout
-                      ? null
-                      : `-${person.schedule[3].tuesdaymorningclockout}`}
-                </p>
+              <div
+                className="morning-shift-tuesday"
+                onClick={() => handleOpen("tuesdaymorningopen", i)}
+              >
+                {!person.schedule[3].tuesdaymorningclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[3].tuesdaymorningclockin &&
+                !person.schedule[3].tuesdaymorningclockout ? (
+                  <div className="tuesdayMorningDayWorking">
+                    <p className="tuesdayCal">
+                      {person.schedule[3].tuesdaymorningclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[3].tuesdaymorningclockout ? null : (
+                  <div className="tuesdayMorningDayWorking">
+                    <p className="tuesdayCal">
+                      {person.schedule[3].tuesdaymorningclockin}-{
+                        person.schedule[3].tuesdaymorningclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("tuesdaymorningopen", i)}
-                    />
+                    <div className="right-arrow-small-tuesday" />
                     <Dialog
                       open={person.tuesdaymorningopen}
                       actions={[
@@ -292,25 +370,36 @@ class MappedSchedules extends Component {
                   </div>
                 ) : null}
               </div>
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[4].tuesdaynightclockin
-                    ? "not working"
-                    : person.schedule[4].tuesdaynightclockin}
-                </p>
-                <p>
-                  {!person.schedule[4].tuesdaynightclockout
-                    ? null
-                    : !person.schedule[4].tuesdaynightclockout
-                      ? null
-                      : `-${person.schedule[4].tuesdaynightclockout}`}
-                </p>
+              <div
+                className="night-shift-tuesday"
+                onClick={() => handleOpen("tuesdaynightopen", i)}
+              >
+                {!person.schedule[4].tuesdaynightclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[4].tuesdaynightclockin &&
+                !person.schedule[4].tuesdaynightclockout ? (
+                  <div className="tuesdayMorningDayWorking">
+                    <p className="tuesdayCal">
+                      {person.schedule[4].tuesdaynightclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[4].tuesdaynightclockout ? null : (
+                  <div className="tuesdayMorningDayWorking">
+                    <p className="tuesdayCal">
+                      {person.schedule[4].tuesdaynightclockin}-{
+                        person.schedule[4].tuesdaynightclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("tuesdaynightopen", i)}
-                    />
+                    <div className="right-arrow-small-tuesday" />
 
                     <Dialog
                       open={person.tuesdaynightopen}
@@ -363,25 +452,36 @@ class MappedSchedules extends Component {
               </div>
             </div>
             <div className="employee-schedule">
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[5].wednesdaymorningclockin
-                    ? "not working"
-                    : person.schedule[5].wednesdaymorningclockin}
-                </p>
-                <p>
-                  {!person.schedule[5].wednesdaymorningclockout
-                    ? null
-                    : !person.schedule[5].wednesdaymorningclockout
-                      ? null
-                      : `-${person.schedule[5].wednesdaymorningclockout}`}
-                </p>
+              <div
+                className="morning-shift-wednesday"
+                onClick={() => handleOpen("wednesdaymorningopen", i)}
+              >
+                {!person.schedule[5].wednesdaymorningclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[5].wednesdaymorningclockin &&
+                !person.schedule[5].wednesdaymorningclockout ? (
+                  <div className="wednesdayMorningDayWorking">
+                    <p className="wednesdayCal">
+                      {person.schedule[5].wednesdaymorningclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[5].wednesdaymorningclockout ? null : (
+                  <div className="wednesdayMorningDayWorking">
+                    <p className="wednesdayCal">
+                      {person.schedule[5].wednesdaymorningclockin}-{
+                        person.schedule[5].wednesdaymorningclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("wednesdaymorningopen", i)}
-                    />
+                    <div className="right-arrow-small-wednesday" />
                     <Dialog
                       open={person.wednesdaymorningopen}
                       actions={[
@@ -433,25 +533,36 @@ class MappedSchedules extends Component {
                   </div>
                 ) : null}
               </div>
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[6].wednesdaynightclockin
-                    ? "not working"
-                    : person.schedule[6].wednesdaynightclockin}
-                </p>
-                <p>
-                  {!person.schedule[6].wednesdaynightclockout
-                    ? null
-                    : !person.schedule[6].wednesdaynightclockout
-                      ? null
-                      : `-${person.schedule[6].wednesdaynightclockout}`}
-                </p>
+              <div
+                className="night-shift-wednesday"
+                onClick={() => handleOpen("wednesdaynightopen", i)}
+              >
+                {!person.schedule[6].wednesdaynightclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[6].wednesdaynightclockin &&
+                !person.schedule[6].wednesdaynightclockout ? (
+                  <div className="wednesdayMorningDayWorking">
+                    <p className="wednesdayCal">
+                      {person.schedule[6].wednesdaynightclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[6].wednesdaynightclockout ? null : (
+                  <div className="wednesdayMorningDayWorking">
+                    <p className="wednesdayCal">
+                      {person.schedule[6].wednesdaynightclockin}-{
+                        person.schedule[6].wednesdaynightclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("wednesdaynightopen", i)}
-                    />
+                    <div className="right-arrow-small-wednesday" />
                     <Dialog
                       open={person.wednesdaynightopen}
                       actions={[
@@ -503,25 +614,36 @@ class MappedSchedules extends Component {
               </div>
             </div>
             <div className="employee-schedule">
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[7].thursdaymorningclockin
-                    ? "not working"
-                    : person.schedule[7].thursdaymorningclockin}
-                </p>
-                <p>
-                  {!person.schedule[7].thursdaymorningclockout
-                    ? null
-                    : !person.schedule[7].thursdaymorningclockout
-                      ? null
-                      : `-${person.schedule[7].thursdaymorningclockout}`}
-                </p>
+              <div
+                className="morning-shift-thursday"
+                onClick={() => handleOpen("thursdaymorningopen", i)}
+              >
+                {!person.schedule[7].thursdaymorningclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[7].thursdaymorningclockin &&
+                !person.schedule[7].thursdaymorningclockout ? (
+                  <div className="thursdayMorningDayWorking">
+                    <p className="thursdayCal">
+                      {person.schedule[7].thursdaymorningclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[7].thursdaymorningclockout ? null : (
+                  <div className="thursdayMorningDayWorking">
+                    <p className="thursdayCal">
+                      {person.schedule[7].thursdaymorningclockin}-{
+                        person.schedule[7].thursdaymorningclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("thursdaymorningopen", i)}
-                    />
+                    <div className="right-arrow-small-thursday" />
                     <Dialog
                       open={person.thursdaymorningopen}
                       actions={[
@@ -573,25 +695,36 @@ class MappedSchedules extends Component {
                   </div>
                 ) : null}
               </div>
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[8].thursdaynightclockin
-                    ? "not working"
-                    : person.schedule[8].thursdaynightclockin}
-                </p>
-                <p>
-                  {!person.schedule[8].thursdaynightclockout
-                    ? null
-                    : !person.schedule[8].thursdaynightclockout
-                      ? null
-                      : `-${person.schedule[8].thursdaynightclockout}`}
-                </p>
+              <div
+                className="night-shift-thursday"
+                onClick={() => handleOpen("thursdaynightopen", i)}
+              >
+                {!person.schedule[8].thursdaynightclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[8].thursdaynightclockin &&
+                !person.schedule[8].thursdaynightclockout ? (
+                  <div className="thursdayMorningDayWorking">
+                    <p className="thursdayCal">
+                      {person.schedule[8].thursdaynightclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[8].thursdaynightclockout ? null : (
+                  <div className="thursdayMorningDayWorking">
+                    <p className="thursdayCal">
+                      {person.schedule[8].thursdaynightclockin}-{
+                        person.schedule[8].thursdaynightclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("thursdaynightopen", i)}
-                    />
+                    <div className="right-arrow-small-thursday" />
                     <Dialog
                       open={person.thursdaynightopen}
                       actions={[
@@ -643,25 +776,36 @@ class MappedSchedules extends Component {
               </div>
             </div>
             <div className="employee-schedule">
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[9].fridaymorningclockin
-                    ? "not working"
-                    : person.schedule[9].fridaymorningclockin}
-                </p>
-                <p>
-                  {!person.schedule[9].fridaymorningclockout
-                    ? null
-                    : !person.schedule[9].fridaymorningclockout
-                      ? null
-                      : `-${person.schedule[9].fridaymorningclockout}`}
-                </p>
+              <div
+                className="morning-shift-friday"
+                onClick={() => handleOpen("fridaymorningopen", i)}
+              >
+                {!person.schedule[9].fridaymorningclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[9].fridaymorningclockin &&
+                !person.schedule[9].fridaymorningclockout ? (
+                  <div className="fridayMorningDayWorking">
+                    <p className="fridayCal">
+                      {person.schedule[9].fridaymorningclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[9].fridaymorningclockout ? null : (
+                  <div className="fridayMorningDayWorking">
+                    <p className="fridayCal">
+                      {person.schedule[9].fridaymorningclockin}-{
+                        person.schedule[9].fridaymorningclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("fridaymorningopen", i)}
-                    />
+                    <div className="right-arrow-small-friday" />
                     <Dialog
                       open={person.fridaymorningopen}
                       actions={[
@@ -711,25 +855,36 @@ class MappedSchedules extends Component {
                   </div>
                 ) : null}
               </div>
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[10].fridaynightclockin
-                    ? "not working"
-                    : person.schedule[10].fridaynightclockin}
-                </p>
-                <p>
-                  {!person.schedule[10].fridaynightclockout
-                    ? null
-                    : !person.schedule[10].fridaynightclockout
-                      ? null
-                      : `-${person.schedule[10].fridaynightclockout}`}
-                </p>
+              <div
+                className="night-shift-friday"
+                onClick={() => handleOpen("fridaynightopen", i)}
+              >
+                {!person.schedule[10].fridaynightclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[10].fridaynightclockin &&
+                !person.schedule[10].fridaynightclockout ? (
+                  <div className="fridayMorningDayWorking">
+                    <p className="fridayCal">
+                      {person.schedule[10].fridaynightclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[10].fridaynightclockout ? null : (
+                  <div className="fridayMorningDayWorking">
+                    <p className="fridayCal">
+                      {person.schedule[10].fridaynightclockin}-{
+                        person.schedule[10].fridaynightclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("fridaynightopen", i)}
-                    />
+                    <div className="right-arrow-small-friday" />
                     <Dialog
                       open={person.fridaynightopen}
                       actions={[
@@ -781,25 +936,36 @@ class MappedSchedules extends Component {
               </div>
             </div>
             <div className="employee-schedule">
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[11].saturdaymorningclockin
-                    ? "not working"
-                    : person.schedule[11].saturdaymorningclockin}
-                </p>
-                <p>
-                  {!person.schedule[11].saturdaymorningclockout
-                    ? null
-                    : !person.schedule[11].saturdaymorningclockout
-                      ? null
-                      : `-${person.schedule[11].saturdaymorningclockout}`}
-                </p>
+              <div
+                className="morning-shift-saturday"
+                onClick={() => handleOpen("saturdaymorningopen", i)}
+              >
+                {!person.schedule[11].saturdaymorningclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[11].saturdaymorningclockin &&
+                !person.schedule[11].saturdaymorningclockout ? (
+                  <div className="saturdayMorningDayWorking">
+                    <p className="saturdayCal">
+                      {person.schedule[11].saturdaymorningclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[11].saturdaymorningclockout ? null : (
+                  <div className="saturdayMorningDayWorking">
+                    <p className="saturdayCal">
+                      {person.schedule[11].saturdaymorningclockin}-{
+                        person.schedule[11].saturdaymorningclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("saturdaymorningopen", i)}
-                    />
+                    <div className="right-arrow-small-saturday" />
                     <Dialog
                       open={person.saturdaymorningopen}
                       actions={[
@@ -851,25 +1017,36 @@ class MappedSchedules extends Component {
                   </div>
                 ) : null}
               </div>
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[12].saturdaynightclockin
-                    ? "not working"
-                    : person.schedule[12].saturdaynightclockin}
-                </p>
-                <p>
-                  {!person.schedule[12].saturdaynightclockout
-                    ? null
-                    : !person.schedule[12].saturdaynightclockout
-                      ? null
-                      : `-${person.schedule[12].saturdaynightclockout}`}
-                </p>
+              <div
+                className="night-shift-saturday"
+                onClick={() => handleOpen("saturdaynightopen", i)}
+              >
+                {!person.schedule[12].saturdaynightclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[12].saturdaynightclockin &&
+                !person.schedule[12].saturdaynightclockout ? (
+                  <div className="saturdayMorningDayWorking">
+                    <p className="saturdayCal">
+                      {person.schedule[12].saturdaynightclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[12].saturdaynightclockout ? null : (
+                  <div className="saturdayMorningDayWorking">
+                    <p className="saturdayCal">
+                      {person.schedule[12].saturdaynightclockin}-{
+                        person.schedule[12].saturdaynightclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("saturdaynightopen", i)}
-                    />
+                    <div className="right-arrow-small-saturday" />
                     <Dialog
                       open={person.saturdaynightopen}
                       actions={[
@@ -921,25 +1098,36 @@ class MappedSchedules extends Component {
               </div>
             </div>
             <div className="employee-schedule">
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[13].sundaymorningclockin
-                    ? "not working"
-                    : person.schedule[13].sundaymorningclockin}
-                </p>
-                <p>
-                  {!person.schedule[13].sundaymorningclockout
-                    ? null
-                    : !person.schedule[13].sundaymorningclockout
-                      ? null
-                      : `-${person.schedule[13].sundaymorningclockout}`}
-                </p>
+              <div
+                className="morning-shift-sunday"
+                onClick={() => handleOpen("sundaymorningopen", i)}
+              >
+                {!person.schedule[13].sundaymorningclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[13].sundaymorningclockin &&
+                !person.schedule[13].sundaymorningclockout ? (
+                  <div className="sundayMorningDayWorking">
+                    <p className="sundayCal">
+                      {person.schedule[13].sundaymorningclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[13].sundaymorningclockout ? null : (
+                  <div className="sundayMorningDayWorking">
+                    <p className="sundayCal">
+                      {person.schedule[13].sundaymorningclockin}-{
+                        person.schedule[13].sundaymorningclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("sundaymorningopen", i)}
-                    />
+                    <div className="right-arrow-small-sunday" />
                     <Dialog
                       open={person.sundaymorningopen}
                       actions={[
@@ -989,25 +1177,36 @@ class MappedSchedules extends Component {
                   </div>
                 ) : null}
               </div>
-              <div className="morning-shift">
-                <p>
-                  {!person.schedule[14].sundaynightclockin
-                    ? "not working"
-                    : person.schedule[14].sundaynightclockin}
-                </p>
-                <p>
-                  {!person.schedule[14].sundaynightclockout
-                    ? null
-                    : !person.schedule[14].sundaynightclockout
-                      ? null
-                      : `-${person.schedule[14].sundaynightclockout}`}
-                </p>
+              <div
+                className="night-shift-sunday"
+                onClick={() => handleOpen("sundaynightopen", i)}
+              >
+                {!person.schedule[14].sundaynightclockin ? (
+                  <div className="morningDayNotWorking">
+                    <p>not working</p>
+                  </div>
+                ) : person.schedule[14].sundaynightclockin &&
+                !person.schedule[14].sundaynightclockout ? (
+                  <div className="sundayMorningDayWorking">
+                    <p className="sundayCal">
+                      {person.schedule[14].sundaynightclockin}
+                    </p>
+                  </div>
+                ) : null}
+
+                {!person.schedule[14].sundaynightclockout ? null : (
+                  <div className="sundayMorningDayWorking">
+                    <p className="sundayCal">
+                      {person.schedule[14].sundaynightclockin}-{
+                        person.schedule[14].sundaynightclockout
+                      }
+                    </p>
+                  </div>
+                )}
+
                 {manager ? (
                   <div>
-                    <div
-                      className="right-arrow-small"
-                      onClick={() => handleOpen("sundaynightopen", i)}
-                    />
+                    <div className="right-arrow-small-sunday" />
                     <Dialog
                       open={person.sundaynightopen}
                       actions={[

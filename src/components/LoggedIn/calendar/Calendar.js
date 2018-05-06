@@ -1,24 +1,31 @@
 import React, { Component } from "react";
 import "./Calendar.css";
-import LoginNav from "../../Nav/LoginNav/LoginNav";
+import Nav from "../../Nav/LoginNav/Nav";
 // import CreateSchedule from "../CreateSchedule/CreateSchedule";
 import { connect } from "react-redux";
 import Error from "../../Error/Error";
 import Schedules from "./schedules/Schedules";
-
-// import { getCompany } from "../../../ducks/calendarreducer";
+import { getUser } from "../../../ducks/users";
+import { getCompany } from "../../../ducks/calendarreducer";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {};
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.props
+      .getUser()
+      .then(() => {
+        this.props.getCompany(this.props.user_id);
+      })
+      .catch(err => console.log(err));
+  }
   render() {
     console.log(this.props);
     return (
       <div>
-        <LoginNav />
+        <Nav />
         {this.props.currentUser[0] ? (
           <div>
             <Schedules />
@@ -36,4 +43,4 @@ let mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {})(App);
+export default connect(mapStateToProps, { getUser, getCompany })(App);

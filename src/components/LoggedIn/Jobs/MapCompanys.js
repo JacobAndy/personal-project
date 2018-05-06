@@ -3,13 +3,27 @@ import Popover, { PopoverAnimationFromTop } from "material-ui/Popover";
 import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/MenuItem";
 import { connect } from "react-redux";
-import { leaveCompany } from "../../../ducks/employee";
+import X from "material-ui/svg-icons/navigation/close.js";
+import RaisedButton from "material-ui/RaisedButton";
+import TextField from "material-ui/TextField";
+import swal from "sweetalert";
+import IconButton from "material-ui/IconButton";
+
 import {
   getPendingApplications,
   getAllEmployees,
-  sendMassEmail
+  sendMassEmail,
+  leaveCompany
 } from "../../../ducks/company";
 
+let applicationStyle = {
+  width: "225px",
+  backgroundColor: "#90CAF9"
+};
+let staffMappedOverStyle = {
+  width: "280px",
+  backgroundColor: "#90CAF9"
+};
 class MapCompanys extends Component {
   constructor(props) {
     super(props);
@@ -69,9 +83,6 @@ class MapCompanys extends Component {
   }
   handleUpdatedInfo() {
     this.editToggleChange();
-    alert(
-      "This feature of Updating the company details has not been registered yet"
-    );
   }
   sendEmail(companyId) {
     this.props
@@ -101,27 +112,31 @@ class MapCompanys extends Component {
     this.props.jobStaff
       ? (mappedEmployees = this.props.jobStaff.map(e => {
           return (
-            <div>
-              <MenuItem primaryText={e.full_name} />
-            </div>
+            <MenuItem style={staffMappedOverStyle} primaryText={e.full_name} />
           );
         }))
       : null;
     return (
-      <div>
+      <div className="company-holder">
         {!this.state.editToggle && !this.state.massEmail ? (
-          <div className="each-job" key={comp.company_id}>
-            <h5>{comp.name}</h5>
-            <h4
-              onClick={event => {
-                this.handlePopOverOpen(event);
-                this.props.getAllEmployees(comp.company_id);
-              }}
-            >
-              staff
-            </h4>
+          <div className="each-company" key={comp.company_id}>
+            <h5 className="company-name">{comp.name}</h5>
+            {/* <div className="staff-button">
+              <RaisedButton
+                className="staffgetter"
+                backgroundColor="#81D4FA"
+                onClick={event => {
+                  this.handlePopOverOpen(event);
+                  this.props.getAllEmployees(comp.company_id);
+                }}
+              >
+                Staff
+              </RaisedButton>
+            </div> */}
             <div className="staff-popover">
               <Popover
+                style={staffMappedOverStyle}
+                className="employees-mapped"
                 open={this.state.popover}
                 anchorEl={this.state.anchorEl}
                 anchorOrigin={{
@@ -132,32 +147,55 @@ class MapCompanys extends Component {
                 onRequestClose={this.handlePopOverClose}
                 animation={PopoverAnimationFromTop}
               >
-                <Menu>{mappedEmployees}</Menu>
+                <Menu style={staffMappedOverStyle}>{mappedEmployees}</Menu>
               </Popover>
             </div>
             {comp.founder == user ? (
-              <div>
-                <button onClick={this.editToggleChange}>Edit Settings</button>
-                <button onClick={this.toggleMassEmail}>Email</button>
+              <div className="editandemailbutton">
+                <RaisedButton
+                  backgroundColor="#69F0AE"
+                  onClick={this.editToggleChange}
+                >
+                  Edit
+                </RaisedButton>
+                <RaisedButton
+                  backgroundColor="#69F0AE"
+                  onClick={this.toggleMassEmail}
+                >
+                  Email
+                </RaisedButton>
               </div>
             ) : null}
-            <button
-              onClick={() => {
-                this.props.leaveCompany(comp.company_id, user);
-              }}
-            >
-              Leave Company
-            </button>
-            <p
-              onClick={event => {
-                this.props.getPendingApplications(comp.company_id);
-                this.handlePopOverOpenApplication(event);
-              }}
-            >
-              applications
-            </p>
+            <div className="leave-company">
+              <IconButton>
+                <X
+                  onClick={() => {
+                    swal({
+                      title: `You left ${comp.name}`,
+                      icon: "success",
+                      button: "OK"
+                    });
+                    this.props.leaveCompany(comp.company_id, user);
+                  }}
+                />
+              </IconButton>
+            </div>
+            {comp.founder == user ? (
+              <div className="application-button">
+                <RaisedButton
+                  backgroundColor="#81D4FA"
+                  onClick={event => {
+                    this.props.getPendingApplications(comp.company_id);
+                    this.handlePopOverOpenApplication(event);
+                  }}
+                >
+                  Applications
+                </RaisedButton>
+              </div>
+            ) : null}
             <div className="staff-popover">
               <Popover
+                className="application-popover"
                 open={this.state.popoverApplication}
                 anchorEl={this.state.anchorEl}
                 anchorOrigin={{
@@ -168,7 +206,7 @@ class MapCompanys extends Component {
                 onRequestClose={this.handlePopOverCloseApplication}
                 animation={PopoverAnimationFromTop}
               >
-                <Menu>
+                <Menu style={applicationStyle}>
                   {!mapApp.length ? (
                     <MenuItem primaryText={"No Applications"} />
                   ) : (
@@ -177,43 +215,96 @@ class MapCompanys extends Component {
                 </Menu>
               </Popover>
             </div>
+            <div className="staff-button">
+              <RaisedButton
+                className="staffgetter"
+                backgroundColor="#81D4FA"
+                onClick={event => {
+                  this.handlePopOverOpen(event);
+                  this.props.getAllEmployees(comp.company_id);
+                }}
+              >
+                Staff
+              </RaisedButton>
+            </div>
           </div>
         ) : this.state.editToggle && !this.state.massEmail ? (
-          <div className="each-job">
-            <input
+          <div className="each-company">
+            <h5>Name</h5>
+            <TextField
               placeholder={comp.name}
               onChange={e => this.handleUpdatedCompanyName(e.target.value)}
             />
-            <input
+            <h5>Location</h5>
+            <TextField
               placeholder={comp.location}
               onChange={e => this.handleUpdateCompanyAddress(e.target.value)}
             />
-            <button onClick={this.editToggleChange}>cancel</button>
-            <button
-              onClick={() => {
-                !this.state.updatedCompanyAddressInput &&
-                !this.state.updatedCompanyNameInput
-                  ? alert("Please Input The Empty Feilds")
-                  : this.handleUpdatedInfo();
-              }}
-            >
-              Update Company
-            </button>
+            <div className="updateandcancel">
+              <RaisedButton
+                backgroundColor="#81D4FA"
+                onClick={this.editToggleChange}
+              >
+                cancel
+              </RaisedButton>
+              <RaisedButton
+                backgroundColor="#81D4FA"
+                onClick={() => {
+                  !this.state.updatedCompanyAddressInput ||
+                  !this.state.updatedCompanyNameInput
+                    ? swal({
+                        title: "FAILED",
+                        text: "Please Input The Empty Feilds",
+                        button: "OK",
+                        icon: "error"
+                      })
+                    : (this.handleUpdatedInfo(),
+                      swal({
+                        title: `${comp.name} information has been update`,
+                        icon: "success",
+                        button: "OK"
+                      }));
+                }}
+              >
+                Update
+              </RaisedButton>
+            </div>
           </div>
         ) : !this.state.editToggle && this.state.massEmail ? (
-          <div className="each-job">
-            <input
+          <div className="each-company">
+            <TextField
               placeholder="Email Subject"
               onChange={e => this.handleEmailSubject(e.target.value)}
             />
-            <input
+            <TextField
+              multiLine={true}
+              rows={3}
+              rowsMax={3}
               placeholder="Email Contents"
               onChange={e => this.handleMassEmail(e.target.value)}
             />
-            <button onClick={this.toggleMassEmail}>cancel</button>
-            <button onClick={() => this.sendEmail(comp.company_id)}>
-              Send Email
-            </button>
+            <div className="updateandcancel editandsendmail">
+              <RaisedButton
+                backgroundColor="#81D4FA"
+                onClick={this.toggleMassEmail}
+              >
+                cancel
+              </RaisedButton>
+              <RaisedButton
+                backgroundColor="#81D4FA"
+                onClick={() => {
+                  swal({
+                    title: this.state.emailSubject,
+                    text: this.state.email,
+                    icon: "success",
+                    button: "OK"
+                  });
+                  this.sendEmail(comp.company_id);
+                }}
+              >
+                Email
+              </RaisedButton>
+            </div>
           </div>
         ) : null}
       </div>

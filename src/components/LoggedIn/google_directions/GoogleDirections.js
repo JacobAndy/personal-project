@@ -1,9 +1,10 @@
 /* eslint-disable no-undef */
 import React, { Component } from "react";
-import LoginNav from "../../Nav/LoginNav/LoginNav";
+import Nav from "../../Nav/LoginNav/Nav";
 import { connect } from "react-redux";
 import Error from "../../Error/Error";
 import { compose, withProps, lifecycle } from "recompose";
+import IconButton from "material-ui/IconButton";
 import {
   withScriptjs,
   withGoogleMap,
@@ -11,7 +12,7 @@ import {
   DirectionsRenderer
 } from "react-google-maps";
 import { getCompany, setDirections } from "../../../ducks/company";
-import { locationError, updateLocation } from "../../../ducks/users";
+import { locationError, updateLocation, getUser } from "../../../ducks/users";
 import "./GoogleDirections.css";
 
 class GoogleDirections extends Component {
@@ -21,7 +22,9 @@ class GoogleDirections extends Component {
   }
   componentDidMount() {
     console.log("component did mount was hit");
-    this.props.getCompany(this.props.user_id);
+    this.props.getUser().then(() => {
+      this.props.getCompany(this.props.currentUser[0].user_id);
+    });
     // this.props.locationErrors ||
     !this.props.userLat || !this.props.userLong
       ? navigator.geolocation.getCurrentPosition(
@@ -62,8 +65,22 @@ class GoogleDirections extends Component {
           process.env.REACT_APP_GOOGLE_MAP_KEY
         }`,
         loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `92.5vh`, width: "1200px" }} />,
-        mapElement: <div style={{ height: `100%`, width: "100%" }} />
+        containerElement: (
+          <div
+            style={{
+              margin: "1.5%",
+              borderRadius: "15px",
+              border: "2px solid blue",
+              height: `95vh`,
+              width: "70vw"
+            }}
+          />
+        ),
+        mapElement: (
+          <div
+            style={{ borderRadius: "15px", height: `100%`, width: "100%" }}
+          />
+        )
       }),
       withScriptjs,
       withGoogleMap,
@@ -107,26 +124,23 @@ class GoogleDirections extends Component {
           key={i}
         >
           <h3>{e.name}</h3>
-          <h3>Location: {e.location}</h3>
+
+          {/* <h3>Location: {e.location}</h3> */}
         </div>
       );
     });
     return (
       <div>
-        <LoginNav />
+        <Nav />
         {!this.props.companys.length && this.props.currentUser[0] ? (
           <div>
             <h3>you have no business</h3>
           </div>
         ) : this.props.currentUser[0] && userLat && userLong ? (
           <div>
-            <h3 className="maptitle">Directions</h3>
             <div className="GoogleDirections">
               <Directions />
-              <div className="mappedDirectionCompany">
-                <h3 className="jobs">Jobs</h3>
-                {mapCompany}
-              </div>
+              <div className="mappedDirectionCompany">{mapCompany}</div>
             </div>
           </div>
         ) : this.props.currentUser[0] && !userLat && !userLong ? (
@@ -147,5 +161,6 @@ export default connect(mapStateToProps, {
   getCompany,
   setDirections,
   locationError,
-  updateLocation
+  updateLocation,
+  getUser
 })(GoogleDirections);

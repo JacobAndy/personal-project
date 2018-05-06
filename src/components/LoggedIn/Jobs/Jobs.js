@@ -1,7 +1,13 @@
 import React, { Component } from "react";
-import Nav from "../../Nav/LoginNav/LoginNav";
+import Nav from "../../Nav/LoginNav/Nav";
 import "./Jobs.css";
 import { connect } from "react-redux";
+import FloatingActionButton from "material-ui/FloatingActionButton";
+import ContentAdd from "material-ui/svg-icons/content/add";
+import RaisedButton from "material-ui/RaisedButton";
+import TextField from "material-ui/TextField";
+import X from "material-ui/svg-icons/navigation/close.js";
+import swal from "sweetalert";
 import {
   getCompany,
   getJobs,
@@ -10,9 +16,11 @@ import {
   sendApplication,
   getPendingApplications,
   acceptCurrentUsersApplication,
-  denyUserApplication
+  denyUserApplication,
+  leaveCompany
 } from "../../../ducks/company";
-import { getStaff, leaveCompany, addEditToggle } from "../../../ducks/employee";
+import { getUser } from "../../../ducks/users";
+import { getStaff, addEditToggle } from "../../../ducks/employee";
 import Error from "../../Error/Error";
 import Popover, { PopoverAnimationFromTop } from "material-ui/Popover";
 import Menu from "material-ui/Menu";
@@ -52,6 +60,9 @@ class Jobs extends Component {
     );
   }
   componentDidMount() {
+    this.props.getUser().then(() => {
+      this.props.getCompany(this.props.currentUser[0].user_id);
+    });
     this.props.getJobs();
   }
 
@@ -185,42 +196,99 @@ class Jobs extends Component {
     return (
       <div>
         <Nav />
-        {this.state.createGroupFlag ? (
-          <div>
-            <h3>create a group</h3>
-            <input
-              placeholder="name"
-              onChange={e => this.handleCompanyName(e.target.value)}
-            />
-            <input
-              placeholder="Location"
-              onChange={e => this.handleCompanyLocation(e.target.value)}
-            />
-            <button onClick={this.getLocations}>Save Changes</button>
-            <button onClick={this.toggleCreateGroup}>Cancel</button>
-          </div>
-        ) : this.props.currentUser[0] ? (
+        {this.props.currentUser[0] ? (
           <div>
             <Nav />
             <div className="jobs-holder">
               <div className="personal-jobs">
-                {/* <input
+                <div className="top-of-jobs">
+                  {/* <input
                   placeholder="search your jobs"
                   onChange={e => this.handleCompanySearch(e.target.value)}
                 /> */}
-                <h3>Your Jobs</h3>
-                {mappedComp}
+                  <h3>Your Jobs</h3>
+
+                  <div className="action-button-wrapper">
+                    {!this.state.createGroupFlag ? (
+                      <FloatingActionButton
+                        className="create-company-toggle"
+                        onClick={this.toggleCreateGroup}
+                      >
+                        <ContentAdd />
+                      </FloatingActionButton>
+                    ) : (
+                      <FloatingActionButton
+                        className="exit-company-toggle"
+                        onClick={this.toggleCreateGroup}
+                      >
+                        <X />
+                      </FloatingActionButton>
+                    )}
+                  </div>
+                </div>
+                {!this.state.createGroupFlag ? (
+                  <div className="mapped-container">
+                    <div className="mapped-company">{mappedComp}</div>
+                  </div>
+                ) : (
+                  <div className="group-creating-tab">
+                    <X
+                      className="exit-create-group"
+                      onClick={this.toggleCreateGroup}
+                    />
+                    <h3>create a group</h3>
+                    <TextField
+                      inputStyle={{ color: "#333" }}
+                      underlineStyle={{ borderColor: "#69F0AE" }}
+                      placeholder="Company Name"
+                      onChange={e => this.handleCompanyName(e.target.value)}
+                    />
+                    <TextField
+                      inputStyle={{ color: "#333" }}
+                      underlineStyle={{ borderColor: "#69F0AE" }}
+                      placeholder="Company Location"
+                      onChange={e => this.handleCompanyLocation(e.target.value)}
+                    />
+                    <div className="savecompany-updates">
+                      <RaisedButton
+                        backgroundColor="#69F0AE"
+                        onClick={() => {
+                          this.getLocations();
+                          swal({
+                            title: "Job Created",
+                            text: "",
+                            icon: "success",
+                            button: "OKAY"
+                          });
+                        }}
+                      >
+                        Submit
+                      </RaisedButton>
+                      <RaisedButton
+                        backgroundColor="#69F0AE"
+                        onClick={this.toggleCreateGroup}
+                      >
+                        Cancel
+                      </RaisedButton>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="inactive-job">
-                <input
-                  placeholder="search for a job"
-                  onChange={e => this.handleJobSearch(e.target.value)}
-                />
-                <h3>Apply For Jobs</h3>
-                {mappedJobs}
+                <div className="top-of-jobs">
+                  <h3>Apply For Jobs</h3>
+                  <TextField
+                    style={{ color: "blue" }}
+                    underlineStyle={{ borderColor: "blue" }}
+                    placeholder="search for a job"
+                    onChange={e => this.handleJobSearch(e.target.value)}
+                  />
+                </div>
+                <div className="mapped-container">
+                  <div className="mapped-jobs">{mappedJobs}</div>
+                </div>
               </div>
             </div>
-            <button onClick={this.toggleCreateGroup}>Create a Business</button>
           </div>
         ) : (
           <div>
@@ -242,6 +310,7 @@ let mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
+  getUser,
   getCompany,
   getJobs,
   createGroup,

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LoginNav from "../../Nav/LoginNav/LoginNav";
+import LoginNav from "../../Nav/LoginNav/Nav";
 import "./About.css";
 
 class About extends Component {

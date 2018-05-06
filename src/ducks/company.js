@@ -32,6 +32,7 @@ const ACCEPT_APPLICATION = "ACCEPT_APPLICATION";
 const DENY_APPLICATION_ID = "DENY_APPLICATION_ID";
 const GET_ALL_STAFF = "GET_ALL_STAFF";
 const SEND_MASS_EMAIL = "SEND_MASS_EMAIL";
+const LEAVE_COMPANY = "LEAVE_COMPANY";
 
 export default function company(state = initialState, action) {
   switch (action.type) {
@@ -58,9 +59,9 @@ export default function company(state = initialState, action) {
     //create group
     case `${CREATE_GROUP}_PENDING`:
       return { ...state, loading: true };
-    case `${CREATE_GROUP}_FULFILLED`:
-      console.log(action.payload.data);
-      return { ...state, loading: false };
+    // case `${CREATE_GROUP}_FULFILLED`:
+    //   console.log(action.payload.data);
+    //   return { ...state, companys: action.payload.data, loading: false };
 
     case UPDATE_STATE_COMP_ID:
       return { ...state, currentCompanyIdForDate: action.payload };
@@ -77,6 +78,8 @@ export default function company(state = initialState, action) {
     case `${GET_COMPANY}_PENDING`:
       console.log("pending");
       return { ...state, loading: true };
+    case `${CREATE_GROUP}_FULFILLED`:
+    case `${LEAVE_COMPANY}_FULFILLED`:
     case `${GET_COMPANY}_FULFILLED`:
       console.log(action.payload.data.slice(1));
       console.log(action.payload.data);
@@ -129,6 +132,9 @@ export default function company(state = initialState, action) {
         currentCompanyLatitude: action.payload.data[0].latitude,
         currentCompanyLongitude: action.payload.data[0].longitude
       };
+    // case `${LEAVE_COMPANY}_FULFILLED`:
+    // console.log(action.payload.data);
+    // return { ...state, companys: action.payload.data };
 
     //GET ALL JOBS ON THE SITE
     case `${GET_ALL_JOBS}_PENDING`:
@@ -143,6 +149,12 @@ export default function company(state = initialState, action) {
 }
 
 //ACTIONS
+export function leaveCompany(compid, userid) {
+  return {
+    type: LEAVE_COMPANY,
+    payload: axios.put(`/leavecompany/${compid}`, { userid })
+  };
+}
 export function sendMassEmail(employees, email, subject) {
   console.log(employees);
   console.log(email);
@@ -161,11 +173,13 @@ export function getAllEmployees(compId) {
     payload: axios.get(`/jobs/staff/${compId}`)
   };
 }
-export function denyUserApplication(id, userId) {
-  console.log(id);
+export function denyUserApplication(id, userId, companyId) {
+  console.log(userId);
   return {
     type: DENY_APPLICATION_ID,
-    payload: axios.delete(`/jobs/application/decision/${id}?user=${userId}`)
+    payload: axios.delete(
+      `/jobs/application/decision/${id}?user=${userId}&company=${companyId}`
+    )
   };
 }
 

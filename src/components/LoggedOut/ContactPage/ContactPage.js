@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Nav from "../../Nav/LoginNav/LoginNav";
+import Nav from "../../Nav/LoginNav/Nav";
 
 class ContactPage extends Component {
   constructor() {
