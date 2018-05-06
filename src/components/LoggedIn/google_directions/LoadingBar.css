@@ -1,0 +1,174 @@
+.loading {
+  display: flex;
+  flex-direction: column;
+  width: 15%;
+  margin: 20% auto;
+  justify-content: center;
+  align-items: center;
+}
+.loading-jobs {
+  display: flex;
+  flex-direction: column;
+  width: 15%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: flex-start;
+}
+.loading-circle {
+  /* background: blue; */
+}
+.letter-bounce-0 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.1s;
+}
+.letter-bounce-1 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.2s;
+}
+.letter-bounce-2 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.3s;
+}
+.letter-bounce-3 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.4s;
+}
+.letter-bounce-4 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.5s;
+}
+.letter-bounce-5 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.6s;
+}
+.letter-bounce-6 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.7s;
+}
+.letter-bounce-7 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.8s;
+}
+.letter-bounce-8 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 0.9s;
+}
+.letter-bounce-9 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1s;
+}
+.letter-bounce-10 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.1s;
+}
+.letter-bounce-11 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.2s;
+}
+.letter-bounce-12 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.3s;
+}
+.letter-bounce-13 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.4s;
+}
+.letter-bounce-14 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.5s;
+}
+.letter-bounce-15 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.6s;
+}
+.letter-bounce-16 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.7s;
+}
+.letter-bounce-17 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.8s;
+}
+.letter-bounce-18 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 1.9s;
+}
+.letter-bounce-19 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 2s;
+}
+.letter-bounce-20 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 2.1s;
+}
+.letter-bounce-21 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 2.2s;
+}
+.letter-bounce-22 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 2.3s;
+}
+.letter-bounce-23 {
+  animation: 2.4s bounce0 infinite;
+  animation-delay: 2.4s;
+}
+.letter-bounce-0,
+.letter-bounce-1,
+.letter-bounce-2,
+.letter-bounce-3,
+.letter-bounce-4,
+.letter-bounce-5,
+.letter-bounce-6,
+.letter-bounce-7,
+.letter-bounce-8,
+.letter-bounce-9,
+.letter-bounce-10,
+.letter-bounce-11,
+.letter-bounce-12,
+.letter-bounce-13,
+.letter-bounce-14,
+.letter-bounce-15,
+.letter-bounce-16,
+.letter-bounce-17,
+.letter-bounce-18,
+.letter-bounce-19,
+.letter-bounce-20,
+.letter-bounce-21,
+.letter-bounce-22,
+.letter-bounce-23 {
+  bottom: 0px;
+  /* margin-left: 10px; */
+  position: relative;
+  color: #01579b;
+  /* animation: colorChange 2s infinite; */
+}
+/* @keyframes colorChange {
+  0% {
+    color: #01579b;
+  }
+  50% {
+    color: blue;
+  }
+  100% {
+    color: #01579b;
+  } */
+/* } */
+@keyframes bounce0 {
+  0% {
+    color: #01579b;
+    bottom: 0px;
+  }
+  5% {
+    bottom: 1.5px;
+  }
+  10% {
+    bottom: 0px;
+  }
+  50% {
+    color: #29b6f6;
+  }
+  100% {
+    color: #01579b;
+  }
+}

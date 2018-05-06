@@ -14,6 +14,7 @@ import filt from "lodash.filter";
 import SelectField from "material-ui/SelectField";
 import swal from "sweetalert";
 import { getCompany, updateStateCompId } from "../../../../ducks/company";
+import LoadingBar from "./ScheduleLoading";
 import {
   getEmployees,
   handleOpen,
@@ -52,10 +53,13 @@ class Schedules extends Component {
       g: `ghijk`,
       l: `lmnop`,
       q: `qrstu`,
-      v: `vwxyz`
+      v: `vwxyz`,
+      loading: false
     };
+    this.handleLoading = this.handleLoading.bind(this);
   }
   componentDidMount() {
+    this.handleLoading();
     this.props.getCompany(this.props.user_id);
   }
   handlePopOverOpen = event => {
@@ -66,6 +70,11 @@ class Schedules extends Component {
   };
   handleChange(val) {
     this.setState({ selectedCompany: val });
+  }
+  handleLoading() {
+    setTimeout(() => {
+      this.setState({ loading: true });
+    }, 3000);
   }
   render() {
     let {
@@ -162,7 +171,9 @@ class Schedules extends Component {
       );
     });
 
-    return (
+    return !this.state.loading ? (
+      <LoadingBar />
+    ) : (
       <div>
         <div className="Job-select">
           <SelectField

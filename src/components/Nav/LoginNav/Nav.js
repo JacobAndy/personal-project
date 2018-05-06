@@ -84,8 +84,9 @@ class Nav extends Component {
                   </MenuItem>
                 </Link>
 
-                <Link to="/about">
+                {/* <Link to="/about">
                   <MenuItem
+                    
                     style={{ color: "whitesmoke" }}
                     onClick={() => {
                       this.burgerHandle();
@@ -96,6 +97,7 @@ class Nav extends Component {
                 </Link>
                 <Link to="/services">
                   <MenuItem
+                   
                     style={{ color: "whitesmoke" }}
                     onClick={() => {
                       this.burgerHandle();
@@ -106,6 +108,7 @@ class Nav extends Component {
                 </Link>
                 <Link to="/contact">
                   <MenuItem
+                   
                     style={{ color: "whitesmoke" }}
                     onClick={() => {
                       this.burgerHandle();
@@ -113,7 +116,7 @@ class Nav extends Component {
                   >
                     Contact
                   </MenuItem>
-                </Link>
+                </Link> */}
               </div>
             </div>
           ) : (
@@ -189,8 +192,9 @@ class Nav extends Component {
                     Traffic
                   </MenuItem>
                 </Link>
-                <Link to="/about">
+                {/* <Link to="/about">
                   <MenuItem
+                   
                     style={{ color: "whitesmoke" }}
                     onClick={() => {
                       this.burgerHandle();
@@ -201,6 +205,7 @@ class Nav extends Component {
                 </Link>
                 <Link to="/services">
                   <MenuItem
+                  
                     style={{ color: "whitesmoke" }}
                     onClick={() => {
                       this.burgerHandle();
@@ -211,6 +216,7 @@ class Nav extends Component {
                 </Link>
                 <Link to="/contact">
                   <MenuItem
+                    
                     style={{ color: "whitesmoke" }}
                     onClick={() => {
                       this.burgerHandle();
@@ -218,7 +224,7 @@ class Nav extends Component {
                   >
                     Contact
                   </MenuItem>
-                </Link>
+                </Link> */}
               </div>
             </div>
           )}

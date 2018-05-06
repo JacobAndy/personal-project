@@ -8,6 +8,8 @@ import { compose, withProps } from "recompose";
 import { getCompany, setTraffic } from "../../../ducks/company";
 import "../google_directions/GoogleDirections.css";
 import { getUser } from "../../../ducks/users";
+import CalculatingLocation from "../google_directions/CalculatingLocation";
+import LoadingBar from "./GeneratingCompanys";
 import {
   withGoogleMap,
   GoogleMap,
@@ -19,14 +21,31 @@ import {
 class Traffic extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      newCompanyLocation: false,
+      loading: true
+    };
+    this.handleLoading = this.handleLoading.bind(this);
+    this.newCompanyHandle = this.newCompanyHandle.bind(this);
   }
   componentDidMount() {
+    this.handleLoading();
     console.log(this.props);
     this.props.getUser().then(() => {
       this.props.getCompany(this.props.currentUser[0].user_id);
     });
     // this.props.getCompany(this.props.user_id);
+  }
+  handleLoading() {
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 2000);
+  }
+  newCompanyHandle() {
+    this.setState({ newCompanyLocation: true });
+    setTimeout(() => {
+      this.setState({ newCompanyLocation: false });
+    }, 1000);
   }
   render() {
     let { currentCompanyLatitude, currentCompanyLongitude } = this.props;
@@ -38,8 +57,22 @@ class Traffic extends Component {
           process.env.REACT_APP_GOOGLE_MAP_KEY
         }`,
         loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `92.5vh`, width: "1200px" }} />,
-        mapElement: <div style={{ height: `100%`, width: "100%" }} />
+        containerElement: (
+          <div
+            style={{
+              margin: "1.5%",
+              borderRadius: "15px",
+              border: "2px solid blue",
+              height: `95vh`,
+              width: "70vw"
+            }}
+          />
+        ),
+        mapElement: (
+          <div
+            style={{ borderRadius: "15px", height: `100%`, width: "100%" }}
+          />
+        )
       }),
       withScriptjs,
       withGoogleMap
@@ -65,24 +98,29 @@ class Traffic extends Component {
       return (
         <div
           className="companys-in-map"
-          onClick={() => this.props.setTraffic(e.company_id)}
+          onClick={() => {
+            this.newCompanyHandle();
+            this.props.setTraffic(e.company_id);
+          }}
           key={i}
         >
           <h3>{e.name}</h3>
-          <h3>Location: {e.location}</h3>
         </div>
       );
     });
     return (
       <div>
         <LoginNav />
-        {!this.props.companys.length && this.props.currentUser[0] ? (
+        {this.state.loading && this.props.currentUser[0] ? (
+          <LoadingBar />
+        ) : !this.props.companys.length && this.props.currentUser[0] ? (
           <div>
             <h3>you have no business</h3>
           </div>
+        ) : this.state.newCompanyLocation ? (
+          <CalculatingLocation />
         ) : this.props.currentUser[0] ? (
           <div>
-            <h3 className="maptitle">Live Traffic Feed</h3>
             <div className="GoogleDirections">
               <GoogleTraffic />
               <div className="mappedDirectionCompany">

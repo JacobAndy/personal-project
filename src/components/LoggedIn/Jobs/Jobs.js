@@ -8,6 +8,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
 import X from "material-ui/svg-icons/navigation/close.js";
 import swal from "sweetalert";
+import LoadingJobs from "./LoadingJobs";
 import {
   getCompany,
   getJobs,
@@ -44,7 +45,8 @@ class Jobs extends Component {
       searchForYourJobs: "",
       searchForAppJobs: "",
       companysSearch: "",
-      jobsSearch: ""
+      jobsSearch: "",
+      loading: false
     };
     this.handlePopOverOpen = this.handlePopOverOpen.bind(this);
     this.handlePopOverClose = this.handlePopOverClose.bind(this);
@@ -58,8 +60,10 @@ class Jobs extends Component {
     this.handlePopOverCloseApplication = this.handlePopOverCloseApplication.bind(
       this
     );
+    this.handleLoading = this.handleLoading.bind(this);
   }
   componentDidMount() {
+    this.handleLoading();
     this.props.getUser().then(() => {
       this.props.getCompany(this.props.currentUser[0].user_id);
     });
@@ -68,6 +72,9 @@ class Jobs extends Component {
 
   toggleCreateGroup() {
     this.setState({ createGroupFlag: !this.state.createGroupFlag });
+    // setTimeout(() => {
+    //   window.onclick = () => this.setState({ createGroupFlag: false });
+    // }, 10);
   }
   handleCompanyName(e) {
     this.setState({ companyName: e });
@@ -92,6 +99,11 @@ class Jobs extends Component {
   }
   handleCompanySearch(val) {
     this.setState({ companysSearch: val });
+  }
+  handleLoading() {
+    setTimeout(() => {
+      this.setState({ loading: true });
+    }, 2000);
   }
 
   getLocations() {
@@ -193,6 +205,7 @@ class Jobs extends Component {
       }
     });
     console.log(this.props);
+
     return (
       <div>
         <Nav />
@@ -212,14 +225,18 @@ class Jobs extends Component {
                     {!this.state.createGroupFlag ? (
                       <FloatingActionButton
                         className="create-company-toggle"
-                        onClick={this.toggleCreateGroup}
+                        onClick={() => {
+                          this.toggleCreateGroup();
+                        }}
                       >
                         <ContentAdd />
                       </FloatingActionButton>
                     ) : (
                       <FloatingActionButton
                         className="exit-company-toggle"
-                        onClick={this.toggleCreateGroup}
+                        onClick={() => {
+                          this.toggleCreateGroup();
+                        }}
                       >
                         <X />
                       </FloatingActionButton>
@@ -234,7 +251,13 @@ class Jobs extends Component {
                   <div className="group-creating-tab">
                     <X
                       className="exit-create-group"
-                      onClick={this.toggleCreateGroup}
+                      onClick={() => {
+                        this.toggleCreateGroup();
+                        window.onclick = () =>
+                          this.setState({
+                            createGroupFlag: !this.state.createGroupFlag
+                          });
+                      }}
                     />
                     <h3>create a group</h3>
                     <TextField
@@ -284,9 +307,13 @@ class Jobs extends Component {
                     onChange={e => this.handleJobSearch(e.target.value)}
                   />
                 </div>
-                <div className="mapped-container">
-                  <div className="mapped-jobs">{mappedJobs}</div>
-                </div>
+                {!this.state.loading ? (
+                  <LoadingJobs />
+                ) : (
+                  <div className="mapped-container">
+                    <div className="mapped-jobs">{mappedJobs}</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

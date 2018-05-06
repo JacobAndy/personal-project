@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import Error from "../../Error/Error";
 import { compose, withProps, lifecycle } from "recompose";
 import IconButton from "material-ui/IconButton";
+import { Redirect } from "react-router-dom";
+import LoadingBar from "./LoadingBar";
+import CalculatingLocation from "./CalculatingLocation";
 import {
   withScriptjs,
   withGoogleMap,
@@ -18,10 +21,16 @@ import "./GoogleDirections.css";
 class GoogleDirections extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      loading: false,
+      newCompanyLocation: false
+    };
+    this.loadingHandle = this.loadingHandle.bind(this);
+    this.newCompanyHandle = this.newCompanyHandle.bind(this);
   }
   componentDidMount() {
     console.log("component did mount was hit");
+    this.loadingHandle();
     this.props.getUser().then(() => {
       this.props.getCompany(this.props.currentUser[0].user_id);
     });
@@ -51,7 +60,20 @@ class GoogleDirections extends Component {
         )
       : null;
   }
+  loadingHandle() {
+    console.log("LOADING TRUE");
+    setTimeout(() => {
+      this.setState({ loading: true });
+    }, 4000);
+  }
+  newCompanyHandle() {
+    this.setState({ newCompanyLocation: true });
+    setTimeout(() => {
+      this.setState({ newCompanyLocation: false });
+    }, 1000);
+  }
   render() {
+    // setTimeout(this.loadingHandle(), 5000);
     console.log(this.props);
     let {
       userLat,
@@ -120,7 +142,10 @@ class GoogleDirections extends Component {
       return (
         <div
           className="companys-in-map"
-          onClick={() => this.props.setDirections(e.company_id)}
+          onClick={() => {
+            this.newCompanyHandle();
+            this.props.setDirections(e.company_id);
+          }}
           key={i}
         >
           <h3>{e.name}</h3>
@@ -129,6 +154,8 @@ class GoogleDirections extends Component {
         </div>
       );
     });
+    console.log(userLat);
+    console.log(userLong);
     return (
       <div>
         <Nav />
@@ -136,7 +163,17 @@ class GoogleDirections extends Component {
           <div>
             <h3>you have no business</h3>
           </div>
-        ) : this.props.currentUser[0] && userLat && userLong ? (
+        ) : this.state.newCompanyLocation ? (
+          <CalculatingLocation />
+        ) : this.props.currentUser[0] &&
+        userLat &&
+        userLong &&
+        !this.state.loading ? (
+          <LoadingBar />
+        ) : this.props.currentUser[0] &&
+        userLat &&
+        userLong &&
+        this.state.loading ? (
           <div>
             <div className="GoogleDirections">
               <Directions />
@@ -144,9 +181,7 @@ class GoogleDirections extends Component {
             </div>
           </div>
         ) : this.props.currentUser[0] && !userLat && !userLong ? (
-          <div>
-            <h3>Loading...</h3>
-          </div>
+          <LoadingBar />
         ) : (
           <Error />
         )}
