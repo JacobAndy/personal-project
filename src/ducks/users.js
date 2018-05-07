@@ -110,7 +110,7 @@ export function getUser() {
   };
 }
 export function updateUser(email, number, address, emergencycontact, auth) {
-  console.log("daddddddy");
+  console.log(email, number, address, emergencycontact, auth);
   return {
     type: UPDATE_USER,
     payload: axios.put("/update", {

@@ -169,13 +169,31 @@ class MapCompanys extends Component {
             <div className="leave-company">
               <IconButton>
                 <X
+                  // onClick={() => {
+                  //   swal({
+                  //     title: `You left ${comp.name}`,
+                  //     icon: "success",
+                  //     button: "OK"
+                  //   });
+                  //   this.props.leaveCompany(comp.company_id, user);
+                  // }}
                   onClick={() => {
                     swal({
-                      title: `You left ${comp.name}`,
-                      icon: "success",
-                      button: "OK"
+                      title: "Are you sure?",
+                      text: "Once deleted, you will not be able to undo!",
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true
+                    }).then(willDelete => {
+                      if (willDelete) {
+                        this.props.leaveCompany(comp.company_id, user);
+                        swal(`You have successfully left ${comp.name}`, {
+                          icon: "success"
+                        });
+                      } else {
+                        swal("Canceled");
+                      }
                     });
-                    this.props.leaveCompany(comp.company_id, user);
                   }}
                 />
               </IconButton>

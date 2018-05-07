@@ -85,7 +85,7 @@ export default function company(state = initialState, action) {
       console.log(action.payload.data);
       let newPayload = action.payload.data.slice(1);
       if (!action.payload.data.length) {
-        return { ...state };
+        return { ...state, companys: [] };
       } else {
         return {
           ...state,

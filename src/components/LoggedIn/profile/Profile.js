@@ -97,10 +97,13 @@ class Profile extends Component {
       emerg_contact
     } = this.props;
     let { newemail, newnumber, newaddress, emcontact } = this.state;
-    console.log(name, user_email, number, user_address, emerg_contact);
-    let mappedEmails = this.props.emails.map((e, i) => {
+    console.log(newemail, newnumber, newaddress, emcontact);
+    let mappedEmails = this.props.emails.slice(0, 10).map((e, i) => {
       return (
-        <div className="email-contents-div">
+        <div
+          className="email-contents-div"
+          style={{ animation: `${i}s email` }}
+        >
           <div className="x">
             <IconButton
               onClick={() =>
@@ -206,19 +209,24 @@ class Profile extends Component {
               <img
                 className="profile-image"
                 src={this.props.photo}
-                width="400px"
-                height="400px"
+                width="450px"
+                height="450px"
               />
-              <h2 className="profile_name">{name}</h2>
+
               <div className="info-holder">
-                <h2>Email: {user_email}</h2>
-                <h2>Phone Number: {number}</h2>
-                <h2>Address: {user_address}</h2>
-                <h2>Emergency Contact: {emerg_contact}</h2>
+                <h2 className="profile_name">{name}</h2>
+                <h4>Email: {user_email}</h4>
+                <h4>Phone Number: {number}</h4>
+                <h4>Address: {user_address}</h4>
+                <h4>Emergency Contact: {emerg_contact}</h4>
               </div>
               <div className="mapped-emails">
                 <h4>ALERTS</h4>
-                {mappedEmails}
+                {!this.props.emails.length ? (
+                  <h6 className="no-notifications">No notifications</h6>
+                ) : (
+                  mappedEmails
+                )}
               </div>
             </div>
           </div>

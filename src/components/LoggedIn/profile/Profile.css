@@ -56,6 +56,7 @@
 }
 .profile {
   position: relative;
+  /* border: 2px solid black; */
   width: 100vw;
   height: 100vh;
   border: 2px solid black;
@@ -68,7 +69,7 @@
 .profile-image {
   position: absolute;
   top: 1%;
-  left: 22%;
+  left: 20%;
   border-radius: 50%;
   border: 3px solid #333;
   background: black;
@@ -77,36 +78,51 @@
   opacity: 0.9;
 }
 .profile_name {
-  position: absolute;
+  color: #0d47a1;
+  /* position: absolute; */
   top: 42%;
   left: 28%;
 }
 .info-holder {
   display: flex;
+  padding: 5%;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   position: absolute;
   bottom: 10px;
-  width: 65vw;
-  left: 0.5%;
-  border-radius: 45px;
+  width: 35vw;
+  left: 15%;
+  border-radius: 15px;
   height: 50vh;
   background-color: #42a5f5;
-  border: 2px solid#333;
+  border: 2px solid#0d47a1;
+}
+.info-holder > h4 {
+  font-size: 20px;
+  color: #bbdefb;
 }
 .mapped-emails {
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  border: 2px solid black;
+  border: 2px solid #0d47a1;
+  background: rgb(100, 181, 246, 0.5);
   height: 97vh;
   width: 33vw;
   position: absolute;
   right: 0.6%;
 }
+.mapped-emails > h4 {
+  color: #0d47a1;
+  border-bottom: solid 2px #0d47a1;
+  display: inline;
+  padding-bottom: 3px;
+}
 .email-contents-div {
+  /* animation: 3s email; */
   position: relative;
   display: flex;
   flex-direction: row;
@@ -115,15 +131,32 @@
   width: 95%;
   height: 8%;
   border-radius: 15px;
-  border: 2px solid black;
+  /* border-radius: 15px; */
+  border: 2px solid #0d47a1;
+  background: rgb(66, 165, 245, 0.5);
 }
 .email-contents-div > h5 {
+  color: #0d47a1;
   position: absolute;
   bottom: 0.2%;
   left: 7%;
 }
 .x {
+  animation: 1s emails;
   position: absolute;
   top: -3%;
   left: -1%;
+}
+.no-notifications {
+  font-weight: 900;
+  color: #0d47a1;
+  font-size: 16px;
+}
+@keyframes email {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

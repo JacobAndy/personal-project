@@ -85,6 +85,11 @@ class Traffic extends Component {
         }}
       >
         <Marker
+          icon={{
+            url:
+              "http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=%E2%80%A2|FF0000"
+          }}
+          animation={google.maps.Animation.DROP}
           position={{
             lat: +currentCompanyLatitude,
             lng: +currentCompanyLongitude

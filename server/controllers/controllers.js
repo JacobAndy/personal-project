@@ -39,12 +39,13 @@ const getUser = (req, res) => {
 //UPDATE USERS INFO WORKS
 const updateUser = (req, res) => {
   let { email, number, address, emergencycontact, auth } = req.body;
-  console.log(req.user);
+  // console.log(req.user);
+  console.log(email, number, address, emergencycontact, auth);
   req.app
     .get("db")
     .updateUser([email, number, address, emergencycontact, auth])
     .then(results => {
-      getUser(req, res);
+      res.status(200).json(results);
       // res.status(200).json(results);
     })
     .catch(err => {
@@ -176,6 +177,7 @@ const leaveCompany = (req, res, next) => {
             .getGroup([userid])
             .then(groups => {
               console.log(`SUCCESS IN GETTING GROUPS AFTER REMOVING EMPLOYEE`);
+              console.log(groups);
               res.status(200).json(groups);
             })
             .catch(error => {
@@ -359,16 +361,16 @@ const createCompanyIdSchedule = (req, res, next) => {
   //   .then(empId => {
   //     console.log(+empId[0].employee_id);
   _(arr, e => {
-    // client.messages
-    //   .create({
-    //     body: `Hey ${
-    //       e.full_name
-    //     }, this is Entity Schedules letting you know that your schedule has been posted`,
-    //     from: "4156505615"
-    // to: e.phone_number
-    // })
-    // .then(message => console.log(message.sid))
-    // .done();
+    client.messages
+      .create({
+        body: `Hey ${
+          e.full_name
+        }, this is Entity Schedules letting you know that your schedule has been posted`,
+        from: "4156505615",
+        to: e.phone_number
+      })
+      .then(message => console.log(message.sid))
+      .done();
     let mailOptions = {
       from: '"Andy Schedules" <andyschedules@gmail.com>',
       to: e.email,
@@ -484,16 +486,16 @@ const createSchedule = (req, res, next) => {
     .then(compId => {
       let id = compId[0].company_id;
       _(arr, e => {
-        // client.messages
-        //   .create({
-        //     body: `Hey ${
-        //       e.full_name
-        //     }, this is Entity Schedules letting you know that your schedule has been posted`,
-        //     from: "4156505615"
-        // to: e.phone_number
-        // })
-        // .then(message => console.log(message.sid))
-        // .done()
+        client.messages
+          .create({
+            body: `Hey ${
+              e.full_name
+            }, this is Entity Schedules letting you know that your schedule has been posted`,
+            from: "4156505615",
+            to: e.phone_number
+          })
+          .then(message => console.log(message.sid))
+          .done();
 
         let mailOptions = {
           from: '"Andy Schedules" <andyschedules@gmail.com>',
@@ -613,16 +615,16 @@ const updateCompanyIdSchedule = (req, res, next) => {
   //   .then(empId => {
   //     console.log(empId);
   _(arr, e => {
-    // client.messages
-    //   .create({
-    //     body: `Hey ${
-    //       e.full_name
-    //     }, this is Entity Schedules letting you know that your schedule has been updated`,
-    //     from: "4156505615"
-    // to: e.phone_number
-    // })
-    // .then(message => console.log(message.sid))
-    // .done();
+    client.messages
+      .create({
+        body: `Hey ${
+          e.full_name
+        }, this is Entity Schedules letting you know that your schedule has been updated`,
+        from: "4156505615",
+        to: e.phone_number
+      })
+      .then(message => console.log(message.sid))
+      .done();
     let mailOptions = {
       from: '"Andy Schedules" <andyschedules@gmail.com>',
       to: e.email,
@@ -761,16 +763,16 @@ const updateSchedule = (req, res) => {
   console.log(arr);
 
   _(arr, e => {
-    // client.messages
-    //   .create({
-    //     body: `Hey ${
-    //       e.full_name
-    //     }, this is Entity Schedules letting you know that your schedule has been updated`,
-    //     from: "4156505615"
-    // to: e.phone_number
-    // })
-    // .then(message => console.log(message.sid))
-    // .done();
+    client.messages
+      .create({
+        body: `Hey ${
+          e.full_name
+        }, this is Entity Schedules letting you know that your schedule has been updated`,
+        from: "4156505615",
+        to: e.phone_number
+      })
+      .then(message => console.log(message.sid))
+      .done();
     console.log(e.employee_id);
     req.app
       .get("db")
