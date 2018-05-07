@@ -8,6 +8,7 @@ let initialstate = {
   number: "",
   user_address: "",
   emerg_contact: "",
+  emails: [],
   userLat: 0,
   userLong: 0,
   loading: false,
@@ -21,11 +22,17 @@ const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const UPDATE_LOCATION = "UPDATE_LOCATION";
 const LOCATION_ERROR = "LOCATION_ERROR";
+const GET_EMAILS = "GET_EMAILS";
+const REMOVE_ALERT = "REMOVE_ALERT";
 
 export default function reducer(state = initialstate, action) {
   switch (action.type) {
     case LOCATION_ERROR:
       return { ...state, locationError: true };
+    case `${REMOVE_ALERT}_FULFILLED`:
+    case `${GET_EMAILS}_FULFILLED`:
+      console.log(action.payload.data);
+      return { ...state, emails: action.payload.data };
     case `${GET_USER}_PENDING`:
       console.log("pending");
       return { ...state, loading: true };
@@ -82,7 +89,19 @@ export default function reducer(state = initialstate, action) {
       return state;
   }
 }
-
+export function removeAlert(id, userid) {
+  return {
+    type: REMOVE_ALERT,
+    payload: axios.delete(`/alert/remove/${id}?user=${userid}`)
+  };
+}
+export function getEmails(id) {
+  console.log(id);
+  return {
+    type: GET_EMAILS,
+    payload: axios.get(`/user/emails/${id}`)
+  };
+}
 export function getUser() {
   console.log("hit getUser function");
   return {

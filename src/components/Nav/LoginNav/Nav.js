@@ -8,8 +8,8 @@ import { connect } from "react-redux";
 import { logout, login } from "../../../ducks/users";
 import { withRouter } from "react-router-dom";
 import IconButton from "material-ui/IconButton";
-import ArrowClose from "material-ui/svg-icons/navigation/arrow-back";
-import ArrowOpen from "material-ui/svg-icons/navigation/arrow-forward";
+import ArrowClose from "material-ui/svg-icons/hardware/keyboard-arrow-left";
+import ArrowOpen from "material-ui/svg-icons/hardware/keyboard-arrow-right";
 
 class Nav extends Component {
   constructor() {
@@ -37,17 +37,18 @@ class Nav extends Component {
         <AppBar
           iconElementLeft={
             <IconButton>
-              <ArrowOpen />
+              <ArrowOpen color="#333" hoverColor="black" />
             </IconButton>
           }
           style={{
-            padding: "0 0 0px 16px",
+            // padding: "0 0 0px 16px",
             borderRadius: "5px",
-            width: "3.6vw",
-            height: "3.6vw",
+            width: "3.7vw",
+            height: "3.7vw",
             position: "fixed",
-            top: "0px",
-            left: "0"
+            top: "3px",
+            left: "3px",
+            background: "#0ca2d0"
           }}
           onClick={this.burgerHandle}
         />
@@ -59,7 +60,7 @@ class Nav extends Component {
           onRequestChange={this.burgerHandle}
         >
           <IconButton onClick={this.burgerHandle} style={{ marginTop: "10px" }}>
-            <ArrowClose />
+            <ArrowClose color="#333" hoverColor="black" />
           </IconButton>
           {!this.props.currentUser[0] ? (
             <div className="item-holder">

@@ -53,6 +53,39 @@ const updateUser = (req, res) => {
     });
 };
 
+//getting emails
+const getEmails = (req, res, next) => {
+  let { id } = req.params;
+  console.log(id);
+  req.app
+    .get("db")
+    .getUserEmails(id)
+    .then(emails => {
+      console.log("GETTING EMAILS SUCCESSFUL");
+      console.log(emails);
+      res.status(200).json(emails);
+    })
+    .catch(error => {
+      console.log(`ERROR IN GETTING EMAILS : => ${error}`);
+      res.status(500).json(error);
+    });
+};
+//remove alert
+const removeAlert = (req, res, next) => {
+  let { id } = req.params;
+  let { user } = req.query;
+  console.log(user);
+  req.app
+    .get("db")
+    .removealert(id, user)
+    .then(emails => {
+      console.log("REMOVING ALERT SUCCESSFUL BOYY");
+      res.status(200).json(emails);
+    })
+    .catch(error => {
+      console.log(`ERROR IN REMOVING ALERT : => ${error}`);
+    });
+};
 ////////////////////////////////////////////////////////////////
 //EMPLOYEE CONTROLLERS
 
@@ -60,8 +93,40 @@ const updateUser = (req, res) => {
 const sendMassEmail = (req, res, next) => {
   let { employees, email, subject } = req.body;
   console.log(employees);
-  console.log(email);
+  // console.log(email);
+  let employid;
   _(employees, e => {
+    employid = e.employee_id;
+    req.app
+      .get("db")
+      .finduser(e.employee_id)
+      .then(user => {
+        req.app
+          .get("db")
+          .addemailwithoutcomp([user[0].user_id, email])
+          .then(email => {
+            let newemail = email[0].email_id;
+            req.app
+              .get("db")
+              .findcompany(employid)
+              .then(comp => {
+                req.app.get("db").updateemail([comp[0].company_id, newemail]);
+              })
+              .catch(eror => {
+                console.log(
+                  `ERROR IN UPDATING EMAIL IN MASS EMAIL : => ${eror}`
+                );
+              });
+          })
+          .catch(error =>
+            console.log(
+              `ERROR IN ADDING EMAIL WITHOUT COMPANY IN MASS EMAIL : => ${error}`
+            )
+          );
+      })
+      .catch(err =>
+        console.log(`ERROR IN FINDING USER IN MASS EMAIL : => ${err}`)
+      );
     let mailOptions = {
       from: '"Andy Schedules" <andyschedules@gmail.com>',
       to: e.email,
@@ -78,6 +143,15 @@ const sendMassEmail = (req, res, next) => {
       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     });
   });
+  req.app
+    .get("db")
+    .addemail([])
+    .then(() => {
+      console.log("SUCCESS IN ADDING AN EMAIL AFTER SENDING MASS EMAIL");
+    })
+    .catch(error => {
+      console.log(`ERROR IN ADDING AN EMAIL AFTER SENDING MASS EMAIL${error}`);
+    });
 };
 
 //leave company
@@ -312,6 +386,23 @@ const createCompanyIdSchedule = (req, res, next) => {
     });
     req.app
       .get("db")
+      .finduser(e.employee_id)
+      .then(useridd => {
+        console.log("FINDING USER IN CREATNG SCHEDULE SUCCESSFULL");
+        req.app
+          .get("db")
+          .addemail([
+            useridd[0].user_id,
+            id,
+            `Your schedule for ${e.schedule[0].weekOf} is available`
+          ]);
+      })
+      .catch(err => {
+        console.log(`ERROR IN FINDING USER IN CREATING SCHEDULE : => ${err}`);
+      });
+
+    req.app
+      .get("db")
       .createCompanySchedule([
         e.employee_id,
         id,
@@ -391,6 +482,7 @@ const createSchedule = (req, res, next) => {
     .get("db")
     .findcompany([arr[0].employee_id])
     .then(compId => {
+      let id = compId[0].company_id;
       _(arr, e => {
         // client.messages
         //   .create({
@@ -401,7 +493,8 @@ const createSchedule = (req, res, next) => {
         // to: e.phone_number
         // })
         // .then(message => console.log(message.sid))
-        // .done();
+        // .done()
+
         let mailOptions = {
           from: '"Andy Schedules" <andyschedules@gmail.com>',
           to: e.email,
@@ -417,6 +510,24 @@ const createSchedule = (req, res, next) => {
           console.log("Message sent: %s", info.messageId);
           console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         });
+        req.app
+          .get("db")
+          .finduser(e.employee_id)
+          .then(useridd => {
+            console.log("FINDING USER IN CREATNG SCHEDULE SUCCESSFULL");
+            req.app
+              .get("db")
+              .addemail([
+                useridd[0].user_id,
+                id,
+                `Your schedule for ${e.schedule[0].weekOf} is available`
+              ]);
+          })
+          .catch(err => {
+            console.log(
+              `ERROR IN FINDING USER IN CREATING SCHEDULE : => ${err}`
+            );
+          });
         req.app
           .get("db")
           .createschedule([
@@ -531,6 +642,61 @@ const updateCompanyIdSchedule = (req, res, next) => {
     });
     req.app
       .get("db")
+      .finduser(e.employee_id)
+      .then(usersid => {
+        console.log("USER ID");
+        console.log(usersid[0].user_id);
+        req.app
+          .get("db")
+          .addemailwithoutcomp([
+            usersid[0].user_id,
+            `Schedule for week ${
+              e.schedule[0].weekOf
+            } has been updated and is now available`
+          ])
+          .then(email => {
+            console.log("EMAIL");
+            console.log(email);
+            console.log(email[0].email_id);
+            console.log("ADDING EMAIL WITHOUT COMPANY ID SUCCESSFUL");
+            console.log(arr[0].employee_id);
+            let newemail = email[0].email_id;
+            console.log(newemail);
+            req.app
+              .get("db")
+              .findcompany(arr[0].employee_id)
+              .then(companyID => {
+                console.log("COMPANY_ID RIGHT HERERE1211212121212");
+                console.log(newemail);
+                console.log(companyID[0].company_id);
+                req.app
+                  .get("db")
+                  .updateemail(companyID[0].company_id, newemail)
+                  .then(() =>
+                    console.log(
+                      "UPDATING EMAIL AFTER FINDING COMPANY SUCCESSFULL"
+                    )
+                  )
+                  .catch(err =>
+                    console.log(
+                      `ERROR IN UPDATING EMAIL AFTER FINDING COMPANY : => ${err}`
+                    )
+                  );
+              });
+          })
+          .catch(err => {
+            console.log(`ERROR IN FINDING COMPANY : =>${err}`);
+          })
+
+          .catch(err =>
+            console.log(`ERROR IN ADDIN EMAIL WITHOUT COMPANY ID : =>${err}`)
+          );
+      })
+      .catch(error => {
+        console.log(`ERROR IN FINDING USER FROM EMPLOYEE ID : => ${error}`);
+      });
+    req.app
+      .get("db")
       .updateScheduleswithcompanyid([
         e.employee_id,
         e.schedule[1].mondaymorningclockin +
@@ -592,9 +758,8 @@ const updateCompanyIdSchedule = (req, res, next) => {
 const updateSchedule = (req, res) => {
   console.log("UPDATE SCHEDULE CONTROLLER HIT!");
   let { week, userId, arr } = req.body;
-  console.log(`THIS IS THE WEEK : => ${week}`);
-  console.log(`THIS IS THE USER ID : => ${userId}`);
-  console.log(arr[0].schedule[0].weekOf);
+  console.log(arr);
+
   _(arr, e => {
     // client.messages
     //   .create({
@@ -606,6 +771,62 @@ const updateSchedule = (req, res) => {
     // })
     // .then(message => console.log(message.sid))
     // .done();
+    console.log(e.employee_id);
+    req.app
+      .get("db")
+      .finduser(e.employee_id)
+      .then(usersid => {
+        console.log("USER ID");
+        console.log(usersid[0].user_id);
+        req.app
+          .get("db")
+          .addemailwithoutcomp([
+            usersid[0].user_id,
+            `Schedule for week ${
+              e.schedule[0].weekOf
+            } has been updated and is now available`
+          ])
+          .then(email => {
+            console.log("EMAIL");
+            console.log(email);
+            console.log(email[0].email_id);
+            console.log("ADDING EMAIL WITHOUT COMPANY ID SUCCESSFUL");
+            console.log(arr[0].employee_id);
+            let newemail = email[0].email_id;
+            console.log(newemail);
+            req.app
+              .get("db")
+              .findcompany(arr[0].employee_id)
+              .then(companyID => {
+                console.log("COMPANY_ID RIGHT HERERE1211212121212");
+                console.log(newemail);
+                console.log(companyID[0].company_id);
+                req.app
+                  .get("db")
+                  .updateemail(companyID[0].company_id, newemail)
+                  .then(() =>
+                    console.log(
+                      "UPDATING EMAIL AFTER FINDING COMPANY SUCCESSFULL"
+                    )
+                  )
+                  .catch(err =>
+                    console.log(
+                      `ERROR IN UPDATING EMAIL AFTER FINDING COMPANY : => ${err}`
+                    )
+                  );
+              });
+          })
+          .catch(err => {
+            console.log(`ERROR IN FINDING COMPANY : =>${err}`);
+          })
+
+          .catch(err =>
+            console.log(`ERROR IN ADDIN EMAIL WITHOUT COMPANY ID : =>${err}`)
+          );
+      })
+      .catch(error => {
+        console.log(`ERROR IN FINDING USER FROM EMPLOYEE ID : => ${error}`);
+      });
 
     let mailOptions = {
       from: '"Andy Schedules" <andyschedules@gmail.com>',
@@ -624,6 +845,19 @@ const updateSchedule = (req, res) => {
       console.log("Message sent: %s", info.messageId);
       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     });
+    req.app
+      .get("db")
+      .addemail([])
+      .then(() => {
+        console.log(
+          "SUCCESS IN ADDING AN EMAIL AFTER UPDATING THE USERS SCHEDULE"
+        );
+      })
+      .catch(error => {
+        console.log(
+          `ERROR IN ADDING AN EMAIL AFTER UPDATING USERS SCHEDULE ${error}`
+        );
+      });
     req.app
       .get("db")
       .updateschedules([
@@ -704,7 +938,7 @@ const deleteschedulewithgroupid = (req, res, next) => {
   console.log(user);
   console.log(company);
   console.log(week);
-  console.log("DENIED APPLICATION CONTROLLER HIT");
+  // console.log("DENIED APPLICATION CONTROLLER HIT");
   // req.app
   //   .get("db")
   //   .findEmployeeWithGroup([user, company])
@@ -791,8 +1025,8 @@ const deleteSchedule = (req, res) => {
 const denyUserApplication = (req, res, next) => {
   console.log("DENIED APPLICATION CONTROLLER HIT");
   let { id } = req.params;
-  let { user, company } = req.query;
-  console.log(user);
+  let { user, company, userid } = req.query;
+  console.log(userid);
   let mailOptions = {
     from: '"Andy Schedules" <andyschedules@gmail.com>',
     to: user,
@@ -808,6 +1042,19 @@ const denyUserApplication = (req, res, next) => {
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   });
+  req.app
+    .get("db")
+    .addemail([userid, company, "Your Application has been denied"])
+    .then(() => {
+      console.log(
+        "SUCCESS IN ADDING AN EMAIL AFTER DENYING THE USERS APPLICATION"
+      );
+    })
+    .catch(error => {
+      console.log(
+        `ERROR IN ADDING AN EMAIL AFTER DENYING USERS APPLICATION${error}`
+      );
+    });
   req.app
     .get("db")
     .denyUsersApplication([id])
@@ -852,6 +1099,19 @@ const acceptUserApplication = (req, res, next) => {
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   });
+  req.app
+    .get("db")
+    .addemail([userId, companyId, "Your Application has been Accepted"])
+    .then(() => {
+      console.log(
+        "SUCCESS IN ADDING AN EMAIL AFTER ACCEPTING THE USERS APPLICATION"
+      );
+    })
+    .catch(error => {
+      console.log(
+        `ERROR IN ADDING AN EMAIL AFTER ACCEPTING USERS APPLICATION${error}`
+      );
+    });
   req.app
     .get("db")
     .addApplicationEmployee([companyId, userId, 0, appId])
@@ -1032,5 +1292,7 @@ module.exports = {
   getApplications,
   acceptUserApplication,
   denyUserApplication,
-  sendMassEmail
+  sendMassEmail,
+  getEmails,
+  removeAlert
 };

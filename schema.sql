@@ -57,3 +57,9 @@ CREATE TABLE users(
     emergency_contact int,
     image text
 )
+create table emails(
+email_id serial primary key,
+recipient int references users(user_id),
+sender int references company(company_id),
+email_contents text
+)

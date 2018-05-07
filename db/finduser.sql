@@ -1,0 +1,1 @@
+select user_id from employee where employee_id=$1;

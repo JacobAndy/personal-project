@@ -23,14 +23,18 @@
   border-width: 0 4px 4px 0;
 }
 .left-arrow {
-  left: 670px;
+  /* left: 670px; */
+  left: 43%;
   transform: rotate(135deg);
 }
 .right-arrow {
-  right: 690px;
+  /* right: 690px; */
+  right: 40%;
   transform: rotate(-45deg);
 }
 .post-schedule {
   position: absolute;
   right: 20px;
+}
+.dialog-datepicker {
 }

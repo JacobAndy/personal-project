@@ -40,7 +40,9 @@ const {
   getApplications,
   acceptUserApplication,
   denyUserApplication,
-  sendMassEmail
+  sendMassEmail,
+  getEmails,
+  removeAlert
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -115,6 +117,12 @@ app.get("/logout", logout);
 
 //adding users extra details  WORKS
 app.put("/update", updateUser);
+
+//get emails
+app.get(`/user/emails/:id`, getEmails);
+
+//remove alert
+app.delete(`/alert/remove/:id`, removeAlert);
 //////////////////////////////////////////////////////////
 //EMPLOYEE END POINTS
 

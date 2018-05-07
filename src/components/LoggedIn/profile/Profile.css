@@ -1,28 +1,74 @@
+.extra-info-holder {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
+  border-radius: 55px;
+  width: 70vw;
+  height: 60vh;
+  border: 2px solid #0d47a1;
+  background: #1976d2b0;
+  margin: 10% auto;
+}
 .add-info {
-  position: absolute;
+  border-radius: 55px;
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  align-content: stretch;
-  background: rgb(145, 220, 245);
-  border: 2px solid blue;
-  width: 40vw;
-  height: 70vh;
-  top: 13vh;
-  left: 31vw;
+  justify-content: space-around;
+  /* align-content: space-between; */
+  align-items: center;
+  margin: auto;
+  width: 65%;
+  height: 93%;
+  border: 2px solid #0d47a1;
+  background: #64b4f6b0;
+}
+.add-info > h2 {
+  color: #07306e;
+}
+.explain-why {
+  background: #64b4f6b0;
+  border-radius: 55px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: space-between;
+  padding: 3% 2% 3% 2%;
+  height: 93%;
+  margin: auto;
+  width: 27%;
+  border: 2px solid #0d47a1;
+}
+.explain-why > h4 {
+  color: #07306e;
+  font-weight: 500;
+  font-size: 17px;
+  white-space: nowrap;
+  line-height: 1px;
+  margin: 0 0 -5% 0;
+}
+.explain-why > h6 {
+  color: #333;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 100%;
+  margin: 0;
 }
 .profile {
-  margin-top: 45px;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  border: 2px solid black;
+  margin: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 .profile-image {
-  /* position: absolute; */
-  top: 80px;
+  position: absolute;
+  top: 1%;
+  left: 22%;
   border-radius: 50%;
   border: 3px solid #333;
   background: black;
@@ -31,6 +77,9 @@
   opacity: 0.9;
 }
 .profile_name {
+  position: absolute;
+  top: 42%;
+  left: 28%;
 }
 .info-holder {
   display: flex;
@@ -39,9 +88,42 @@
   align-items: center;
   position: absolute;
   bottom: 10px;
-  width: 35vw;
+  width: 65vw;
+  left: 0.5%;
   border-radius: 45px;
-  height: 30vh;
+  height: 50vh;
   background-color: #42a5f5;
   border: 2px solid#333;
+}
+.mapped-emails {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border: 2px solid black;
+  height: 97vh;
+  width: 33vw;
+  position: absolute;
+  right: 0.6%;
+}
+.email-contents-div {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2%;
+  padding: 2%;
+  width: 95%;
+  height: 8%;
+  border-radius: 15px;
+  border: 2px solid black;
+}
+.email-contents-div > h5 {
+  position: absolute;
+  bottom: 0.2%;
+  left: 7%;
+}
+.x {
+  position: absolute;
+  top: -3%;
+  left: -1%;
 }

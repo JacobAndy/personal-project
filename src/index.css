@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Open Sans, sans-serif;
-  background: rgb(199, 220, 245);
+  background: rgba(187, 222, 251, 0.836);
 }
 * {
   box-sizing: border-box;

@@ -49,6 +49,7 @@
   margin: 5px;
 }
 .each-company {
+  position: relative;
   background: #40c4ff;
   text-align: center;
 }
@@ -119,28 +120,34 @@
 .staffgetter {
   border-bottom: 10px;
 }
-.staff-button,
-.application-button,
+
 .leave-company,
 .editandemailbutton {
   position: relative;
 }
 .staff-button {
-  bottom: -15px;
-  width: 88px;
-  top: 45px;
+  position: absolute;
+  /* margin-top: 6%; */
+  bottom: 6%;
+  width: 8%;
+  left: 3%;
+  /* top: 45px; */
 }
 .application-button {
-  left: 90px;
-  top: 81px;
+  position: absolute;
+  right: 3%;
+  bottom: 6%;
 }
 .application-popover {
   position: relative;
   margin-left: -279px;
 }
 .leave-company {
-  top: -67px;
-  left: -130px;
+  position: absolute;
+  /* margin: -4% 0 0 -1.2%; */
+  top: -4%;
+  /* top: -67px; */
+  left: -4%;
 }
 .editandemailbutton {
   display: flex;

@@ -1,0 +1,1 @@
+select * from emails where recipient=$1;

@@ -1,0 +1,1 @@
+update emails set sender=$1 where email_id=$2;

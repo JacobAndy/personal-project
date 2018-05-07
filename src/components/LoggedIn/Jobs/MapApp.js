@@ -43,7 +43,8 @@ class MapApp extends Component {
                 this.props.denyUserApplication(
                   app.application_id,
                   app.email,
-                  app.company_id
+                  app.company_id,
+                  app.user_id
                 );
               }}
             >

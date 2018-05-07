@@ -455,103 +455,109 @@ class WeekOf extends Component {
             }
           }}
         />
-        <Dialog
-          open={this.state.dialogopen}
-          onRequestClose={() => this.calendarToggle("dialogopen")}
-          actions={[
-            <FlatButton
-              label="Cancel"
-              primary={true}
-              onClick={() => this.calendarToggle("dialogopen")}
-            />,
-            <FlatButton
-              label="Submit"
-              primary={true}
-              onClick={() => this.calendarToggle("dialogopen")}
+        <div className="dialog-datepicker">
+          <Dialog
+            open={this.state.dialogopen}
+            onRequestClose={() => this.calendarToggle("dialogopen")}
+            actions={[
+              <FlatButton
+                label="Cancel"
+                primary={true}
+                onClick={() => this.calendarToggle("dialogopen")}
+              />,
+              <FlatButton
+                label="Submit"
+                primary={true}
+                onClick={() => this.calendarToggle("dialogopen")}
+              />
+            ]}
+          >
+            <DatePicker
+              hideCalendarDate={this.state.calendarselect}
+              placeholder="select a date"
+              onChange={(blank, date) => {
+                let newcurrdate = new Date(date);
+                let dayOfWeek = +newcurrdate.getDay();
+                let dayOfMonth = +newcurrdate.getDate();
+                if (dayOfWeek === 0) {
+                  dayOfMonth = dayOfMonth - 6;
+                } else if (dayOfWeek === 1) {
+                  null;
+                } else {
+                  dayOfMonth = dayOfMonth - (dayOfWeek - 1);
+                }
+                let month = date.toString().slice(4, 7);
+                // let day = date.toString().slice(8, 10);
+                let year = date.toString().slice(11, 15);
+                // if (day[0] === "0") {
+                //   day = date.toString().slice(9, 10);
+                // }
+                switch (month) {
+                  case "Jan":
+                    month = jan;
+                    break;
+                  case "Feb":
+                    month = feb;
+                    break;
+                  case "Mar":
+                    month = march;
+                    break;
+                  case "Apr":
+                    month = april;
+                    break;
+                  case "May":
+                    month = may;
+                    break;
+                  case "Jun":
+                    month = june;
+                    break;
+                  case "Jul":
+                    month = july;
+                    break;
+                  case "Aug":
+                    month = aug;
+                    break;
+                  case "Sep":
+                    month = sept;
+                    break;
+                  case "Oct":
+                    month = oct;
+                    break;
+                  case "Nov":
+                    month = nov;
+                    break;
+                  case "Dec":
+                    month = dec;
+                    break;
+                  default:
+                    month = "Day Unavailable";
+                }
+                date = `${month} ${dayOfMonth}, ${year}`;
+                let dayTM = new Date(year, this.state.currentnumbermonth, 0);
+                let dayTM1 = dayTM.getDate();
+                let dayLM = new Date(
+                  year,
+                  this.state.currentnumbermonth - 1,
+                  0
+                );
+                let dayLM1 = dayLM.getDate();
+                //update reducer week of and get that week of schedules
+                this.setState({
+                  currentDay: dayOfMonth,
+                  currentMonth: month,
+                  currentnumbermonth: newcurrdate.getMonth(),
+                  currentYear: year,
+                  daysThisMonth: dayTM1,
+                  daysLastMonth: dayLM1
+                });
+                this.props.setWeekOf(date);
+                this.props.getWeekOf(this.props.currentUser[0].user_id, date);
+                // this.props.getWeekOf(this.props.currentUser[0].user_id, date);
+              }}
+              mode="landscape"
             />
-          ]}
-        >
-          <DatePicker
-            hideCalendarDate={this.state.calendarselect}
-            placeholder="select a date"
-            onChange={(blank, date) => {
-              let newcurrdate = new Date(date);
-              let dayOfWeek = +newcurrdate.getDay();
-              let dayOfMonth = +newcurrdate.getDate();
-              if (dayOfWeek === 0) {
-                dayOfMonth = dayOfMonth - 6;
-              } else if (dayOfWeek === 1) {
-                null;
-              } else {
-                dayOfMonth = dayOfMonth - (dayOfWeek - 1);
-              }
-              let month = date.toString().slice(4, 7);
-              // let day = date.toString().slice(8, 10);
-              let year = date.toString().slice(11, 15);
-              // if (day[0] === "0") {
-              //   day = date.toString().slice(9, 10);
-              // }
-              switch (month) {
-                case "Jan":
-                  month = jan;
-                  break;
-                case "Feb":
-                  month = feb;
-                  break;
-                case "Mar":
-                  month = march;
-                  break;
-                case "Apr":
-                  month = april;
-                  break;
-                case "May":
-                  month = may;
-                  break;
-                case "Jun":
-                  month = june;
-                  break;
-                case "Jul":
-                  month = july;
-                  break;
-                case "Aug":
-                  month = aug;
-                  break;
-                case "Sep":
-                  month = sept;
-                  break;
-                case "Oct":
-                  month = oct;
-                  break;
-                case "Nov":
-                  month = nov;
-                  break;
-                case "Dec":
-                  month = dec;
-                  break;
-                default:
-                  month = "Day Unavailable";
-              }
-              date = `${month} ${dayOfMonth}, ${year}`;
-              let dayTM = new Date(year, this.state.currentnumbermonth, 0);
-              let dayTM1 = dayTM.getDate();
-              let dayLM = new Date(year, this.state.currentnumbermonth - 1, 0);
-              let dayLM1 = dayLM.getDate();
-              //update reducer week of and get that week of schedules
-              this.setState({
-                currentDay: dayOfMonth,
-                currentMonth: month,
-                currentnumbermonth: newcurrdate.getMonth(),
-                currentYear: year,
-                daysThisMonth: dayTM1,
-                daysLastMonth: dayLM1
-              });
-              this.props.setWeekOf(date);
-              this.props.getWeekOf(this.props.currentUser[0].user_id, date);
-              // this.props.getWeekOf(this.props.currentUser[0].user_id, date);
-            }}
-            mode="landscape"
-          />
-        </Dialog>
+          </Dialog>
+        </div>
         <h3 className="week-display">{this.props.weekOf}</h3>
         <div
           className="right-arrow"

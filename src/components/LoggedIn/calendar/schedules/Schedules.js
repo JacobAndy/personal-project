@@ -179,7 +179,7 @@ class Schedules extends Component {
           <SelectField
             labelStyle={{ color: "#2196F3" }}
             listStyle={{ backgroundColor: "#BBDEFB" }}
-            style={{ width: "150px" }}
+            style={{ width: "200px" }}
             iconStyle={iconColor}
             underlineStyle={underlined}
             value={

@@ -173,12 +173,12 @@ export function getAllEmployees(compId) {
     payload: axios.get(`/jobs/staff/${compId}`)
   };
 }
-export function denyUserApplication(id, userId, companyId) {
-  console.log(userId);
+export function denyUserApplication(id, userId, companyId, userIdd) {
+  console.log(userIdd);
   return {
     type: DENY_APPLICATION_ID,
     payload: axios.delete(
-      `/jobs/application/decision/${id}?user=${userId}&company=${companyId}`
+      `/jobs/application/decision/${id}?user=${userId}&company=${companyId}&userid=${userIdd}`
     )
   };
 }
