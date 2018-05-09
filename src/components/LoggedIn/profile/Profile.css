@@ -55,21 +55,45 @@
   margin: 0;
 }
 .profile {
-  position: relative;
-  /* border: 2px solid black; */
-  width: 100vw;
+  position: absolute;
+  width: 100%;
   height: 100vh;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   margin: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-.profile-image {
+
+.profile-image-holder {
+  display: flex;
   position: absolute;
-  top: 1%;
-  left: 20%;
+  background: rgba(0, 0, 0, 0.384);
+  width: 97%;
+  /* margin: auto; */
+  height: 50%;
+  top: 1.5%;
+  border-radius: 15px;
+  border: 2px solid black;
+}
+.profile-image-holder:hover {
+  background: rgba(0, 0, 0, 0.329);
+}
+.image {
+  border-radius: 50%;
+  background: #999;
+  position: relative;
+  margin: 10% auto 0 auto;
+}
+.profile-image {
+  z-index: 200;
+  display: flex;
+  position: absolute;
+  background-color: black;
+  bottom: -10%;
+  position: relative;
+  margin: auto;
   border-radius: 50%;
   border: 3px solid #333;
   background: black;
@@ -78,6 +102,7 @@
   opacity: 0.9;
 }
 .profile_name {
+  margin: auto;
   color: #0d47a1;
   /* position: absolute; */
   top: 42%;
@@ -85,16 +110,15 @@
 }
 .info-holder {
   display: flex;
-  padding: 5%;
+  position: relative;
+  padding: 1%;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  position: absolute;
-  bottom: 10px;
-  width: 35vw;
-  left: 15%;
+  width: 62vw;
+  left: -14.5%;
   border-radius: 15px;
-  height: 50vh;
+  height: 98vh;
   background-color: #42a5f5;
   border: 2px solid#0d47a1;
 }
@@ -108,8 +132,6 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  border: 2px solid #0d47a1;
-  background: rgb(100, 181, 246, 0.5);
   height: 97vh;
   width: 33vw;
   position: absolute;
@@ -152,6 +174,31 @@
   color: #0d47a1;
   font-size: 16px;
 }
+.personal-info {
+  line-height: 0%;
+  display: flex;
+  padding: 2% 0;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 15px;
+  position: relative;
+  bottom: -1%;
+  width: 40%;
+  height: 55%;
+  margin: 0 auto 0 auto;
+  background: rgba(199, 227, 247, 0.534);
+}
+.update-profile-cancel-update {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 2%;
+  right: 2%;
+  width: 96%;
+}
+
 @keyframes email {
   from {
     opacity: 0;

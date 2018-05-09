@@ -1,5 +1,6 @@
 require("dotenv").config();
-const app = require("express")();
+const express = require("express");
+const app = express();
 const massive = require("massive");
 const { json } = require("body-parser");
 const cors = require("cors");
@@ -8,7 +9,6 @@ const passport = require("passport");
 const port = process.env.PORT || 3003;
 const { strat, logout } = require(`${__dirname}/controllers/strategy`);
 const NodeGeocoder = require("node-geocoder");
-const express = require("express");
 
 const options = {
   provider: "google",
@@ -42,7 +42,8 @@ const {
   denyUserApplication,
   sendMassEmail,
   getEmails,
-  removeAlert
+  removeAlert,
+  updateUsersFullProfile
 } = require("./controllers/controllers");
 
 app.use(json());
@@ -100,7 +101,7 @@ passport.deserializeUser((user, done) => {
 app.get(
   "/auth",
   passport.authenticate("auth0", {
-    successRedirect: "http://localhost:3004/#/profile",
+    successRedirect: "http://localhost:3004/profile",
     failureRedirect: "http://localhost:3003/auth",
     failureFlash: true
   })
@@ -117,6 +118,9 @@ app.get("/logout", logout);
 
 //adding users extra details  WORKS
 app.put("/update", updateUser);
+
+//user updating info
+app.put(`/profile/fullupdate/:id`, updateUsersFullProfile);
 
 //get emails
 app.get(`/user/emails/:id`, getEmails);

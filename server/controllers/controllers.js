@@ -36,6 +36,24 @@ const getUser = (req, res) => {
   }
 };
 
+//updating users full profile
+const updateUsersFullProfile = (req, res, next) => {
+  let { name, bio, email, number, address, contact } = req.body;
+  let { id } = req.params;
+  console.log(id);
+  console.log(name, bio, email, number, address, contact);
+  req.app
+    .get("db")
+    .updateUsersFullProfile([id, name, bio, email, number, address, contact])
+    .then(results => {
+      console.log(`SUCCESS IN UPDATING USERS FULL PROFILE`);
+    })
+    .catch(error => {
+      console.log(`ERROR IN UPDATING USERS FULL PROFILE : => ${error}`);
+      res.status(500).json(error);
+    });
+};
+
 //UPDATE USERS INFO WORKS
 const updateUser = (req, res) => {
   let { email, number, address, emergencycontact, auth } = req.body;
@@ -1296,5 +1314,6 @@ module.exports = {
   denyUserApplication,
   sendMassEmail,
   getEmails,
-  removeAlert
+  removeAlert,
+  updateUsersFullProfile
 };

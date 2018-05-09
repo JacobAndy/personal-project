@@ -24,6 +24,7 @@ const UPDATE_LOCATION = "UPDATE_LOCATION";
 const LOCATION_ERROR = "LOCATION_ERROR";
 const GET_EMAILS = "GET_EMAILS";
 const REMOVE_ALERT = "REMOVE_ALERT";
+const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 
 export default function reducer(state = initialstate, action) {
   switch (action.type) {
@@ -88,6 +89,20 @@ export default function reducer(state = initialstate, action) {
       console.log(state);
       return state;
   }
+}
+export function updateUserInfo(id, name, bio, email, number, address, contact) {
+  console.log(id);
+  return {
+    type: UPDATE_USER_INFO,
+    payload: axios.put(`/profile/fullupdate/${id}`, {
+      name,
+      bio,
+      email,
+      number,
+      address,
+      contact
+    })
+  };
 }
 export function removeAlert(id, userid) {
   return {

@@ -1,0 +1,1 @@
+update users set full_name=$2,email=$4,phone_number=$5,address=$6,emergency_contact=$7 where user_id=$1;

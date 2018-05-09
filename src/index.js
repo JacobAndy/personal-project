@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import Calendar from "./components/LoggedIn/calendar/Calendar";
 import HomePage from "./components/LoggedOut/HomePage/HomePage";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import About from "./components/LoggedOut/About/About";
 import OurServices from "./components/LoggedOut/OurServices/OurServices";
 import store from "./store";
