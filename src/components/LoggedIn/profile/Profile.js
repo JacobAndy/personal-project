@@ -27,7 +27,8 @@ class Profile extends Component {
       newaddress: "",
       emcontact: "",
       new_full_name: "",
-      new_bio: ""
+      new_bio: "",
+      updateToggle: false
     };
     this.submitVals = this.submitVals.bind(this);
     this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
@@ -113,6 +114,7 @@ class Profile extends Component {
       address_send,
       emergency_contact_send
     );
+    this.setState({ updateToggle: !this.state.updateToggle });
   }
   submitVals() {
     console.log("daddddddy");
@@ -266,71 +268,119 @@ class Profile extends Component {
                   />
                 </div>
                 {/* <div className="bio" /> */}
-                <div className="personal-info">
-                  {/* <h2 className="profile_name">{name}</h2> */}
-                  <TextField
-                    onChange={e =>
-                      this.setState({ new_full_name: e.target.value })
-                    }
-                    inputStyle={{ color: "#1E88E5" }}
-                    hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
-                    hintText={name}
-                    errorText="Full Name"
-                    errorStyle={{ color: "#0D47A1", borderColor: "#0D47A1" }}
-                  />
-                  <TextField
-                    onChange={e => this.setState({ new_bio: e.target.value })}
-                    textareaStyle={{ color: "#1E88E5" }}
-                    placeholder="bio"
-                    rows={3}
-                    rowsMax={3}
-                    multiLine={true}
-                    errorText="Bio"
-                    errorStyle={{ color: "#0D47A1", borderColor: "#0D47A1" }}
-                  />
-                  <TextField
-                    onChange={e => this.setState({ newemail: e.target.value })}
-                    inputStyle={{ color: "#1E88E5" }}
-                    hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
-                    hintText={user_email}
-                    errorText="Email"
-                    errorStyle={{ color: "#0D47A1", borderColor: "#0D47A1" }}
-                  />
-                  <TextField
-                    onChange={e => this.setState({ newnumber: e.target.value })}
-                    inputStyle={{ color: "#1E88E5" }}
-                    hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
-                    hintText={number}
-                    errorText="Phone Number"
-                    errorStyle={{ color: "#0D47A1", borderColor: "#0D47A1" }}
-                  />
-                  <TextField
-                    onChange={e =>
-                      this.setState({ newaddress: e.target.value })
-                    }
-                    inputStyle={{ color: "#1E88E5" }}
-                    hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
-                    hintText={user_address}
-                    errorText="Address"
-                    errorStyle={{ color: "#0D47A1", borderColor: "#0D47A1" }}
-                  />
-                  <TextField
-                    onChange={e => this.setState({ emcontact: e.target.value })}
-                    inputStyle={{ color: "#1E88E5" }}
-                    hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
-                    hintText={emerg_contact}
-                    errorText="Emergency Contact"
-                    errorStyle={{ color: "#0D47A1", borderColor: "#0D47A1" }}
-                  />
-                </div>
-                <div className="update-profile-cancel-update">
-                  <RaisedButton label="Cancel" backgroundColor="#BBDEFB" />
-                  <RaisedButton
-                    onClick={this.handleProfileUpdate}
-                    label="Update"
-                    backgroundColor="#BBDEFB"
-                  />
-                </div>
+                {this.state.updateToggle ? (
+                  <div>
+                    <div className="personal-info">
+                      {/* <h2 className="profile_name">{name}</h2> */}
+                      <TextField
+                        onChange={e =>
+                          this.setState({ new_full_name: e.target.value })
+                        }
+                        inputStyle={{ color: "#1E88E5" }}
+                        hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
+                        hintText={name}
+                        errorText="Full Name"
+                        errorStyle={{
+                          color: "#0D47A1",
+                          borderColor: "#0D47A1"
+                        }}
+                      />
+                      <TextField
+                        onChange={e =>
+                          this.setState({ new_bio: e.target.value })
+                        }
+                        textareaStyle={{ color: "#1E88E5" }}
+                        placeholder="bio"
+                        rows={3}
+                        rowsMax={3}
+                        multiLine={true}
+                        errorText="Bio"
+                        errorStyle={{
+                          color: "#0D47A1",
+                          borderColor: "#0D47A1"
+                        }}
+                      />
+                      <TextField
+                        onChange={e =>
+                          this.setState({ newemail: e.target.value })
+                        }
+                        inputStyle={{ color: "#1E88E5" }}
+                        hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
+                        hintText={user_email}
+                        errorText="Email"
+                        errorStyle={{
+                          color: "#0D47A1",
+                          borderColor: "#0D47A1"
+                        }}
+                      />
+                      <TextField
+                        onChange={e =>
+                          this.setState({ newnumber: e.target.value })
+                        }
+                        inputStyle={{ color: "#1E88E5" }}
+                        hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
+                        hintText={number}
+                        errorText="Phone Number"
+                        errorStyle={{
+                          color: "#0D47A1",
+                          borderColor: "#0D47A1"
+                        }}
+                      />
+                      <TextField
+                        onChange={e =>
+                          this.setState({ newaddress: e.target.value })
+                        }
+                        inputStyle={{ color: "#1E88E5" }}
+                        hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
+                        hintText={user_address}
+                        errorText="Address"
+                        errorStyle={{
+                          color: "#0D47A1",
+                          borderColor: "#0D47A1"
+                        }}
+                      />
+                      <TextField
+                        onChange={e =>
+                          this.setState({ emcontact: e.target.value })
+                        }
+                        inputStyle={{ color: "#1E88E5" }}
+                        hintStyle={{ color: "rgba(30, 136, 229, 0.5)" }}
+                        hintText={emerg_contact}
+                        errorText="Emergency Contact"
+                        errorStyle={{
+                          color: "#0D47A1",
+                          borderColor: "#0D47A1"
+                        }}
+                      />
+                    </div>
+                    <div className="update-profile-cancel-update">
+                      <RaisedButton
+                        onClick={() =>
+                          this.setState({
+                            updateToggle: !this.state.updateToggle
+                          })
+                        }
+                        label="Cancel"
+                        backgroundColor="#BBDEFB"
+                      />
+                      <RaisedButton
+                        onClick={this.handleProfileUpdate}
+                        label="Update"
+                        backgroundColor="#BBDEFB"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <RaisedButton
+                      onClick={() =>
+                        this.setState({
+                          updateToggle: !this.state.updateToggle
+                        })
+                      }
+                    />
+                  </div>
+                )}
               </div>
               <div className="mapped-emails">
                 <h4>Whats new?</h4>
