@@ -25,6 +25,7 @@
 }
 .add-info > h2 {
   color: #07306e;
+  white-space: nowrap;
 }
 .explain-why {
   background: #64b4f6b0;
@@ -42,17 +43,20 @@
 .explain-why > h4 {
   color: #07306e;
   font-weight: 500;
-  font-size: 17px;
-  white-space: nowrap;
-  line-height: 1px;
+  font-size: 80%;
+  /* white-space: nowrap; */
+  /* line-height: 1px; */
   margin: 0 0 -5% 0;
 }
 .explain-why > h6 {
   color: #333;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 80%;
   line-height: 100%;
   margin: 0;
+}
+.sumbitvalsbutton {
+  margin-top: 2%;
 }
 .profile {
   position: absolute;
@@ -71,7 +75,7 @@
   position: absolute;
   background: rgba(0, 0, 0, 0.384);
   width: 97%;
-  /* margin: auto; */
+  margin: auto;
   height: 50%;
   top: 1.5%;
   border-radius: 15px;
@@ -83,13 +87,14 @@
 .image {
   border-radius: 50%;
   background: #999;
+  width: 50%;
   position: relative;
-  margin: 10% auto 0 auto;
+  margin: -21% auto 0 auto;
 }
 .profile-image {
-  z-index: 200;
   display: flex;
-  position: absolute;
+  width: 100%;
+  position: relative;
   background-color: black;
   bottom: -10%;
   position: relative;
@@ -161,7 +166,7 @@
   color: #0d47a1;
   position: absolute;
   bottom: 0.2%;
-  left: 7%;
+  left: 10%;
 }
 .x {
   animation: 1s emails;
@@ -169,6 +174,7 @@
   top: -3%;
   left: -1%;
 }
+
 .no-notifications {
   font-weight: 900;
   color: #0d47a1;
@@ -198,7 +204,97 @@
   right: 2%;
   width: 96%;
 }
+@media (max-width: 1255px) {
+  /*
 
+ADDING EXTRA INFO MEDIA QUERY
+
+  */
+  .extra-info-holder {
+    flex-direction: column;
+    height: 100vh;
+    margin-top: 2%;
+  }
+  .explain-why {
+    height: 57%;
+    width: 60%;
+  }
+  .add-info,
+  .explain-why {
+    margin-top: 2%;
+    width: 94%;
+  }
+  .add-info {
+    height: 65%;
+    padding-bottom: 2%;
+  }
+  .explain-why {
+    margin-bottom: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  .explain-why > h4 {
+    margin: 0 0 -2.7% 0;
+  }
+
+  /*
+  
+  Media QUERY FOR USRES PROFILE
+  
+  */
+  .info-holder {
+    left: -14%;
+  }
+}
+@media (max-width: 1150px) {
+  .profile-image-holder {
+    height: 40%;
+  }
+  .image {
+    margin-top: -40%;
+  }
+  .info-holder {
+    height: 95vh;
+    top: -1%;
+  }
+  .mapped-emails {
+    margin-top: -1%;
+  }
+  .email-contents-div > h5 {
+    padding-right: 5%;
+  }
+}
+@media (max-width: 1003px) {
+  .email-contents-div {
+    height: 10%;
+  }
+}
+@media (max-width: 650px) {
+  .explain-why {
+    padding-left: 7%;
+    margin-top: 4%;
+  }
+  .extra-info-holder {
+    width: 97vw;
+    margin-bottom: 2.5%;
+  }
+}
+@media (max-width: 480px) {
+  .extra-info-holder {
+    height: 120vh;
+  }
+  .sumbitvalsbutton {
+    margin-top: 15%;
+    margin-bottom: 5%;
+  }
+  .explain-why {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+  .add-info > h2 {
+    font-size: 20px;
+  }
+}
 @keyframes email {
   from {
     opacity: 0;
