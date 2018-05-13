@@ -138,11 +138,14 @@
   justify-content: flex-start;
   align-items: center;
   height: 97vh;
-  width: 33vw;
+  width: 32vw;
   position: absolute;
   right: 0.6%;
 }
-.mapped-emails > h4 {
+.whatsNew {
+  padding-top: 2%;
+}
+.whatsNew > h4 {
   color: #0d47a1;
   border-bottom: solid 2px #0d47a1;
   display: inline;
@@ -153,10 +156,10 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  margin-bottom: 2%;
+  margin: 3% 0 0 0;
   padding: 2%;
-  width: 95%;
-  height: 8%;
+  width: 33vw;
+  height: 10vh;
   border-radius: 15px;
   /* border-radius: 15px; */
   border: 2px solid #0d47a1;
@@ -254,8 +257,9 @@ ADDING EXTRA INFO MEDIA QUERY
     margin-top: -40%;
   }
   .info-holder {
-    height: 95vh;
-    top: -1%;
+    height: 85vh;
+    top: -6.5%;
+    left: -16%;
   }
   .mapped-emails {
     margin-top: -1%;
@@ -265,8 +269,57 @@ ADDING EXTRA INFO MEDIA QUERY
   }
 }
 @media (max-width: 1003px) {
+  .profile {
+    flex-direction: column;
+  }
+  .mapped-emails {
+    width: 90%;
+    /* margin-left: 33%; */
+    justify-content: space-around;
+    position: relative;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* height: 110%; */
+    /* padding: 12%; */
+    /* width: 100vw; */
+  }
   .email-contents-div {
-    height: 10%;
+    width: 35%;
+    padding: 5%;
+  }
+  .info-holder {
+    margin: auto;
+    left: 0;
+    top: 2%;
+    height: 700%;
+    width: 95%;
+    margin-bottom: 7%;
+  }
+  .image {
+    width: 40%;
+    top: 40px;
+  }
+  .whatsNew {
+    position: absolute;
+    top: -50%;
+    /* margin-left: 37%; */
+  }
+  .profile-image {
+  }
+}
+@media (max-width: 836px) {
+  .whatsNew {
+    margin-top: 2%;
+  }
+  .email-contents-div {
+  }
+}
+@media (max-width: 720px) {
+  .whatsNew {
+    margin-top: 7%;
+  }
+  .info-holder {
+    height: 500%;
   }
 }
 @media (max-width: 650px) {
@@ -277,6 +330,33 @@ ADDING EXTRA INFO MEDIA QUERY
   .extra-info-holder {
     width: 97vw;
     margin-bottom: 2.5%;
+  }
+  .email-contents-div {
+    width: 50%;
+  }
+}
+@media (max-width: 613px) {
+  .email-contents-div {
+  }
+  .whatsNew {
+    margin-top: 8%;
+  }
+}
+@media (max-width: 570px) {
+  .whatsNew > h4 {
+    font-size: 13px;
+  }
+  .whatsNew {
+    margin-top: 10%;
+  }
+}
+@media (max-width: 510px) {
+  .image {
+    width: 50%;
+    top: 20px;
+  }
+  .whatsNew {
+    margin-top: 11%;
   }
 }
 @media (max-width: 480px) {
@@ -293,6 +373,57 @@ ADDING EXTRA INFO MEDIA QUERY
   }
   .add-info > h2 {
     font-size: 20px;
+  }
+  .whatsNew {
+    margin-top: 11.5%;
+  }
+}
+@media (max-width: 450px) {
+  .mapped-emails {
+    height: 100%;
+    margin-top: 30%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .email-contents-div {
+    padding-top: 10%;
+    width: 90vw;
+  }
+  .whatsNew {
+    margin-top: -18%;
+  }
+}
+@media (max-width: 430px) {
+  .info-holder {
+    height: 200%;
+  }
+  .whatsNew {
+    margin-top: -2%;
+  }
+}
+@media (max-width: 375px) {
+  .whatsNew {
+    margin-top: 1%;
+  }
+}
+@media (max-width: 355px) {
+  .whatsNew {
+    margin-top: 2%;
+  }
+}
+@media (max-width: 350px) {
+  .whatsNew {
+    margin-top: 3%;
+  }
+}
+@media (max-width: 335px) {
+  .whatsNew {
+    margin-top: 4%;
+  }
+}
+@media (max-width: 320px) {
+  .whatsNew {
+    margin-top: 6%;
   }
 }
 @keyframes email {

@@ -384,7 +384,9 @@ class Profile extends Component {
                 )}
               </div>
               <div className="mapped-emails">
-                <h4>Whats new?</h4>
+                <div className="whatsNew">
+                  <h4>Whats new?</h4>
+                </div>
                 {!this.props.emails.length ? (
                   <h6 className="no-notifications">No notifications</h6>
                 ) : (
