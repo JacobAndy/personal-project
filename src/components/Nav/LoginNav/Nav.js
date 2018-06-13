@@ -43,8 +43,8 @@ class Nav extends Component {
           style={{
             // padding: "0 0 0px 16px",
             borderRadius: "5px",
-            width: "3.7vw",
-            height: "3.7vw",
+            width: "60px",
+            height: "60px",
             position: "fixed",
             top: "3px",
             left: "3px",

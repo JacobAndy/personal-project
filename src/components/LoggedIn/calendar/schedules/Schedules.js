@@ -229,9 +229,10 @@ class Schedules extends Component {
                   );
               }}
               className="clear-schedule"
-              label="Clear Week"
+              label="Clear"
               backgroundColor="pink"
               color="white"
+              style={{ width: "7%", top: "1.5%" }}
             />
             <RaisedButton
               onClick={() => {
@@ -283,9 +284,10 @@ class Schedules extends Component {
                       ));
               }}
               className="post-schedule"
-              label="Post Schedule"
+              label="Post"
               backgroundColor="green"
               color="white"
+              style={{ width: "7%", top: "1.5%" }}
             />
           </div>
         ) : null}

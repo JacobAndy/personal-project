@@ -5,10 +5,10 @@
   align-items: flex-end;
 }
 .filter-emp {
-  width: 150px;
-  position: absolute;
-  left: 350px;
-  top: 20px;
+  /* width: 150px; */
+  /* position: absolute; */
+  /* left: 380px; */
+  /* top: 20px; */
 }
 .filter-station {
   position: absolute;

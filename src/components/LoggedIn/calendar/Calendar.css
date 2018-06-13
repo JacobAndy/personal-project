@@ -105,7 +105,8 @@ body {
   /* width: 232.7px; */
   width: 13.9%;
   position: absolute;
-  height: 6.45%;
+  /* height: 6.45%; */
+  height: 64px;
   text-align: center;
 }
 .date,
@@ -120,8 +121,8 @@ body {
   border: 1px solid black;
   /* width: 197.2px; */
   width: 11.73vw;
-  /* height: 80px; */
-  height: 8.2vh;
+  height: 80px;
+  /* height: 8.2vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -146,7 +147,8 @@ body {
   /* width: 232px; */
   /* height: 80px; */
   width: 13.85vw;
-  height: 8.2vh;
+  /* height: 8.2vh; */
+  height: 80px;
 }
 
 .employee-name {
